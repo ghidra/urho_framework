@@ -86,7 +86,8 @@ void PickUp::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
     //MemoryBuffer contacts(eventData[P_CONTACTS].GetBuffer());
 
     //Actor* actor = static_cast<Actor*>(otherNode->GetComponent<Character>());//    !!!!!!!  I NEED TO REMOVE THE NEED TO KNOW ABOUT CHARACTER CLASS
-    Pawn* actor = otherNode->GetComponent<Pawn>();//actually only give this to a character
+    Pawn* actor = otherNode->GetDerivedComponent<Pawn>();//this allows me to get a derived from pawn class component!
+    //Pawn* actor = otherNode->GetComponent<Pawn>();//actually only give this to a character
     //Actor* actor = otherNode->GetComponent<Actor>();
     //GetSubsystem<DebugHud>()->SetAppStats("pickup:", String( otherNode->GetNumComponents() ) );
     if(actor != NULL)
