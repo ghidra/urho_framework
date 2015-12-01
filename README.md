@@ -1,0 +1,2 @@
+This is a framework that can be used as a submodule to the other urho_* c++ projects.
+Includes the CMakeLists.txt, and shell scripts to automatically do some of the more mundane tasks, like building urho for me from the command line.

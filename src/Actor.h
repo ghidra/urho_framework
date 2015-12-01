@@ -1,0 +1,88 @@
+#ifndef ACTOR_H
+#define ACTOR_H
+
+#pragma once
+
+#include <Urho3D/Scene/LogicComponent.h>
+
+#include <Urho3D/Physics/RigidBody.h>
+#include <Urho3D/Physics/CollisionShape.h>
+
+using namespace Urho3D;
+
+const int SIDE_NEUTRAL = 0;
+const int SIDE_PLAYER = 1;
+const int SIDE_ENEMY = 2;
+
+class Actor : public LogicComponent
+{
+    URHO3D_OBJECT(Actor,LogicComponent);
+    
+public:
+    Actor(Context* context);
+    ~Actor();
+
+    virtual void FixedUpdate(float timeStep);
+    Node* GetNode(){return node_;};
+    RigidBody* GetBody(){return body_;};
+    CollisionShape* GetShape(){return shape_;};
+    
+protected:
+
+    
+    //virtual bool Damage(Actor * origin, float amount);
+    //virtual bool Heal(float amount);
+    //virtual void PlaySound(const String& soundName);
+    virtual void SetRigidBody(const float mass = 1.0f, const float friction = 1.0f);
+    virtual void HandleNodeCollision(StringHash eventType, VariantMap& eventData);
+    float Fit(float v, float l1, float h1, float l2, float h2);
+    //virtual void WorldCollision(VariantMap& eventData);
+
+    String mesh_;
+    String mesh_convex_;
+    String material_;
+
+    //bool readyForUpdate_;//this is to make sure that we are totally initialized before calling fixedupdate. for physcs objects
+  
+    bool onGround_;
+    bool isSliding_;
+    float duration_;
+    //float health_;
+    //float maxHealth_;
+    int side_;
+    //int lastDamageSide_;
+    //uint lastDamageCreatorID_;
+    uint creatorID_;
+
+    float speed_;
+    float sensitivity_;
+
+    float timeIncrement_;
+
+    WeakPtr<RigidBody> body_;
+    WeakPtr<CollisionShape> shape_;
+
+    //character collision masks as default
+    uint collision_layer_;//=1;
+    uint collision_mask_;//=60;
+
+    //collision data
+    Vector3 contactPosition_;
+    Vector3 contactNormal_;
+    float contactDistance_;
+    float contactImpulse_;
+/*
+COLLISION LAYERS AND MASKS
+--------------------------------
+layers:                        masks:
+000001 = (1)character          111100 (60)
+000010 = (2)character bullets  111000 (56)
+000100 = (4)pickups            100001 (33)
+001000 = (8)enemy bullets      100001 (33)
+010000 = (16)enemies           100011 (35) 110011 (51)(collide with other enemies)
+100000 = (32)env               111111 (63)
+---------------------------------
+*/
+
+};
+#endif
