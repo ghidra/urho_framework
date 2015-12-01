@@ -19,7 +19,7 @@
 #include "PickUp.h"
 //i need to remove this dependency from here... it should not have to know about character class
 //#include "../game/Pawn.h"
-#include "../piece/Character.h"
+#include "Pawn.h"
 
 #include <Urho3D/DebugNew.h>
 #include <Urho3D/IO/Log.h>
@@ -86,7 +86,7 @@ void PickUp::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
     //MemoryBuffer contacts(eventData[P_CONTACTS].GetBuffer());
 
     //Actor* actor = static_cast<Actor*>(otherNode->GetComponent<Character>());//    !!!!!!!  I NEED TO REMOVE THE NEED TO KNOW ABOUT CHARACTER CLASS
-    Character* actor = otherNode->GetComponent<Character>();//actually only give this to a character
+    Pawn* actor = otherNode->GetComponent<Pawn>();//actually only give this to a character
     //Actor* actor = otherNode->GetComponent<Actor>();
     //GetSubsystem<DebugHud>()->SetAppStats("pickup:", String( otherNode->GetNumComponents() ) );
     if(actor != NULL)
