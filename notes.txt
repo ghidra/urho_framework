@@ -1,0 +1,15 @@
+notes:
+
+-------
+link.bat
+	-take a third argument to trigger a dry run
+	-need to copy CMakeLists.txt
+
+urho_build.bat
+	-needs to be made
+
+------
+bash
+
+multiline file export
+http://stackoverflow.com/questions/7875540/how-do-you-write-multiple-line-configuration-file-using-bash-and-use-variables

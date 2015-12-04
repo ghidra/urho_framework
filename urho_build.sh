@@ -1,5 +1,9 @@
 #!/bin/bash
-#does the mundane task of running my favorite build commands to build urho
+
+# needs 2 arguments
+# argument 1: Urho3D source
+# argument 2: Urho3D build folder
+# argument 3 (optional): build with core-avx-i
 
 URHOPATH=$1
 URHOBUILD=$2
@@ -25,7 +29,13 @@ else
 		if [ -d $URHOPATH ];then
 			echo "***********************************"
 			echo "begun build process"
-			sh $URHOPATH/cmake_generic.sh $URHOBUILD -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_LIB_TYPE=SHARED -DURHO3D_SAMPLES=1 
+			if [ -z "$3" ];then
+				echo "standard build"
+				sh $URHOPATH/cmake_generic.sh $URHOBUILD -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_LIB_TYPE=SHARED -DURHO3D_SAMPLES=1 
+			else
+				echo "build with core-avx-i"
+				sh $URHOPATH/cmake_generic.sh $URHOBUILD -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_LIB_TYPE=SHARED -DURHO3D_SAMPLES=1 -DURHO3D_DEPLOYMENT_TARGET=core-avx-i
+			fi
 			cd $URHOBUILD
 			make
 		else
