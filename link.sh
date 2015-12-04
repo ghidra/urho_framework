@@ -17,49 +17,69 @@ make_alias(){
 }
 
 URHOPATH=$1
+URHOBUILD=$2
+DRYRUN=1
 #first make sure that the given folder is good
 
 if [ $# -eq 0 ];then
   echo "***********************************"
   echo "no arguments given, please provide:"
   echo "     -urho source path"
+  echo "     -urho build path"
   echo "***********************************"
 else
   if [ -d $URHOPATH ];then
-  #if [[ ( -d $URHOPATH ) && ( -d $URHOBUILD ) ]];then
+    if [ -d $URHOBUILD ];then
 
-    echo "***********************************"
-    echo "linking folders from urho source"
+      # Absolute path this script is in, thus /home/user/bin
+      SCRIPT=$(readlink -f "$0")
+      SCRIPTPATH=$(dirname "$SCRIPT")
+      #get the project path by going up two directories
+      PROJECTPATH=$(basename $(dirname $SCRIPTPATH))
 
-    # Absolute path this script is in, thus /home/user/bin
-    SCRIPT=$(readlink -f "$0")
-    SCRIPTPATH=$(dirname "$SCRIPT")
+      if [ $DRYRUN -eq 1 ];then
+        echo "***********************************"
+        echo "we are dryrunning it"
+        echo      "SCRIPT: "$SCRIPT
+        echo      "SCRIPTPATH: "$SCRIPTPATH
+        echo      "PROJECTPATH: "$PROJECTPATH
 
-    #link the data and core data folder
-    echo "     -link CMake, CoreData and Data folders"
-    make_alias "CMake" $URHOPATH"/CMake" $SCRIPTPATH"/CMake"
-    make_alias "CoreData" $URHOPATH"/bin/CoreData" $SCRIPTPATH"/bin/CoreData"
-    make_alias "Data" $URHOPATH"/bin/Data" $SCRIPTPATH"/bin/Data"
+      else
 
-    echo "***********************************"
-    echo "create launch editor script"
+        echo "***********************************"
+        echo "linking folders from urho source"
 
-    EDIT=$URHOPATH"/bin/Urho3DPlayer /Scripts/Editor.as -pp "$SCRIPTPATH"/bin -p \"CoreData;Data;Resources\" -w -s"
-    EFILE=$SCRIPTPATH/editor.sh
-    if [ -f "$EFILE" ];then
-      printf "$EDIT" > $EFILE
-      echo "     -editor.sh edited"
+
+        #link the data and core data folder
+        echo "     -link CMake, CoreData and Data folders"
+        make_alias "CMake" $URHOPATH"/CMake" $SCRIPTPATH"/CMake"
+        make_alias "CoreData" $URHOPATH"/bin/CoreData" $SCRIPTPATH"/bin/CoreData"
+        make_alias "Data" $URHOPATH"/bin/Data" $SCRIPTPATH"/bin/Data"
+
+        echo "***********************************"
+        echo "create launch editor script"
+
+        EDIT=$URHOPATH"/bin/Urho3DPlayer /Scripts/Editor.as -pp "$SCRIPTPATH"/bin -p \"CoreData;Data;Resources\" -w -s"
+        EFILE=$SCRIPTPATH/editor.sh
+        if [ -f "$EFILE" ];then
+          printf "$EDIT" > $EFILE
+          echo "     -editor.sh edited"
+        else
+          touch $EFILE
+          printf "$EDIT" > $EFILE
+          echo "     -editor.sh created"
+        fi
+      fi
+
     else
-      touch $EFILE
-      printf "$EDIT" > $EFILE
-      echo "     -editor.sh created"
+      echo "***********************************"
+      echo "invalid build path:"
+      echo "     -source:" $URHOBUILD
+      echo "***********************************"
     fi
-
-    echo "***********************************"
-
   else
     echo "***********************************"
-    echo "invalid path or paths given:"
+    echo "invalid source path:"
     echo "     -source:" $URHOPATH
     echo "***********************************"
   fi
