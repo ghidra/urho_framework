@@ -1,10 +1,6 @@
 notes:
 
 -------
-link.bat
-	-take a third argument to trigger a dry run
-	-need to copy CMakeLists.txt
-
 urho_build.bat
 	-needs to be made
 

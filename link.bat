@@ -1,6 +1,6 @@
 @echo OFF
 setlocal EnableDelayedExpansion
-SET DRYRUN=0
+SET DRYRUN=%3
 
 if NOT "%1"=="" (
 	if NOT "%2"=="" (
@@ -8,7 +8,6 @@ if NOT "%1"=="" (
 		SET URHOPATH=%1
     	SET URHOBUILD=%2
 
-		
 		if exist "!URHOPATH!" (
 			if exist "!URHOBUILD!" (
 
@@ -16,7 +15,7 @@ if NOT "%1"=="" (
 					call :resolve PROJECTPATH %%~ff
 				)
 
-				if "%DRYRUN%" == "1" (
+				if NOT "!DRYRUN!"=="" (
 					echo ***********************************
 					echo -some debug information
 			      	echo 	Launched: "%~dp0"
@@ -27,7 +26,7 @@ if NOT "%1"=="" (
 			    )
 			    echo ***********************************
 			    echo -make bin folder
-			    if "%DRYRUN%" == "1" (
+			    if NOT "!DRYRUN!"=="" (
 			    	echo 	-DRYRUN
 			    	echo 	"!PROJECTPATH!bin"
 			    ) else (
@@ -36,7 +35,7 @@ if NOT "%1"=="" (
 			    echo ***********************************
 		    	echo linking folders from urho source
 		    	echo 	-link CMake, CoreData and Data folders
-				if "%DRYRUN%" == "1" (
+				if NOT "!DRYRUN!"=="" (
 					echo 	-DRYRUN
 					echo 	"CoreData"
 					echo 		"!URHOPATH!\bin\CoreData"
@@ -53,9 +52,23 @@ if NOT "%1"=="" (
         			call:makeAlias "CMake" "!URHOPATH!\CMake" "!PROJECTPATH!CMake"
         		)
         		echo ***********************************
+      			echo copy CMakeLists.txt
+      			if exist "!PROJECTPATH!\CMakeLists.txt" (
+      				echo "CMakeLists.txt already exists"
+      			) else (
+      				if NOT "!DRYRUN!"=="" (
+      					echo "CMakeLists.txt will need to be copied"
+      				) else (
+      					echo      "CMakeLists.txt created"
+          				echo            "-!!!! MANUALLY UPDATE PROJECT AND TARGET NAME !!!!"
+      					call:copyFile "CmakeLists.txt" "%~dp0\CMakeLists.txt" "!PROJECTPATH!\CMakeLists.txt"
+      				)
+      			)
+
+        		echo ***********************************
     			echo editor script
     			SET EDITOR=!URHOBUILD!\bin\Urho3DPlayer.exe \Scripts\Editor.as -pp !PROJECTPATH!\bin -p "CoreData;Data;Resources"
-		        if "%DRYRUN%" == "1" (
+		        if NOT "!DRYRUN!"=="" (
 		        	echo 	-DRYRUN
 		        	echo 	!EDITOR!
 		        ) else (
@@ -138,5 +151,13 @@ goto:EOF
 	  echo           -%~2 removed
 	) else (
 	  echo           -%~1 does not exist
+	)
+	GOTO:EOF
+
+:copyFile
+	if exist %~3 (
+	  echo           -%~1 already exists
+	) else (
+	  xcopy /s %~3 %~2
 	)
 	GOTO:EOF
