@@ -51,8 +51,8 @@ protected:
     //float maxHealth_;
     int side_;
     //int lastDamageSide_;
-    //uint lastDamageCreatorID_;
-    uint creatorID_;
+    //unsigned lastDamageCreatorID_;
+    unsigned creatorID_;
 
     float speed_;
     float sensitivity_;
@@ -63,8 +63,8 @@ protected:
     WeakPtr<CollisionShape> shape_;
 
     //character collision masks as default
-    uint collision_layer_;//=1;
-    uint collision_mask_;//=60;
+    unsigned collision_layer_;//=1;
+    unsigned collision_mask_;//=60;
 
     //collision data
     Vector3 contactPosition_;

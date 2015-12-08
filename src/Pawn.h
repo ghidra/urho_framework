@@ -66,7 +66,7 @@ protected:
     float health_;
     float maxHealth_;
     int lastDamageSide_;
-    uint lastDamageCreatorID_;
+    unsigned lastDamageCreatorID_;
 
     float moveForce_;
     float inAirMoveForce_;
