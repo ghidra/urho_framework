@@ -1,6 +1,9 @@
 notes:
 
 -------
+link.bat
+	-need to make Resources directory
+	-need to mklink /H to from Urho3D.dll (in bin folder likely)
 urho_build.bat
 	-needs to be made
 
