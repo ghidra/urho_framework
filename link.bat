@@ -33,6 +33,15 @@ if NOT "%1"=="" (
 			    	call:makeFolder "bin" "!PROJECTPATH!"
 			    )
 			    echo ***********************************
+			    echo -make bin\Resources folder
+			    if NOT "!DRYRUN!"=="" (
+			    	echo 	-DRYRUN
+			    	echo 	"!PROJECTPATH!bin\Resources"
+			    ) else (
+			    	call:makeFolder "Resources" "!PROJECTPATH!bin\"
+			    )
+
+			    echo ***********************************
 		    	echo linking folders from urho source
 		    	echo 	-link CMake, CoreData and Data folders
 				if NOT "!DRYRUN!"=="" (
@@ -51,6 +60,14 @@ if NOT "%1"=="" (
         			call:makeAlias "Data" "!URHOPATH!\bin\Data" "!PROJECTPATH!bin\Data"
         			call:makeAlias "CMake" "!URHOPATH!\CMake" "!PROJECTPATH!CMake"
         		)
+        		echo ***********************************
+			    echo -link dll folder
+			    if NOT "!DRYRUN!"=="" (
+			    	echo 	-DRYRUN
+			    	echo 	"!URHOBUILD!\bin\Urho3D.dll !PROJECTPATH!bin\Urho3D.dll"
+			    ) else (
+			    	call:makeAliasFile "Urho3D.dll" "!URHOBUILD!\bin\Urho3D.dll" "!PROJECTPATH!\bin\Urho3D.dll"
+			    )
         		echo ***********************************
       			echo copy CMakeLists.txt
       			if exist "!PROJECTPATH!\CMakeLists.txt" (
@@ -123,7 +140,7 @@ goto:EOF
 	if exist %~3 (
 	  echo           -%~1 already exists
 	) else (
-	  mklink /H %~3 %~2
+	  mklink %~3 %~2
 	)
 	GOTO:EOF
 

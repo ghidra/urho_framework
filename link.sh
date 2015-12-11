@@ -68,6 +68,15 @@ else
       fi
 
       echo "***********************************"
+      echo "make bin/Resources folder"
+      if [ ! -z "$DRYRUN" ];then
+        echo "     -DRYRUN"
+        echo "     "$PROJECTPATH"/bin/Resources"
+      else
+        make_folder $PROJECTPATH"/bin/Resources"
+      fi
+
+      echo "***********************************"
       echo "linking folders from urho source"
       echo "     -link CMake, CoreData and Data folders"
       if [ ! -z "$DRYRUN" ];then
