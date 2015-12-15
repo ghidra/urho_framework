@@ -93,7 +93,7 @@ else
       else
         make_alias "CMake" $URHOPATH"/CMake" $PROJECTPATH"/CMake"
         make_alias "CoreData" $URHOPATH"/bin/CoreData" $PROJECTPATH"/bin/CoreData"
-        make_alias "Data" $URHOPATH"/bin/Data" $SCRIPTPATH"/bin/Data"
+        make_alias "Data" $URHOPATH"/bin/Data" $PROJECTPATH"/bin/Data"
       fi
 
       echo "***********************************"
