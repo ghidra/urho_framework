@@ -113,6 +113,27 @@ void CameraLogic::FixedUpdate(float timeStep)
             node_->SetRotation(newRotation_);
         }
     }
+    else if(cameraType_ == String("shmup"))
+    {
+        if(target_)//this will only work if I have a target
+        {
+            //i need the targets position, orientation, to get my cameras position and orientation
+            Vector3 target_position = target_->GetWorldPosition()+(target_->GetWorldRotation() * targetOffset_);
+            //Quaternion target_orientation = target_->GetWorldRotation();//i may or may not need this at the moment
+
+            Vector3 rotated_origin = outDirectionOrientation_ * outDirection_* cameraDistance_;
+            Vector3 target_offset_position = rotated_origin + target_position;
+
+            newPosition_ = target_offset_position;
+            Vector3 smoothPos = SmoothPosition(timeStep); 
+            
+            //Vector3 lookDirection = target_position - smoothPos;
+            //newRotation_.FromLookRotation(lookDirection.Normalized());
+
+            node_->SetPosition(smoothPos);
+            node_->SetRotation(outDirectionOrientation_ );
+        }
+    }
 
     // Toggle debug geometry with space
     //if (input->GetKeyPress(KEY_SPACE))
