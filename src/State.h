@@ -24,12 +24,12 @@ public:
     virtual void Update();
     virtual void Exit();
 
-    virtual void Debug();
+    virtual void Debug(const String label, const String value);
 
 protected:
 
     String name_;
-    Pawn* pawn_;
+    Pawn* pawn_=NULL;
 
     float Fit(float v, float l1, float h1, float l2, float h2);
   

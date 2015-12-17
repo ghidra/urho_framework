@@ -33,6 +33,6 @@ float State::Fit(float v, float l1, float h1, float l2=0.0f, float h2=1.0f)
 {
     return Clamp( l2 + (v - l1) * (h2 - l2) / (h1 - l1), l2,h2);
 }
-void State::Debug(){
-    GetSubsystem<DebugHud>()->SetAppStats("state:", name_ );
+void State::Debug(const String label, const String value){
+    GetSubsystem<DebugHud>()->SetAppStats(label+" : ", value );
 }
