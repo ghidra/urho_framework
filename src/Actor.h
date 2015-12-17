@@ -8,6 +8,8 @@
 #include <Urho3D/Physics/RigidBody.h>
 #include <Urho3D/Physics/CollisionShape.h>
 
+#include "Debug.h"
+
 using namespace Urho3D;
 
 const int SIDE_NEUTRAL = 0;
@@ -71,6 +73,8 @@ protected:
     Vector3 contactNormal_;
     float contactDistance_;
     float contactImpulse_;
+
+    Debug* debug_=NULL;
 /*
 COLLISION LAYERS AND MASKS
 --------------------------------

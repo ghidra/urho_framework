@@ -19,6 +19,7 @@ Actor::Actor(Context* context) :
 {
     // Only the scene update event is needed: unsubscribe from the rest for optimization
     //SetUpdateEventMask(USE_FIXEDUPDATE);
+    debug_ = new Debug(context_);
 }
 Actor::~Actor(){}
 

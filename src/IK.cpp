@@ -1,29 +1,17 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Scene/Scene.h>
-//#include <math.h>
 
-/*#include <Urho3D/IO/MemoryBuffer.h>
-#include <Urho3D/Physics/PhysicsEvents.h>
-#include <Urho3D/Physics/PhysicsWorld.h>
-#include <Urho3D/Physics/RigidBody.h>
-#include <Urho3D/Scene/SceneEvents.h>
-
-#include <Urho3D/Input/Controls.h>*/
 #include <Urho3D/Core/CoreEvents.h>
 #include <Urho3D/Scene/SceneEvents.h>
 
 #include <Urho3D/Graphics/AnimatedModel.h>
 #include <Urho3D/Graphics/Skeleton.h>
-//#include <Urho3D/Graphics/AnimationController.h>
 
 #include "IK.h"
 
-#include <Urho3D/DebugNew.h>
-#include <Urho3D/IO/Log.h>
-#include <Urho3D/Engine/DebugHud.h>
 #include <Urho3D/Graphics/DebugRenderer.h>
-#include <Urho3D/Math/Sphere.h>
+//#include <Urho3D/Math/Sphere.h>
 
 
 IK::IK(Context* context) :
@@ -55,25 +43,6 @@ void IK::SetTarget(Vector3 targetPos)
 {
 	Solve(targetPos);
 }
-
-/*void IK::HandleSceneDrawableUpdateFinished(StringHash eventType, VariantMap& eventData)
-{
-	using namespace Update;
-	if (doIK_)
-	{
-		//SolveIK( eventData[P_TIMESTEP].GetFloat() );
-		Solve( targetPos_ );
-		//GetSubsystem<DebugHud>()->SetAppStats("IK:", boneName_+String(":")+String(length_)+String(":")+String(initialRot_) );
-	}
-}*/
-/*float IK::FindD(const float a, const float b, const float c)
-{
-	return Max(0.0f, Min(a, (c + (a*a-b*b)/c) / 2.0f));
-}
-float IK::FindE(const float a, const float d)
-{
-	return sqrtf(a*a-d*d);
-}*/
 
 bool IK::Solve(Vector3 targetPos)
 {

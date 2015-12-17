@@ -2,17 +2,9 @@
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Scene/Scene.h>
 
-#include <Urho3D/IO/MemoryBuffer.h>
-#include <Urho3D/Physics/PhysicsEvents.h>
-#include <Urho3D/Physics/PhysicsWorld.h>
-#include <Urho3D/Physics/RigidBody.h>
-#include <Urho3D/Scene/SceneEvents.h>
-
 #include <Urho3D/Graphics/Model.h>
 #include <Urho3D/Graphics/StaticModel.h>
-//#include <Urho3D/Graphics/AnimationController.h>
 
-#include <Urho3D/IO/FileSystem.h>
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Graphics/Material.h>
 
@@ -109,8 +101,8 @@ void Weapon::Setup()
 //    node_->Rotate(kick_rot_);
 //}
 
-void Weapon::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
-{
+//void Weapon::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
+//{
     //Weapons only really care about collision with the character
    /* using namespace NodeCollision;
     //Actor::HandleNodeCollision(eventType, eventData);
@@ -126,7 +118,7 @@ void Weapon::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
         //collected_=true;
         //LOGINFO("ACTOR CHARACTER COLLISION");
     }*/
-}
+//}
 
 ////firing mechanisms
 void Weapon::SetFireRate(float fireRate)

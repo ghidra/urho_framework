@@ -43,7 +43,7 @@ public:
 protected:
 
     
-    virtual void HandleNodeCollision(StringHash eventType, VariantMap& eventData);
+    //virtual void HandleNodeCollision(StringHash eventType, VariantMap& eventData);
     //virtual void HandleSceneDrawableUpdateFinished(StringHash eventType, VariantMap& eventData);
 
     
