@@ -41,11 +41,10 @@ void Projectile::Start()
     object->SetCastShadows(true);
     node_->SetScale(0.25f);
 
-    RigidBody* body = node_->CreateComponent<RigidBody>();
-    body->SetCollisionLayer(collision_layer_);
-    body->SetCollisionMask(collision_mask_);
-    body->SetMass(1.0f);
-    body->SetTrigger(true);
+    SetRigidBody();
+
+    shape_ = node_->CreateComponent<CollisionShape>();
+    shape_->SetCapsule(3.0f, 10.0f, Vector3(0.0f, 5.0f, 0.0f));
 
     pos_born_ = node_->GetWorldPosition();
 }
