@@ -13,10 +13,6 @@
 #include "Controller.h"//for the constants
 //#include "../piece/Character.h"
 
-#include <Urho3D/DebugNew.h>
-#include <Urho3D/IO/Log.h>
-#include <Urho3D/Engine/DebugHud.h>
-
 
 Weapon::Weapon(Context* context) :
     Actor(context),
@@ -172,8 +168,8 @@ void Weapon::SpawnProjectile()
 
     //initlal rotation of fire_direction
     Vector3 rotoff = rot*fire_off_;
-    Vector3 offpos = pos+rotoff;
-    Vector3 dir = rotoff.Normalized()*Vector3(1.0f,1.0f,0.0f);//make sure its stays on plane
+    ProjectileSpawnPosition_ = pos+rotoff;
+    ProjectileSpawnDirection_ = rotoff.Normalized()*Vector3(1.0f,1.0f,0.0f);//make sure its stays on plane
 
     //get rotation axis
     //Vector3 rotaxis = dir.CrossProduct(Vector3(0.0f,1.0f,0.0f));//local to the gun
@@ -183,7 +179,7 @@ void Weapon::SpawnProjectile()
     kick_off_ = Vector3(Random(0.1f),Random(0.1f),Random(0.1f));
     //kick_off_+=Vector3(1.2,1.2,1.2);
     //node_->Translate(kick_off_,TS_WORLD);
-    GetSubsystem<DebugHud>()->SetAppStats("gun_pos:", String(node_->GetTransform()) );
+    //GetSubsystem<DebugHud>()->SetAppStats("gun_pos:", String(node_->GetTransform()) );
 
     node_->SetTransform(kick_off_,kick_rot_);
 
@@ -194,15 +190,13 @@ void Weapon::SpawnProjectile()
     //GetSubsystem<DebugHud>()->SetAppStats("gun_pos:", String(pos) );
     //GetSubsystem<DebugHud>()->SetAppStats("gun_rot:", String(rot) );
 
-    Node* projectileNode_ = node_->GetScene()->CreateChild("projectile");
+    //leave the actuall spawning up to whome inherits
+    /*Node* projectileNode_ = node_->GetScene()->CreateChild("projectile");
     projectileNode_->SetPosition(offpos);
 
     Projectile* projectile_ = projectileNode_->CreateComponent<Projectile>();
-    projectile_->Setup(dir);
-    //projectileNode_.position = node.worldPosition+aprojectile_offset_[0];
-    //Projectile@ node_script_ = cast<Projectile>(projectile_.CreateScriptObject(scriptFile, ctype_, LOCAL));
-    //node_script_.set_parmameters(dir,fire_velocity_,isenemy_,hit); 
-    //i need to get the position and the rotation of the weapon to determine the location and roation to spawn at
+    projectile_->Setup(dir);*/
+
 }
 
 /*Vector3 Weapon::GetLeftHandTarget()

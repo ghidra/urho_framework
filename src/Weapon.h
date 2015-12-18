@@ -50,6 +50,9 @@ protected:
     //virtual void FireLogic(float timeStep);
     virtual void SpawnProjectile();
 
+    Vector3 ProjectileSpawnPosition_;
+    Vector3 ProjectileSpawnDirection_;
+
     //virtual void SetLeftHandOffset();//set the offest. sets itself on fire. needs to always be set
 
     //bool collected_;

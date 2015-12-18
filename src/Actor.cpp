@@ -34,6 +34,16 @@ void Actor::FixedUpdate(float timeStep)
           node_->Remove();
     }
 }
+void Actor::SetCollisionLayers(const unsigned layer, const unsigned mask)
+{
+    collision_layer_ = layer;
+    collision_mask_ = mask;
+    if(body_)
+    {
+        body_->SetCollisionLayer(collision_layer_);
+        body_->SetCollisionMask(collision_mask_);
+    }
+}
 void Actor::SetRigidBody(const float mass, const float friction)
 {
     body_ = node_->CreateComponent<RigidBody>();

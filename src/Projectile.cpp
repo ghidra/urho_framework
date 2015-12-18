@@ -8,6 +8,8 @@
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Graphics/Material.h>
 
+#include <Urho3D/Physics/PhysicsEvents.h>
+
 #include "Projectile.h"
 
 
@@ -82,18 +84,20 @@ void Projectile::Setup(const Vector3 direction)
 void Projectile::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
 {
     //Weapons only really care about collision with the character
-   /* using namespace NodeCollision;
+    using namespace NodeCollision;
     //Actor::HandleNodeCollision(eventType, eventData);
     //
     Node* otherNode = static_cast<Node*>(eventData[P_OTHERNODE].GetPtr());
     //RigidBody* otherBody = static_cast<RigidBody*>(eventData[P_OTHERBODY].GetPtr());
     //MemoryBuffer contacts(eventData[P_CONTACTS].GetBuffer());
 
-    Actor* actor = static_cast<Actor*>(otherNode->GetComponent<Character>());
-    if(actor != NULL)
-    {
-        Actor::HandleNodeCollision(eventType,eventData);
+    //Actor* actor = static_cast<Actor*>(otherNode->GetComponent<Actor>());
+    Actor* actor = otherNode->GetDerivedComponent<Actor>();
+    debug_->Hud("projectile hit",otherNode->GetName());
+    //if(actor != NULL)
+    //{
+        //Actor::HandleNodeCollision(eventType,eventData);
         //collected_=true;
         //LOGINFO("ACTOR CHARACTER COLLISION");
-    }*/
+    //}
 }

@@ -2,6 +2,9 @@
 #include <Urho3D/Scene/Scene.h>//will not complie without this?
 #include <Urho3D/Core/Context.h>
 
+#include <Urho3D/IO/MemoryBuffer.h>
+#include <Urho3D/Physics/PhysicsEvents.h>
+
 #include "RagDoll.h"
 
 #include <Urho3D/Graphics/AnimatedModel.h>
@@ -13,7 +16,7 @@
 #include <Urho3D/Engine/DebugHud.h>
 
 RagDoll::RagDoll(Context* context):
-    Component(context)
+    LogicComponent(context)
 {
 }
 RagDoll::~RagDoll(){}
@@ -52,6 +55,33 @@ void RagDoll::Activate()
         rb->SetMass(1.0f);
    	}
 }
+
+/*void RagDoll::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
+{
+    // Check collision contacts and see if character is standing on ground (look for a contact that has near vertical normal)
+    using namespace NodeCollision;
+    
+    MemoryBuffer contacts(eventData[P_CONTACTS].GetBuffer());
+
+    while (!contacts.IsEof())
+    {
+        Vector3 contactPosition_ = contacts.ReadVector3();
+        Vector3 contactNormal_ = contacts.ReadVector3();
+        float contactDistance_ = contacts.ReadFloat();
+        float contactImpulse_ = contacts.ReadFloat();
+        
+        // If contact is below node center and mostly vertical, assume it's a ground contact
+        if (contactPosition_.y_ < (node_->GetPosition().y_ + 1.0f))
+        {
+            float level = Abs(contactNormal_.y_);
+            //if (level > 0.75)
+            //    onGround_ = true;
+        }
+    }
+}*/
+
+//////------
+
 void RagDoll::Bone(const String& start, const String& stop, ShapeType type, const Vector3& size)
 {
 

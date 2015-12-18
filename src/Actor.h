@@ -28,6 +28,7 @@ public:
     Node* GetNode(){return node_;};
     RigidBody* GetBody(){return body_;};
     CollisionShape* GetShape(){return shape_;};
+    void SetCollisionLayers(const unsigned layer, const unsigned mask);
     
 protected:
 
