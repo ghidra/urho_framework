@@ -16,8 +16,6 @@ class Scene;
 
 }
 
-using namespace Urho3D;
-
 class Weapon : public Actor
 {
 
