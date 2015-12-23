@@ -75,10 +75,10 @@ SimplexNoise::SimplexNoise(Context* context) :
 
 SimplexNoise::~SimplexNoise(){}
 
-float SimplexNoise::Get(const Vector2 pos, const Vector2 scl, const Vector2 offset)
+float SimplexNoise::Noise(const Vector2 pos, const Vector2 scl, const Vector2 offset)
 {
-	float ax=pos.x_;//(pos.x_*scl.x_)+offset.x_;
-	float ay=pos.y_;//(pos.y_*scl.y_)+offset.y_;
+	float ax=(pos.x_+offset.x_)*scl.x_;
+	float ay=(pos.y_+offset.y_)*scl.y_;
 
 	float s = (ax + ay) * F2_;
 	float i = floor(ax + s);
@@ -146,12 +146,36 @@ float SimplexNoise::Get(const Vector2 pos, const Vector2 scl, const Vector2 offs
 	return noise * 70.0f; //scale noise to [-1, 1]
 	//return 2.0f;
 }
-
-float SimplexNoise::Get(const Vector3 pos, const Vector3 scl, const Vector3 offset)
+float SimplexNoise::Noise(const Vector2 pos, const float scl, const Vector2 offset)
 {
-	float ax=(pos.x_*scl.x_)+offset.x_;//abs(x);
-	float ay=(pos.y_*scl.y_)+offset.y_;//abs(y);
-	float az=(pos.z_*scl.z_)+offset.z_;//abs(x);
+	return Noise(pos,Vector2(scl,scl),offset);
+}
+float SimplexNoise::Noise(const Vector2 pos, const float scl, const float offset)
+{
+	return Noise(pos,Vector2(scl,scl),Vector3(offset,offset));
+}
+Vector2 SimplexNoise::Gradient(const Vector2 pos, const float range, const Vector2 scl, const Vector2 offset)
+{
+    float nx = Noise(pos,scl,offset);
+    float ny = Noise(pos,scl,offset+Vector2(0.0f,range));
+    return Vector2(nx,ny);
+}
+Vector2 SimplexNoise::Gradient(const Vector2 pos, const float range, const float scl, const Vector2 offset)
+{
+    return Gradient(pos,range,Vector2(scl,scl),offset);
+}
+Vector2 SimplexNoise::Gradient(const Vector2 pos, const float range, const float scl, const float offset)
+{
+    return Gradient(pos,range,Vector2(scl,scl),Vector2(offset,offset));
+}
+
+//-----------------
+
+float SimplexNoise::Noise(const Vector3 pos, const Vector3 scl, const Vector3 offset)
+{
+	float ax=(pos.x_+offset.x_)*scl.x_;
+	float ay=(pos.y_+offset.y_)*scl.y_;
+	float az=(pos.z_+offset.z_)*scl.z_;
 
 	float s = (ax + ay + az) * F3_;
 	float i = floor(ax + s);
@@ -275,4 +299,27 @@ float SimplexNoise::Get(const Vector3 pos, const Vector3 scl, const Vector3 offs
 	}
 	
 	return noise * 32.0f;
+}
+float SimplexNoise::Noise(const Vector3 pos, const float scl, const Vector3 offset)
+{
+	return Noise(pos,Vector3(scl,scl),offset);
+}
+float SimplexNoise::Noise(const Vector3 pos, const float scl, const float offset)
+{
+	return Noise(pos,Vector3(scl,scl,scl),Vector3(offset,offset,scl));
+}
+Vector3 SimplexNoise::Gradient(const Vector3 pos, const float range, const Vector3 scl, const Vector3 offset)
+{
+    float nx = Noise(pos,scl,offset);
+    float ny = Noise(pos,scl,offset+Vector3(0.0f,range,0.0f));
+    float nz = Noise(pos,scl,offset+Vector3(0.0f,0.0f,range));
+    return Vector3(nx,ny,nz);
+}
+Vector3 SimplexNoise::Gradient(const Vector3 pos, const float range, const float scl, const Vector3 offset)
+{
+    return Gradient(pos,range,Vector3(scl,scl,scl),offset);
+}
+Vector3 SimplexNoise::Gradient(const Vector3 pos, const float range, const float scl, const float offset)
+{
+    return Gradient(pos,range,Vector3(scl,scl,scl),Vector3(offset,offset,offset));
 }
