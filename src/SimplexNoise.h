@@ -32,7 +32,7 @@ public:
 
 protected:
 
-	unsigned permutation_[256];
+	unsigned permutation_[512];
 	unsigned period_;
     
     Vector3 GRAD3_[16];

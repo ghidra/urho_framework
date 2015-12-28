@@ -8,7 +8,7 @@ SimplexNoise::SimplexNoise(Context* context) :
 	Object(context),
     period_(256)
 {
-	const unsigned plist[256] = 
+	const unsigned plist[512] = 
 	{
     	151,160,137,91,90,15, 
 		131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23, 
@@ -25,9 +25,9 @@ SimplexNoise::SimplexNoise(Context* context) :
 		138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
 	};
 	//hack assign the goddamned values to the array
-	for (unsigned i = 0; i<256; ++i)
+	for (unsigned i = 0; i<512; ++i)
 	{
-		permutation_[i]=plist[i];
+		permutation_[i]=plist[i%256];
 	}
 
 	const Vector3 glist[16] = 
@@ -67,10 +67,10 @@ SimplexNoise::SimplexNoise(Context* context) :
 		Vector4(2,1,0,3),Vector4(0,0,0,0),Vector4(0,0,0,0),Vector4(0,0,0,0),Vector4(3,1,0,2),Vector4(0,0,0,0),Vector4(3,2,0,1),Vector4(3,2,1,0)
 	};*/
 
-	F2_ = 0.5 * (sqrtf(3.0) - 1.0);
-	G2_ = (3.0 - sqrtf(3.0)) / 6.0;
-	F3_ = 1.0 / 3.0;
-	G3_ = 1.0 / 6.0;
+	F2_ = 0.5f * (sqrtf(3.0f) - 1.0f);
+	G2_ = (3.0f - sqrtf(3.0f)) / 6.0f;
+	F3_ = 1.0f / 3.0f;
+	G3_ = 1.0f / 6.0f;
 }
 
 SimplexNoise::~SimplexNoise(){}
@@ -247,6 +247,7 @@ float SimplexNoise::Noise(const Vector3 pos, const Vector3 scl, const Vector3 of
 			k2 = 0;
 		}
 	}
+
 	
 	float x1 = x0 - float(i1) + G3_;
 	float y1 = y0 - float(j1) + G3_;
@@ -265,6 +266,14 @@ float SimplexNoise::Noise(const Vector3 pos, const Vector3 scl, const Vector3 of
 	unsigned gi1 = permutation_[ii + i1 + permutation_[jj + j1 + permutation_[kk + k1]]] % 12;
 	unsigned gi2 = permutation_[ii + i2 + permutation_[jj + j2 + permutation_[kk + k2]]] % 12;
 	unsigned gi3 = permutation_[ii + 1 + permutation_[jj + 1 + permutation_[kk + 1]]] % 12;
+
+	//URHO3D_LOGWARNING("ii = "+String(unsigned(i))+"%"+String(period_)+"="+String(ii));
+	//URHO3D_LOGWARNING("jj = "+String(unsigned(j))+"%"+String(period_)+"="+String(jj));
+	//URHO3D_LOGWARNING(String( permutation_[jj] ) );
+	//URHO3D_LOGWARNING(String(gi0));
+	//URHO3D_LOGWARNING(String(gi1));
+	//URHO3D_LOGWARNING(String(gi2));
+	//URHO3D_LOGWARNING(String(gi3));
 
 	float noise = 0.0f;
 	float tt = 0.6 - (x0*x0) - (y0*y0) - (z0*z0);
