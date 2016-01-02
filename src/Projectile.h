@@ -32,6 +32,7 @@ public:
     virtual void Start();
     virtual void FixedUpdate(float timeStep);
     virtual void Setup(const Vector3 direction);
+    virtual void Setup(VariantMap& parms);
     //virtual void Attach(Node* bone);
 
 protected:
@@ -40,9 +41,10 @@ protected:
     virtual void HandleNodeCollision(StringHash eventType, VariantMap& eventData);
 
     Vector3 pos_born_;//the position this projectile was born
-  	Vector3 hit_;//this is if we want this projectile to aim at a specific position
-  	float range_;//how far this projectile can travel
-  	float damage_;//how much damage this projectile can do
+    Vector3 hit_;//this is if we want this projectile to aim at a specific position
+    float speed_;//the speed of the bullet
+    float range_;//how far this projectile can travel
+    float damage_;//how much damage this projectile can do
 
     //bool collected_;
    

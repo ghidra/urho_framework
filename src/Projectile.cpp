@@ -15,7 +15,8 @@
 
 Projectile::Projectile(Context* context) :
     Actor(context),
-    range_(40.0f),
+    speed_(200.0f),
+    range_(100.0f),
     damage_(1.0f)
 {
     SetUpdateEventMask(USE_FIXEDUPDATE);
@@ -51,6 +52,12 @@ void Projectile::Start()
 void Projectile::FixedUpdate(float timeStep)
 {
     Actor::FixedUpdate(timeStep);
+    //delete based on range
+    Vector3 pos = node_->GetPosition();
+    Vector3 diff = pos_born_-pos;
+    if(diff.Length()>range_)
+        node_->Remove();
+
 }
 void Projectile::Setup(const Vector3 direction)
 {
@@ -77,7 +84,23 @@ void Projectile::Setup(const Vector3 direction)
     body->SetTrigger(true);
     */
     RigidBody* body = node_->GetComponent<RigidBody>();
-    body->SetLinearVelocity(direction*80.0f);
+    body->SetLinearVelocity(direction*speed_);
+}
+
+void Projectile::Setup(VariantMap& parms)
+{
+    Vector3 direction = Vector3::UP;
+    bool usegravity = true;
+
+    if( parms.Contains("direction") ) direction = parms["direction"].GetVector3();
+    if( parms.Contains("range") ) range_ = parms["range"].GetFloat();
+    if( parms.Contains("speed") ) speed_ = parms["speed"].GetFloat();
+    if( parms.Contains("usegravity") ) usegravity= parms["usegravity"].GetBool();
+
+    RigidBody* body = node_->GetComponent<RigidBody>();
+    if(!usegravity)
+        body->SetUseGravity(false);
+    body->SetLinearVelocity(direction*speed_);
 }
 
 void Projectile::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
