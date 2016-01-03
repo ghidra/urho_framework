@@ -17,14 +17,14 @@ Projectile::Projectile(Context* context) :
     Actor(context),
     speed_(200.0f),
     range_(100.0f),
-    damage_(1.0f)
+    damage_(1.0f),
+    collision_size_(3.0f)
 {
     SetUpdateEventMask(USE_FIXEDUPDATE);
     mesh_ = String("Sphere.mdl");
     collision_layer_ = 2;
     collision_mask_ = 56;
     side_ = SIDE_PLAYER;
-
 }
 Projectile::~Projectile(){}
 void Projectile::RegisterObject(Context* context)
@@ -45,19 +45,32 @@ void Projectile::Start()
     SetRigidBody();
 
     shape_ = node_->CreateComponent<CollisionShape>();
-    shape_->SetCapsule(3.0f, 10.0f, Vector3(0.0f, 5.0f, 0.0f));
+    shape_->SetCapsule( collision_size_, collision_size_ );
+    //shape_->SetBox( Vector3(collision_size_, collision_size_,collision_size_) );
 
     pos_born_ = node_->GetWorldPosition();
+    pos_last_ = node_->GetWorldPosition();
+    collision_size_half_ = collision_size_/2.0f;
 }
 void Projectile::FixedUpdate(float timeStep)
 {
     Actor::FixedUpdate(timeStep);
+    //get the position
+    Vector3 pos = node_->GetWorldPosition();
+    Vector3 travelled = pos_last_-pos;
+    float resize = travelled.Length();
+
+    shape_->SetPosition( Vector3(0.0f,(resize-collision_size_half_),0.0f) );
+    shape_->SetSize(Vector3(collision_size_,resize+collision_size_,collision_size_));
+    //i need to consider stretching this based on movement
+    //debug_->Hud("collision size",String(shape_->GetSize()) );
+
     //delete based on range
-    Vector3 pos = node_->GetPosition();
     Vector3 diff = pos_born_-pos;
     if(diff.Length()>range_)
         node_->Remove();
 
+    pos_last_ = pos;
 }
 void Projectile::Setup(const Vector3 direction)
 {

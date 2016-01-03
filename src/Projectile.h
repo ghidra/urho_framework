@@ -36,15 +36,17 @@ public:
     //virtual void Attach(Node* bone);
 
 protected:
-
     
     virtual void HandleNodeCollision(StringHash eventType, VariantMap& eventData);
 
     Vector3 pos_born_;//the position this projectile was born
+    Vector3 pos_last_;//the last position
     Vector3 hit_;//this is if we want this projectile to aim at a specific position
     float speed_;//the speed of the bullet
     float range_;//how far this projectile can travel
     float damage_;//how much damage this projectile can do
+    float collision_size_;//this is the collision size
+    float collision_size_half_;//this is the collision size
 
     //bool collected_;
    
