@@ -9,12 +9,12 @@
 
 #include "Weapon.h"
 #include "State.h"
-#include "RagDoll.h"
+//#include "RagDoll.h"
 
-#include <Urho3D/Graphics/AnimationController.h>
+//#include <Urho3D/Graphics/AnimationController.h>
 
 class State;
-class RagDoll;
+//class RagDoll;
 
 class Pawn : public Actor
 {
@@ -43,14 +43,14 @@ public:
     Vector3 GetPlaneVelocity(){return planeVelocity_;};
     Vector3 GetJumpVelocity(){return jumpVelocity_;};
 
-    AnimationController* GetAnimationController(){return animationController_;};
+    //AnimationController* GetAnimationController(){return animationController_;};
     String GetRootName(){return rootName_;};
     bool GetFacingDirection(){return facingDirection_;};
     void SetFacingDirection(bool d){facingDirection_=d;}
 
     void SetState(State* state);
     //void SetArmsState(State* state);
-    RagDoll* GetRagDoll(){return ragdoll_;};
+    //RagDoll* GetRagDoll(){return ragdoll_;};
 
 protected:
 
@@ -85,7 +85,7 @@ protected:
     bool okToJump_;
     float inAirTimer_;    /// In air timer. Due to possible physics inaccuracy, character can be off ground for max. 1/10 second and still be allowed to move.
 
-    AnimationController* animationController_;
+    //AnimationController* animationController_;
 
     String rootName_;//the name of the root node, to grab for world transforms
     bool facingDirection_;//the direction I am facing. left=0 or right=1;
@@ -94,7 +94,7 @@ protected:
     //State* stateArms_ = NULL;
 
     //ragdoll
-    WeakPtr<RagDoll> ragdoll_;
+    //WeakPtr<RagDoll> ragdoll_;
 
     //now I can maybe have an array or something to hold the required animation paths?
    

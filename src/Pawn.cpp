@@ -1,7 +1,9 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Scene/Scene.h>
 
-#include <Urho3D/Graphics/AnimatedModel.h>
+//#include <Urho3D/Graphics/AnimatedModel.h>
+#include <Urho3D/Graphics/StaticModel.h>
+#include <Urho3D/Graphics/Model.h>
 #include <Urho3D/Resource/ResourceCache.h>
 
 #include "Pawn.h"
@@ -9,7 +11,7 @@
 #include "Controller.h"
 
 #include "State.h"
-#include "RagDoll.h"
+//#include "RagDoll.h"
 
 #include <Urho3D/DebugNew.h>
 #include <Urho3D/IO/Log.h>
@@ -77,12 +79,13 @@ void Pawn::Setup()
     //node_->SetPosition(Vector3(0.0f, 1.0f, 0.0f));//objectNode
 
     // Create the rendering component + animation controller
-    AnimatedModel* object = node_->CreateComponent<AnimatedModel>();
+    //AnimatedModel* object = node_->CreateComponent<AnimatedModel>();
+    StaticModel* object = node_->CreateComponent<StaticModel>();
     object->SetModel(cache->GetResource<Model>("Models/"+mesh_));
     //object->SetMaterial(cache->GetResource<Material>("Materials/Jack.xml"));
     object->SetCastShadows(true);
 
-    animationController_ = node_->CreateComponent<AnimationController>();
+    //animationController_ = node_->CreateComponent<AnimationController>();
 
     SetRigidBody();
     body_->SetAngularFactor(Vector3::ZERO);
@@ -91,7 +94,7 @@ void Pawn::Setup()
     //we still need to setup the collisionshape in the child class
     
     //here we are setting the ragdoll object waiting to accept some commands to build out
-    ragdoll_ = node_->CreateComponent<RagDoll>();//
+    //ragdoll_ = node_->CreateComponent<RagDoll>();//
 
 }
 
