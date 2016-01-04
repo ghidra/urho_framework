@@ -2,6 +2,9 @@
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Scene/Scene.h>
 
+#include <Urho3D/Physics/PhysicsWorld.h>//for the raycasting
+#include <Urho3D/Math/Ray.h>
+
 #include <Urho3D/Graphics/Model.h>
 #include <Urho3D/Graphics/StaticModel.h>
 
@@ -18,7 +21,8 @@ Projectile::Projectile(Context* context) :
     speed_(200.0f),
     range_(100.0f),
     damage_(1.0f),
-    collision_size_(3.0f)
+    collision_size_(3.0f),
+    ray_test_(false)
 {
     SetUpdateEventMask(USE_FIXEDUPDATE);
     mesh_ = String("Sphere.mdl");
@@ -57,20 +61,36 @@ void Projectile::FixedUpdate(float timeStep)
     Actor::FixedUpdate(timeStep);
     //get the position
     Vector3 pos = node_->GetWorldPosition();
-    Vector3 travelled = pos_last_-pos;
-    float resize = travelled.Length();
+    Vector3 dir = body_->GetLinearVelocity();
+    //Vector3 travelled = pos_last_-pos;
+    float resize = dir.Length()*timeStep;
+    
+    //for fast moving bullets we need to do some raycasting to make sure we dont go through
+
+    //get the physics world to do some raycasting
+    if(ray_test_)
+    {
+        PhysicsRaycastResult result;
+        PhysicsWorld* pw = node_->GetScene()->GetComponent<PhysicsWorld>();
+        pw->RaycastSingle( result,Ray(body_->GetPosition(), dir), speed_ *timeStep);
+        if(result.body_ != NULL)
+        {
+            result.body_->ApplyImpulse(dir);
+        }
+    }
+
 
     shape_->SetPosition( Vector3(0.0f,(resize-collision_size_half_),0.0f) );
     shape_->SetSize(Vector3(collision_size_,resize+collision_size_,collision_size_));
     //i need to consider stretching this based on movement
-    //debug_->Hud("collision size",String(shape_->GetSize()) );
+    //debug_->Hud("vel",String(resize) );
 
     //delete based on range
     Vector3 diff = pos_born_-pos;
     if(diff.Length()>range_)
         node_->Remove();
 
-    pos_last_ = pos;
+    //pos_last_ = pos;
 }
 void Projectile::Setup(const Vector3 direction)
 {
@@ -109,6 +129,7 @@ void Projectile::Setup(VariantMap& parms)
     if( parms.Contains("range") ) range_ = parms["range"].GetFloat();
     if( parms.Contains("speed") ) speed_ = parms["speed"].GetFloat();
     if( parms.Contains("usegravity") ) usegravity= parms["usegravity"].GetBool();
+    if( parms.Contains("raytest") ) ray_test_= parms["raytest"].GetBool();
 
     RigidBody* body = node_->GetComponent<RigidBody>();
     if(!usegravity)

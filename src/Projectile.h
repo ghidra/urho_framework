@@ -47,8 +47,7 @@ protected:
     float damage_;//how much damage this projectile can do
     float collision_size_;//this is the collision size
     float collision_size_half_;//this is the collision size
-
-    //bool collected_;
+    bool ray_test_;//weather we want to do ray testing for better collision results on fast projectiles
    
 };
 #endif
