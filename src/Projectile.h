@@ -33,6 +33,7 @@ public:
     virtual void FixedUpdate(float timeStep);
     virtual void Setup(const Vector3 direction);
     virtual void Setup(VariantMap& parms);
+    virtual float GetDamage(){return damage_;};
     //virtual void Attach(Node* bone);
 
 protected:

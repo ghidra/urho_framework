@@ -54,7 +54,7 @@ public:
 
 protected:
 
-    virtual void Setup();
+    //virtual void Setup();
 
     virtual void HandleNodeCollision(StringHash eventType, VariantMap& eventData);
 
@@ -63,10 +63,10 @@ protected:
 
     Weapon* weapon_ = NULL;
   
-    float health_;
-    float maxHealth_;
-    int lastDamageSide_;
-    unsigned lastDamageCreatorID_;
+    //float health_;
+    //float maxHealth_;
+    //int lastDamageSide_;
+    //unsigned lastDamageCreatorID_;
 
     float moveForce_;
     float inAirMoveForce_;

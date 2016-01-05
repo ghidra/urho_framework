@@ -2,9 +2,9 @@
 #include <Urho3D/Scene/Scene.h>
 
 //#include <Urho3D/Graphics/AnimatedModel.h>
-#include <Urho3D/Graphics/StaticModel.h>
-#include <Urho3D/Graphics/Model.h>
-#include <Urho3D/Resource/ResourceCache.h>
+//#include <Urho3D/Graphics/StaticModel.h>
+//#include <Urho3D/Graphics/Model.h>
+//#include <Urho3D/Resource/ResourceCache.h>
 
 #include "Pawn.h"
 //#include "../core/ApplicationInput.h"
@@ -72,7 +72,7 @@ void Pawn::FixedUpdate(float timeStep)
     jumpVelocity_ = Vector3(0.0f, velocity_.y_, 0.0f);
 }
 
-void Pawn::Setup()
+/*void Pawn::Setup()
 {
     ResourceCache* cache = GetSubsystem<ResourceCache>();
 
@@ -96,7 +96,7 @@ void Pawn::Setup()
     //here we are setting the ragdoll object waiting to accept some commands to build out
     //ragdoll_ = node_->CreateComponent<RagDoll>();//
 
-}
+}*/
 
 void Pawn::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
 {

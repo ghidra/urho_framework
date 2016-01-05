@@ -32,7 +32,7 @@ public:
     
 protected:
 
-    
+    virtual void Setup();
     //virtual bool Damage(Actor * origin, float amount);
     //virtual bool Heal(float amount);
     //virtual void PlaySound(const String& soundName);
@@ -44,6 +44,11 @@ protected:
     String mesh_;
     String mesh_convex_;
     String material_;
+
+    float health_;
+    float maxHealth_;
+    int lastDamageSide_;
+    unsigned lastDamageCreatorID_;
 
     //bool readyForUpdate_;//this is to make sure that we are totally initialized before calling fixedupdate. for physcs objects
   
