@@ -32,7 +32,7 @@ void PawnAnimated::Setup()
     //object->SetMaterial(cache->GetResource<Material>("Materials/Jack.xml"));
     object->SetCastShadows(true);
 
-    //animationController_ = node_->CreateComponent<AnimationController>();
+    animationController_ = node_->CreateComponent<AnimationController>();
 
     SetRigidBody();
     body_->SetAngularFactor(Vector3::ZERO);
@@ -47,5 +47,5 @@ void PawnAnimated::Setup()
 
 void PawnAnimated::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
 {
-    Actor::HandleNodeCollision(eventType, eventData);
+    Pawn::HandleNodeCollision(eventType, eventData);
 }
