@@ -29,6 +29,8 @@ public:
     RigidBody* GetBody(){return body_;};
     CollisionShape* GetShape(){return shape_;};
     void SetCollisionLayers(const unsigned layer, const unsigned mask);
+
+    bool canCollect_;//can collect pickups
     
 protected:
 
@@ -52,8 +54,8 @@ protected:
 
     //bool readyForUpdate_;//this is to make sure that we are totally initialized before calling fixedupdate. for physcs objects
   
-    bool onGround_;
-    bool isSliding_;
+    //bool onGround_;
+    //bool isSliding_;
     float duration_;
     //float health_;
     //float maxHealth_;

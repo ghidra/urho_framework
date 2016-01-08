@@ -5,12 +5,6 @@
 #include <Urho3D/Physics/PhysicsEvents.h>//this is for the namespace node collision
 #include <Urho3D/Physics/RigidBody.h>
 
-#include <Urho3D/Graphics/Model.h>
-#include <Urho3D/Graphics/StaticModel.h>
-
-#include <Urho3D/Resource/ResourceCache.h>
-//#include <Urho3D/Graphics/Material.h>
-
 #include "PickUp.h"
 #include "Pawn.h"
 
@@ -32,7 +26,8 @@ void PickUp::FixedUpdate(float timeStep)
 }
 void PickUp::Setup()
 {
-	ResourceCache* cache = GetSubsystem<ResourceCache>();
+    Actor::Setup();
+	/*ResourceCache* cache = GetSubsystem<ResourceCache>();
 
     StaticModel* object = node_->CreateComponent<StaticModel>();
     object->SetModel(cache->GetResource<Model>("Models/"+mesh_));
@@ -40,11 +35,11 @@ void PickUp::Setup()
     object->SetCastShadows(true);
 
 
-    RigidBody* body = node_->CreateComponent<RigidBody>();
-    body->SetCollisionLayer(collision_layer_);
-    body->SetCollisionMask(collision_mask_);
-    body->SetMass(0.01f);
-    body->SetCollisionEventMode(COLLISION_ALWAYS);
+    body_ = node_->CreateComponent<RigidBody>();
+    body_->SetCollisionLayer(collision_layer_);
+    body_->SetCollisionMask(collision_mask_);
+    body_->SetMass(0.01f);*/
+    body_->SetCollisionEventMode(COLLISION_ALWAYS);
     //body->SetTrigger(true);//wont sit on floor
 }
 
@@ -58,7 +53,10 @@ void PickUp::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
 
     if(actor != NULL)
     {
-        Actor::HandleNodeCollision(eventType,eventData);
-        collected_=true;
+        if(actor->canCollect_)
+        {
+            Actor::HandleNodeCollision(eventType,eventData);
+            collected_=true;
+        }
     }
 }

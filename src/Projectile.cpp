@@ -72,7 +72,7 @@ void Projectile::FixedUpdate(float timeStep)
     {
         PhysicsRaycastResult result;
         PhysicsWorld* pw = node_->GetScene()->GetComponent<PhysicsWorld>();
-        pw->RaycastSingle( result,Ray(body_->GetPosition(), dir), speed_ *timeStep);
+        pw->RaycastSingle( result,Ray(body_->GetPosition(), dir), speed_ *timeStep, body_->GetCollisionMask() );
         if(result.body_ != NULL)
         {
             result.body_->ApplyImpulse(dir);
