@@ -33,10 +33,13 @@ public:
     virtual void Fire(float timestep);
     virtual void ReleaseFire();
     virtual void SetFireRate(float fireRate);
+    virtual void StartReload();
+    virtual void Reload(const float timeStep);
     //virtual unsigned GetFiring(){return firing_;};
     //virtual Vector3 GetFireOffset(return fire_offset_);
     //virtual Vector3 GetLeftHandTarget();
     virtual Vector3 GetLeftHandTarget(){return lefthand_target_;};
+    virtual void SetMagSize(const unsigned size,  const float rate);
 
 protected:
 
@@ -54,10 +57,15 @@ protected:
     //virtual void SetLeftHandOffset();//set the offest. sets itself on fire. needs to always be set
 
     //bool collected_;
-	unsigned firing_;
-	float fire_velocity_;
-	float firing_timer_;
-	float firing_interval_;//the rate of fire
+    bool firing_;
+    float fire_velocity_;
+    float firing_timer_;
+    float firing_interval_;//the rate of fire
+    unsigned mag_size_;
+    unsigned mag_remains_;
+    float reload_timer_;
+    bool reloading_;
+    float reload_interval_;//speed or reload
 
     Vector3 fire_off_;//the vector offset of the position releative to where projectiles should spawn
     Quaternion kick_rot_;

@@ -16,10 +16,15 @@
 
 Weapon::Weapon(Context* context) :
     Actor(context),
-    firing_(0),
+    firing_(false),
     fire_velocity_(50.0f),
     firing_timer_(0.0f),
     firing_interval_(0.2f),
+    mag_size_(16),
+    mag_remains_(16),
+    reload_timer_(0.0f),
+    reload_interval_(0.25f),
+    reloading_(false),
     fire_off_(Vector3(0.0f,0.0f,2.0f)),
     lefthand_off_(Vector3(-0.4f,0.8f,1.1f))
 {
@@ -43,6 +48,9 @@ void Weapon::Update(Controls& ctrl, float timeStep)
     lefthand_target_=node_->GetWorldTransform()*lefthand_off_;
     //node_->SetPosition(Vector3(0.2f, 0.2f, 0.2f));//objectNode
     //this is called from the pawn controlling it, fron thier fixed update, like a state
+    if(reloading_)
+        Reload(timeStep);
+
     if (ctrl.IsDown(CTRL_FIRE))
         Fire(timeStep);
     else
@@ -54,7 +62,7 @@ void Weapon::Update(Controls& ctrl, float timeStep)
 
 void Weapon::Setup()
 {
-	ResourceCache* cache = GetSubsystem<ResourceCache>();
+    ResourceCache* cache = GetSubsystem<ResourceCache>();
 
     node_->SetPosition(Vector3(0.2f, 0.2f, 0.2f));//objectNode
 
@@ -117,41 +125,72 @@ void Weapon::Setup()
 //}
 
 ////firing mechanisms
+void Weapon::Reload(const float timeStep)
+{
+    reload_timer_+=timeStep;
+    if(reload_timer_ > reload_interval_)
+    {
+        mag_remains_=mag_size_;
+        reloading_ = false;
+    }
+}
+void Weapon::StartReload()
+{
+    reloading_=true;
+    reload_timer_=0.0f;//reset the timer
+}
 void Weapon::SetFireRate(float fireRate)
 {
     //i should send in an actual rate and do the math, fire rate per second.
     //as it is now, i send in the edsired interval
-    firing_interval_ = fireRate;
+    //firing_interval_ = fireRate;
+    firing_interval_ = 1000.0f/(fireRate*1000.0f);
+}
+void Weapon::SetMagSize(const unsigned size,  const float rate)
+{
+    mag_size_=size;
+    reload_interval_=1000.0f/(rate*1000.0f);
+    mag_remains_=size;
+    reload_timer_=0.0f;
 }
 void Weapon::Fire(float timeStep)
 {
+    
+    //check the mag_remains_ first to see if we need to reload
+    if(mag_remains_<=0 && !reloading_)
+        StartReload();
     //do the firing part
-    if(firing_)//if we are firing, just deal with the timer
+    if(!reloading_)
     {
-        firing_timer_ += timeStep;
-
-        //this is a lame attempt at setting it back
-        //node_->SetRotation(Quaternion());
-        //node_->Translate(-kick_off_);
-        //kick_off_=Vector3(0.0f,0.0f,0.0f);
-        
-        if(firing_timer_ > firing_interval_)
+        if(firing_ )//if we are firing, just deal with the timer
         {
-            firing_timer_=0.0f;
+            firing_timer_ += timeStep;
+
+            //this is a lame attempt at setting it back
+            //node_->SetRotation(Quaternion());
+            //node_->Translate(-kick_off_);
+            //kick_off_=Vector3(0.0f,0.0f,0.0f);
+            
+            if(firing_timer_ > firing_interval_)
+            {
+                firing_timer_=0.0f;
+                mag_remains_-=1;
+                SpawnProjectile();
+            }
+        }
+        else
+        {
+            firing_ = true;
+            firing_timer_ = timeStep;
+            mag_remains_-=1;
             SpawnProjectile();
         }
-    }
-    else
-    {
-        firing_ = 1;
-        firing_timer_ = timeStep;
-        SpawnProjectile();
     }
     //SpawnProjectile();   
 }
 void Weapon::ReleaseFire()
 {
-    firing_ = 0;
+    firing_ = false;
     firing_timer_ = 0.0f;
     node_->SetTransform(Vector3(),Quaternion());
     //kick_rot_ = Quaternion();
