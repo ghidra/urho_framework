@@ -28,12 +28,7 @@ Weapon::Weapon(Context* context) :
     fire_off_(Vector3(0.0f,0.0f,2.0f)),
     lefthand_off_(Vector3(-0.4f,0.8f,1.1f))
 {
-    // Only the scene update event is needed: unsubscribe from the rest for optimization
-    //SetUpdateEventMask(USE_FIXEDUPDATE);
     mesh_ = String("Man/MAN_gun.mdl");
-    //collision_layer_ = 4;
-    //collision_mask_ = 33;
-    //SubscribeToEvent(E_SCENEDRAWABLEUPDATEFINISHED, URHO3D_HANDLER(Weapon, HandleSceneDrawableUpdateFinished));
 }
 Weapon::~Weapon(){}
 
@@ -55,9 +50,6 @@ void Weapon::Update(Controls& ctrl, float timeStep)
         Fire(timeStep);
     else
         ReleaseFire();
-
-    //something
-    //SetLeftHandOffset();
 }
 
 void Weapon::Setup()
@@ -75,54 +67,8 @@ void Weapon::Setup()
 
     lefthand_grip_ = node_->CreateChild("lefthand_grip");
     lefthand_grip_->SetPosition(lefthand_off_); 
-    /*StaticModel* lo = lefthand_grip_->CreateComponent<StaticModel>();
-    lo->SetModel(cache->GetResource<Model>("Models/Box.mdl"));
-    lo->SetMaterial(cache->GetResource<Material>("Materials/Jack.xml"));*/
-    //node_->CreateComponent<AnimationController>();
 
-    // Set the head bone for manual control
-    //object->GetSkeleton().GetBone("Bip01_Head")->animated_ = false;
-
-    // Create rigidbody, and set non-zero mass so that the body becomes dynamic
-    /*RigidBody* body = node_->CreateComponent<RigidBody>();
-    body->SetCollisionLayer(collision_layer_);
-    body->SetCollisionMask(collision_mask_);
-    body->SetMass(1.0f);
-
-    // Set zero angular factor so that physics doesn't turn the character on its own.
-    // Instead we will control the character yaw manually
-    body->SetAngularFactor(Vector3::ZERO);
-
-    // Set the rigidbody to signal collision also when in rest, so that we get ground collisions properly
-    body->SetCollisionEventMode(COLLISION_ALWAYS);*/
 }
-/*void Weapon::Attach(Node* bone)
-{
-
-}*/
-//void Weapon::HandleSceneDrawableUpdateFinished(StringHash eventType, VariantMap& eventData)
-//{ 
-//    node_->Rotate(kick_rot_);
-//}
-
-//void Weapon::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
-//{
-    //Weapons only really care about collision with the character
-   /* using namespace NodeCollision;
-    //Actor::HandleNodeCollision(eventType, eventData);
-    //
-    Node* otherNode = static_cast<Node*>(eventData[P_OTHERNODE].GetPtr());
-    //RigidBody* otherBody = static_cast<RigidBody*>(eventData[P_OTHERBODY].GetPtr());
-    //MemoryBuffer contacts(eventData[P_CONTACTS].GetBuffer());
-
-    Actor* actor = static_cast<Actor*>(otherNode->GetComponent<Character>());
-    if(actor != NULL)
-    {
-        Actor::HandleNodeCollision(eventType,eventData);
-        //collected_=true;
-        //LOGINFO("ACTOR CHARACTER COLLISION");
-    }*/
-//}
 
 ////firing mechanisms
 void Weapon::Reload(const float timeStep)
@@ -136,14 +82,11 @@ void Weapon::Reload(const float timeStep)
 }
 void Weapon::StartReload()
 {
-    reloading_=true;
-    reload_timer_=0.0f;//reset the timer
+    reloading_ = true;
+    reload_timer_ = 0.0f;//reset the timer
 }
 void Weapon::SetFireRate(float fireRate)
 {
-    //i should send in an actual rate and do the math, fire rate per second.
-    //as it is now, i send in the edsired interval
-    //firing_interval_ = fireRate;
     firing_interval_ = 1000.0f/(fireRate*1000.0f);
 }
 void Weapon::SetMagSize(const unsigned size,  const float rate)
@@ -159,6 +102,7 @@ void Weapon::Fire(float timeStep)
     //check the mag_remains_ first to see if we need to reload
     if(mag_remains_<=0 && !reloading_)
         StartReload();
+
     //do the firing part
     if(!reloading_)
     {
@@ -199,7 +143,7 @@ void Weapon::ReleaseFire()
     //temporaily put this here, since its being called all the time if we are not firing.. and the target value needs to be set
     //lefthand_target_=node_->GetWorldTransform()*lefthand_off_;
 }
-void Weapon::SpawnProjectile()
+void Weapon::Recoil()
 {
     //I think that before I make the projectile, I should move the gun, to straighted it, as well as create kick
     Quaternion rot = node_->GetWorldRotation();
@@ -214,28 +158,15 @@ void Weapon::SpawnProjectile()
     //Vector3 rotaxis = dir.CrossProduct(Vector3(0.0f,1.0f,0.0f));//local to the gun
     Vector3 rotaxis = Vector3(0.0f,1.0f,0.0f);//local to the gun
     kick_rot_ = Quaternion(Random(4.0f),rotaxis);
-    //node_->Rotate(kick_rot_,TS_WORLD);
     kick_off_ = Vector3(Random(0.1f),Random(0.1f),Random(0.1f));
-    //kick_off_+=Vector3(1.2,1.2,1.2);
-    //node_->Translate(kick_off_,TS_WORLD);
-    //GetSubsystem<DebugHud>()->SetAppStats("gun_pos:", String(node_->GetTransform()) );
 
     node_->SetTransform(kick_off_,kick_rot_);
 
     lefthand_target_=lefthand_grip_->GetWorldPosition();
-
-    //SetLeftHandOffset();
-
-    //GetSubsystem<DebugHud>()->SetAppStats("gun_pos:", String(pos) );
-    //GetSubsystem<DebugHud>()->SetAppStats("gun_rot:", String(rot) );
-
-    //leave the actuall spawning up to whome inherits
-    /*Node* projectileNode_ = node_->GetScene()->CreateChild("projectile");
-    projectileNode_->SetPosition(offpos);
-
-    Projectile* projectile_ = projectileNode_->CreateComponent<Projectile>();
-    projectile_->Setup(dir);*/
-
+}
+void Weapon::SpawnProjectile()
+{
+    Recoil();
 }
 
 /*Vector3 Weapon::GetLeftHandTarget()

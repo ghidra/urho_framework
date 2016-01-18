@@ -49,6 +49,7 @@ protected:
 
     
     //virtual void FireLogic(float timeStep);
+    virtual void Recoil();
     virtual void SpawnProjectile();
 
     Vector3 ProjectileSpawnPosition_;
