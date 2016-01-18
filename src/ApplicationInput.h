@@ -20,6 +20,7 @@ public:
     bool GetQuit(){return quit_;};
 
     void SetCameraNode(SharedPtr<Node> cameraNode);
+    Node* GetCameraNode(){return cameraNode_;};
     //these all just get passes along
     void SetCameraTarget(SharedPtr<Node> target);//whom the camera should target
     void SetCameraType(const String& cameraType );
