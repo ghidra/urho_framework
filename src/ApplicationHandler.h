@@ -66,7 +66,7 @@ protected:
     /// Subscribe to application-wide logic update and post-render update events.
     void SubscribeToEvents();
 
-    void HandleUpdate(StringHash eventType, VariantMap& eventData);
+    virtual void HandleUpdate(StringHash eventType, VariantMap& eventData);
     //void HandleFixedUpdate(StringHash eventType, VariantMap& eventData);
     /// Handle the post-render update event.
     void HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData);
