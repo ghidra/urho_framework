@@ -34,6 +34,7 @@ public:
     virtual void Setup(const Vector3 direction);
     virtual void Setup(VariantMap& parms);
     virtual float GetDamage(){return damage_;};
+    virtual void Impact(RigidBody* body, const Vector3 pos, const Vector3 dir);
     //virtual void Attach(Node* bone);
 
 protected:
@@ -43,6 +44,7 @@ protected:
     Vector3 pos_born_;//the position this projectile was born
     Vector3 pos_last_;//the last position
     Vector3 hit_;//this is if we want this projectile to aim at a specific position
+    Vector3 dir_;//the direction that we are travelling, length is speed
     float speed_;//the speed of the bullet
     float range_;//how far this projectile can travel
     float damage_;//how much damage this projectile can do

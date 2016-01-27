@@ -61,9 +61,9 @@ void Projectile::FixedUpdate(float timeStep)
     Actor::FixedUpdate(timeStep);
     //get the position
     Vector3 pos = node_->GetWorldPosition();
-    Vector3 dir = body_->GetLinearVelocity();
+    dir_ = body_->GetLinearVelocity();
     //Vector3 travelled = pos_last_-pos;
-    float resize = dir.Length()*timeStep;
+    float resize = dir_.Length()*timeStep;
     
     //for fast moving bullets we need to do some raycasting to make sure we dont go through
 
@@ -72,10 +72,12 @@ void Projectile::FixedUpdate(float timeStep)
     {
         PhysicsRaycastResult result;
         PhysicsWorld* pw = node_->GetScene()->GetComponent<PhysicsWorld>();
-        pw->RaycastSingle( result,Ray(body_->GetPosition(), dir), speed_ *timeStep, body_->GetCollisionMask() );
+        pw->RaycastSingle( result,Ray(body_->GetPosition(), dir_), speed_ *timeStep, body_->GetCollisionMask() );
         if(result.body_ != NULL)
         {
-            result.body_->ApplyImpulse(dir);
+            //result.body_->ApplyImpulse(dir_);
+            Impact(result.body_,result.position_,dir_);
+            //i need to also "HANDLENODECOLLISION" to do whatever that wants to do
         }
     }
 
@@ -88,7 +90,8 @@ void Projectile::FixedUpdate(float timeStep)
     //delete based on range
     Vector3 diff = pos_born_-pos;
     if(diff.Length()>range_)
-        node_->Remove();
+        if(node_!=NULL)
+            node_->Remove();
 
     //pos_last_ = pos;
 }
@@ -116,8 +119,9 @@ void Projectile::Setup(const Vector3 direction)
     body->SetMass(1.0f);
     body->SetTrigger(true);
     */
+    dir_ = direction*speed_;
     RigidBody* body = node_->GetComponent<RigidBody>();
-    body->SetLinearVelocity(direction*speed_);
+    body->SetLinearVelocity(dir_);
 }
 
 void Projectile::Setup(VariantMap& parms)
@@ -134,14 +138,15 @@ void Projectile::Setup(VariantMap& parms)
     RigidBody* body = node_->GetComponent<RigidBody>();
     if(!usegravity)
         body->SetUseGravity(false);
-    body->SetLinearVelocity(direction*speed_);
+    dir_ = direction*speed_;
+    body->SetLinearVelocity(dir_);
 }
 
 void Projectile::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
 {
     //Weapons only really care about collision with the character
     using namespace NodeCollision;
-    //Actor::HandleNodeCollision(eventType, eventData);
+    Actor::HandleNodeCollision(eventType, eventData);
     //
     Node* otherNode = static_cast<Node*>(eventData[P_OTHERNODE].GetPtr());
     //RigidBody* otherBody = static_cast<RigidBody*>(eventData[P_OTHERBODY].GetPtr());
@@ -150,10 +155,18 @@ void Projectile::HandleNodeCollision(StringHash eventType, VariantMap& eventData
     //Actor* actor = static_cast<Actor*>(otherNode->GetComponent<Actor>());
     Actor* actor = otherNode->GetDerivedComponent<Actor>();
     debug_->Hud("projectile hit",otherNode->GetName());
+
+    Impact(otherNode->GetComponent<RigidBody>(),contactPosition_,dir_);
     //if(actor != NULL)
     //{
         //Actor::HandleNodeCollision(eventType,eventData);
         //collected_=true;
         //LOGINFO("ACTOR CHARACTER COLLISION");
     //}
+}
+void Projectile::Impact(RigidBody* body, const Vector3 pos, const Vector3 dir)
+{
+    body->ApplyImpulse(dir);
+    //duration_=0.0;
+    //removing the projecile is proving problematic
 }
