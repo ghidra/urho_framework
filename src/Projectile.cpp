@@ -76,22 +76,23 @@ void Projectile::FixedUpdate(float timeStep)
         if(result.body_ != NULL)
         {
             //result.body_->ApplyImpulse(dir_);
-            Impact(result.body_,result.position_,dir_);
-            //i need to also "HANDLENODECOLLISION" to do whatever that wants to do
+            Impact(result.body_->GetNode(),result.position_,dir_);
         }
     }
 
+    if(node_!=NULL)
+    {
 
-    shape_->SetPosition( Vector3(0.0f,(resize-collision_size_half_),0.0f) );
-    shape_->SetSize(Vector3(collision_size_,resize+collision_size_,collision_size_));
-    //i need to consider stretching this based on movement
-    //debug_->Hud("vel",String(resize) );
+        shape_->SetPosition( Vector3(0.0f,(resize-collision_size_half_),0.0f) );
+        shape_->SetSize(Vector3(collision_size_,resize+collision_size_,collision_size_));
+        //i need to consider stretching this based on movement
+        //debug_->Hud("vel",String(resize) );
 
-    //delete based on range
-    Vector3 diff = pos_born_-pos;
-    if(diff.Length()>range_)
-        if(node_!=NULL)
+        //delete based on range
+        Vector3 diff = pos_born_-pos;
+        if(diff.Length()>range_)      
             node_->Remove();
+    }
 
     //pos_last_ = pos;
 }
@@ -156,7 +157,8 @@ void Projectile::HandleNodeCollision(StringHash eventType, VariantMap& eventData
     Actor* actor = otherNode->GetDerivedComponent<Actor>();
     debug_->Hud("projectile hit",otherNode->GetName());
 
-    Impact(otherNode->GetComponent<RigidBody>(),contactPosition_,dir_);
+    //Impact(otherNode->GetComponent<RigidBody>(),contactPosition_,dir_);
+    Impact(otherNode,contactPosition_,dir_);
     //if(actor != NULL)
     //{
         //Actor::HandleNodeCollision(eventType,eventData);
@@ -164,9 +166,21 @@ void Projectile::HandleNodeCollision(StringHash eventType, VariantMap& eventData
         //LOGINFO("ACTOR CHARACTER COLLISION");
     //}
 }
-void Projectile::Impact(RigidBody* body, const Vector3 pos, const Vector3 dir)
+void Projectile::Impact(Node* node, const Vector3 pos, const Vector3 dir)
+{
+    RigidBody* body = node->GetComponent<RigidBody>();
+    Actor* actor = node->GetDerivedComponent<Actor>();
+    body->ApplyImpulse(dir);
+    if(actor!=NULL)
+    {
+        actor->TakeDamage(damage_,pos,dir,level_);
+    }
+    if(node_!=NULL)
+        node_->Remove();
+}
+/*void Projectile::Impact(RigidBody* body, const Vector3 pos, const Vector3 dir)
 {
     body->ApplyImpulse(dir);
-    //duration_=0.0;
-    //removing the projecile is proving problematic
-}
+    if(node_!=NULL)
+        node_->Remove();
+}*/

@@ -83,6 +83,10 @@ void Actor::SetRigidBody(const float mass, const float friction)
     body_->SetMass(mass);
     body_->SetFriction(friction);
 }
+void Actor::TakeDamage(const float amount, const Vector3 pos, const Vector3 dir, const unsigned level, const enum DamageType type)
+{
+    health_-=amount;
+}
 void Actor::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
 {
     // Check collision contacts and see if character is standing on ground (look for a contact that has near vertical normal)

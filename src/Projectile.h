@@ -33,8 +33,9 @@ public:
     virtual void FixedUpdate(float timeStep);
     virtual void Setup(const Vector3 direction);
     virtual void Setup(VariantMap& parms);
-    virtual float GetDamage(){return damage_;};
-    virtual void Impact(RigidBody* body, const Vector3 pos, const Vector3 dir);
+    //virtual float GetDamage(){return damage_;};
+    virtual void Impact(Node* node, const Vector3 pos, const Vector3 dir);
+    //virtual void Impact(RigidBody* body, const Vector3 pos, const Vector3 dir);
     //virtual void Attach(Node* bone);
 
 protected:
