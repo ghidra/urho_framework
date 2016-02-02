@@ -55,6 +55,9 @@ void Projectile::Start()
     pos_born_ = node_->GetWorldPosition();
     pos_last_ = node_->GetWorldPosition();
     collision_size_half_ = collision_size_/2.0f;
+
+    //start checking for collision
+    SubscribeToEvent(GetNode(), E_NODECOLLISION, URHO3D_HANDLER(Projectile, HandleNodeCollision));
 }
 void Projectile::FixedUpdate(float timeStep)
 {
