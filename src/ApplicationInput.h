@@ -32,6 +32,8 @@ public:
     void HandleUpdate(StringHash eventType, VariantMap& eventData);//this is called from outside this class, in the appication handler
     //void HandleFixedUpdate(StringHash eventType, VariantMap& eventData);//this is called from outside this class
 
+    void SetFullscreen(const bool value);
+    void ToggleFullscreen();
     //Controls controls_;
 
     bool IsDebugCamera(){return debugCamera_;}
@@ -50,6 +52,7 @@ private:
 
     //
     void HandleTouchBegin(StringHash eventType, VariantMap& eventData);
+    
 
     virtual String GetScreenJoystickPatchString() const { return String::EMPTY; }
 
@@ -69,6 +72,7 @@ private:
     //debug bools
     bool debugCamera_;
     bool debugDrawPhysics_;
+    bool fullscreen_;
 
     SharedPtr<Node> cameraNode_;
     CameraLogic* cameraLogic_;//i might not need to store this in the end

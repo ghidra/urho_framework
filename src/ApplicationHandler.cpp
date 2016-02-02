@@ -53,11 +53,11 @@ void ApplicationHandler::Setup()
     // Modify engine startup parameters
     engineParameters_["WindowTitle"] = GetTypeName();
     engineParameters_["LogName"]     = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs") + GetTypeName() + ".log";
-    engineParameters_["FullScreen"]  = false;
+    //engineParameters_["FullScreen"]  = false;
     engineParameters_["Headless"]    = false;
-    engineParameters_["WindowResizable"] = true;
-    engineParameters_["WindowWidth"] = 800;
-    engineParameters_["WindowHeight"] = 600;
+    //engineParameters_["WindowResizable"] = true;
+    //engineParameters_["WindowWidth"] = 800;
+    //engineParameters_["WindowHeight"] = 600;
     engineParameters_["VSync"] = true; // need this on my slow laptop
     engineParameters_["ResourcePaths"] = "Data;CoreData;Resources";//or
     //cache->AddResourceDir("Resources");
@@ -106,10 +106,11 @@ void ApplicationHandler::Stop()
     engine_->DumpResources(true);
 }
 
-void ApplicationHandler::SetApplicationInput(ApplicationInput* applicationInput)
+void ApplicationHandler::SetApplicationInput(ApplicationInput* applicationInput, const bool fullscreen)
 {
     applicationInput_ = applicationInput;
     applicationInput_->SetCameraNode(cameraNode_);
+    applicationInput_->SetFullscreen(fullscreen);
     //CameraLogic* cameraLogic_ = cameraNode_->CreateComponent<CameraLogic>();
     //cameraLogic_->SetCameraType(cameraType);
 }
@@ -244,6 +245,14 @@ void ApplicationHandler::HandleUpdate(StringHash eventType, VariantMap& eventDat
 
     // Move the camera, scale movement with time step
     //MoveCamera(timeStep);
+}
+
+void ApplicationHandler::ToggleFullscreen()
+{
+    if(applicationInput_)
+    {
+        applicationInput_->ToggleFullscreen();
+    } 
 }
 
 void ApplicationHandler::HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData)

@@ -38,7 +38,8 @@ ApplicationInput::ApplicationInput(Context* context):
     paused_(false),
     quit_(false),
     debugCamera_(false),
-    debugDrawPhysics_(false)
+    debugDrawPhysics_(false),
+    fullscreen_(true)
 {
     if (GetPlatform() == "Android" || GetPlatform() == "iOS")
         // On mobile platform, enable touch by adding a screen joystick
@@ -269,7 +270,13 @@ void ApplicationInput::HandleKeyDown(StringHash eventType, VariantMap& eventData
             cameraLogic_->SetCameraType(cameraType_);
     }
     else if (key == KEY_F10)
+    {
         GetSubsystem<DebugHud>()->Toggle(1);//just the debug renderer
+    }
+    else if(key == KEY_F12)
+    {
+        ToggleFullscreen();
+    }
 
 
     
@@ -361,9 +368,38 @@ void ApplicationInput::HandleKeyDown(StringHash eventType, VariantMap& eventData
             Image screenshot(context_);
             graphics->TakeScreenShot(screenshot);
             // Here we save in the Data folder with date and time appended
-            screenshot.SavePNG(GetSubsystem<FileSystem>()->GetProgramDir() + "Data/Screenshot_" +
+            // I expect to have a Resources/Screenshots folder to save into
+            screenshot.SavePNG(GetSubsystem<FileSystem>()->GetProgramDir() + "Resources/Screenshots/Screenshot_" +
                 Time::GetTimeStamp().Replaced(':', '_').Replaced('.', '_').Replaced(' ', '_') + ".png");
         }
+    }
+}
+void ApplicationInput::SetFullscreen(const bool value)
+{
+    if(value!=fullscreen_) ToggleFullscreen();
+    fullscreen_ = value;
+}
+void ApplicationInput::ToggleFullscreen()
+{
+    Graphics* graphics = GetSubsystem<Graphics>();
+    IntVector2 res = graphics->GetDesktopResolution();
+    if(fullscreen_){
+        
+        //set it to half res i assume
+        IntVector2 resh = res-IntVector2(int(res.x_/2.0),int(res.y_/2.0));
+        unsigned posx = unsigned(resh.x_/2.0);
+        unsigned posy = unsigned(resh.y_/2.0);
+        IntVector2 pos = IntVector2(posx,posy);
+
+        graphics->SetMode(unsigned(res.x_/2.0),unsigned(res.y_/2.0),false,true,false,false,false,1);
+        graphics->SetWindowPosition(pos.x_,pos.y_);
+
+        fullscreen_=false;
+    }else{
+        graphics->SetMode(res.x_,res.y_,false,true,false,false,false,1);
+        graphics->SetWindowPosition(0,0);
+
+        fullscreen_=true;
     }
 }
 

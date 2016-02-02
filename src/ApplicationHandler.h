@@ -58,7 +58,7 @@ protected:
     //void SetLogoVisible(bool enable);
     /// Logo sprite.
     //SharedPtr<Sprite> logoSprite_;
-    void SetApplicationInput(ApplicationInput* applicationInput);
+    void SetApplicationInput(ApplicationInput* applicationInput, const bool fullscreen=true);
     /// Scene.
     void CreateScene();
     /// Construct an instruction text to the UI.
@@ -88,6 +88,8 @@ protected:
     void HandleSceneUpdate(StringHash eventType, VariantMap& eventData);
     /// Handle touch begin event to initialize touch input on desktop platform.
     void HandleTouchBegin(StringHash eventType, VariantMap& eventData);
+
+    void ToggleFullscreen();//we start out in fullscreen mode
 
     /// Screen joystick index for navigational controls (mobile platforms only).
     unsigned screenJoystickIndex_;
