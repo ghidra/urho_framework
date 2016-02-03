@@ -32,7 +32,13 @@ public:
     //virtual void Attach(Node* bone);
     virtual void Fire(float timestep);
     virtual void ReleaseFire();
-    virtual void SetFireRate(float fireRate);
+
+    virtual void SetProjectileRate(const unsigned rate);//number of projectiles at once
+    virtual void SetFireRate(const float fireRate);
+    virtual void SetProjectileSpeed(const float speed);
+    virtual void SetProjectileRange(const float range);
+    virtual void SetProjectileContinuous(const bool continuous);
+
     virtual void StartReload();
     virtual void Reload(const float timeStep);
     //virtual unsigned GetFiring(){return firing_;};
@@ -62,6 +68,12 @@ protected:
     float fire_velocity_;
     float firing_timer_;
     float firing_interval_;//the rate of fire
+    unsigned num_projectiles_;
+    float projectile_speed_;
+    float projectile_range_;
+    bool continuous_;//for continus type projectiles, ie laser
+    //bool continuous_spawned_;//weather a continuous projectile has been spawned
+
     unsigned mag_size_;
     unsigned mag_remains_;
     float reload_timer_;

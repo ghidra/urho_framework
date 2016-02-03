@@ -130,7 +130,7 @@ void Projectile::Setup(const Vector3 direction)
 
 void Projectile::Setup(VariantMap& parms)
 {
-    Vector3 direction = Vector3::UP;
+    Vector3 direction = Vector3::FORWARD;
     bool usegravity = true;
 
     if( parms.Contains("direction") ) direction = parms["direction"].GetVector3();

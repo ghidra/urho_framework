@@ -20,6 +20,11 @@ Weapon::Weapon(Context* context) :
     fire_velocity_(50.0f),
     firing_timer_(0.0f),
     firing_interval_(0.2f),
+    num_projectiles_(1),
+    projectile_speed_(80.0f),
+    projectile_range_(20.0f),
+    continuous_(false),
+    //continuous_spawned_(false),
     mag_size_(16),
     mag_remains_(16),
     reload_timer_(0.0f),
@@ -85,10 +90,13 @@ void Weapon::StartReload()
     reloading_ = true;
     reload_timer_ = 0.0f;//reset the timer
 }
-void Weapon::SetFireRate(float fireRate)
-{
-    firing_interval_ = 1000.0f/(fireRate*1000.0f);
-}
+
+void Weapon::SetProjectileRate(const unsigned rate){num_projectiles_=rate;}
+void Weapon::SetFireRate(const float fireRate){firing_interval_ = 1000.0f/(fireRate*1000.0f);}
+void Weapon::SetProjectileSpeed(const float speed){projectile_speed_=speed;}
+void Weapon::SetProjectileRange(const float range){projectile_range_=range;}
+void Weapon::SetProjectileContinuous(const bool continuous){continuous_=continuous;}
+
 void Weapon::SetMagSize(const unsigned size,  const float rate)
 {
     mag_size_=size;
@@ -115,11 +123,20 @@ void Weapon::Fire(float timeStep)
             //node_->Translate(-kick_off_);
             //kick_off_=Vector3(0.0f,0.0f,0.0f);
             
-            if(firing_timer_ > firing_interval_)
+            if(firing_timer_ > firing_interval_ )
             {
                 firing_timer_=0.0f;
                 mag_remains_-=1;
-                SpawnProjectile();
+                //we dont need to spawn if we are continuous
+                //debug_->Hud("PROJECTILE",String(continuous_));
+                if(!continuous_)
+                {
+                    SpawnProjectile();
+                }
+                else
+                {
+                    Recoil();//just do the recoil if we are continuous
+                }
             }
         }
         else
