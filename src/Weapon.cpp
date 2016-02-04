@@ -132,6 +132,7 @@ void Weapon::Fire(float timeStep)
                 if(!continuous_)
                 {
                     SpawnProjectile();
+                    firing_ = true;//need to make sure that we set this so we dont immediatly delete the projectile, since its looking for this
                 }
                 else
                 {

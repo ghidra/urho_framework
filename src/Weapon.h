@@ -38,6 +38,7 @@ public:
     virtual void SetProjectileSpeed(const float speed);
     virtual void SetProjectileRange(const float range);
     virtual void SetProjectileContinuous(const bool continuous);
+    bool IsFiring(){return firing_;};
 
     virtual void StartReload();
     virtual void Reload(const float timeStep);
