@@ -83,6 +83,8 @@ void Weapon::Reload(const float timeStep)
     {
         mag_remains_=mag_size_;
         reloading_ = false;
+        if(continuous_)//have to set this to false to make it fire again
+            firing_=false;
     }
 }
 void Weapon::StartReload()
