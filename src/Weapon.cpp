@@ -87,6 +87,13 @@ void Weapon::Reload(const float timeStep)
             firing_=false;
     }
 }
+//updateremains
+//when reload is overriddedn and we want to update this information
+/*void Weapon::UpdateMagRemains(const unsigned amount)
+{
+    mag_remains_+=amount;
+}*/
+
 void Weapon::StartReload()
 {
     reloading_ = true;
@@ -110,11 +117,12 @@ void Weapon::Fire(float timeStep)
 {
     
     //check the mag_remains_ first to see if we need to reload
-    if(mag_remains_<=0 && !reloading_)
+    if(mag_remains_<=0 && !reloading_)//auto reload
         StartReload();
 
     //do the firing part
     if(!reloading_)
+    //if(mag_remains_>0)
     {
         if(firing_ )//if we are firing, just deal with the timer
         {

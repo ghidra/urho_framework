@@ -40,6 +40,7 @@ public:
     virtual void SetProjectileContinuous(const bool continuous);
     bool IsFiring(){return firing_;};
     bool IsReloading(){return reloading_;};
+    bool IsContinuous(){return continuous_;};
 
     virtual void StartReload();
     virtual void Reload(const float timeStep);
@@ -48,6 +49,7 @@ public:
     //virtual Vector3 GetLeftHandTarget();
     virtual Vector3 GetLeftHandTarget(){return lefthand_target_;};
     virtual void SetMagSize(const unsigned size,  const float rate);
+    //virtual void UpdateMagRemains(const unsigned amount);//this is called incase we do something else for reloading
 
 protected:
 

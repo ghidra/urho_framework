@@ -152,3 +152,8 @@ Vector3 CameraLogic::SmoothPosition(float timeStep) {
 void CameraLogic::SmoothZoom(float timeStep) {
   //curFollow_ = Lerp(curFollow_, follow_, timeStep * 20.0f);
 }
+
+void CameraLogic::ShakeCamera(const Vector3 shake)
+{
+    node_->SetPosition(node_->GetWorldPosition()+shake);
+}

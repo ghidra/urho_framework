@@ -102,6 +102,10 @@ layers:                        masks:
 001000 = (8)enemy bullets      100001 (33)
 010000 = (16)enemies           100011 (35) 110011 (51)(collide with other enemies)
 100000 = (32)env               111111 (63)
+
+000010 = (2)character casings  111001 (57)
+
+32,16,8,4,2,1
 ---------------------------------
 */
 

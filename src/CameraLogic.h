@@ -25,6 +25,8 @@ public:
     virtual void SetCameraParameters(const float distance, const float distance_min = 1.0f, const float distance_max = 20.0f, const Quaternion orientation = Quaternion(0.0f,0.0f,0.0f,1.0f) );
     virtual void SetCameraParameters( VariantMap& parms );
 
+    virtual void ShakeCamera(const Vector3 shake);
+
 
 private:
 
