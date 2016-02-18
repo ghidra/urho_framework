@@ -2,8 +2,9 @@
 #include <Urho3D/Scene/Scene.h>
 
 #include <Urho3D/Graphics/StaticModel.h>
-#include <Urho3D/Graphics/Model.h>
 #include <Urho3D/Resource/ResourceCache.h>
+#include <Urho3D/Graphics/Model.h>
+#include <Urho3D/Graphics/Material.h>
 
 #include <Urho3D/IO/MemoryBuffer.h>
 #include <Urho3D/Physics/PhysicsEvents.h>
@@ -21,7 +22,8 @@ Actor::Actor(Context* context) :
     maxHealth_(100.0f),
     canCollect_(false),
     collision_layer_(1),
-    collision_mask_(60)
+    collision_mask_(60),
+    material_("")
 {
     // Only the scene update event is needed: unsubscribe from the rest for optimization
     //SetUpdateEventMask(USE_FIXEDUPDATE);
@@ -50,7 +52,8 @@ void Actor::Setup()
     //AnimatedModel* object = node_->CreateComponent<AnimatedModel>();
     StaticModel* object = node_->CreateComponent<StaticModel>();
     object->SetModel(cache->GetResource<Model>("Models/"+mesh_));
-    //object->SetMaterial(cache->GetResource<Material>("Materials/Jack.xml"));
+    if(material_!="")
+        object->SetMaterial(cache->GetResource<Material>("Materials/"+material_+".xml"));
     object->SetCastShadows(true);
 
     //animationController_ = node_->CreateComponent<AnimationController>();
