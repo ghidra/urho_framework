@@ -18,6 +18,8 @@ public:
 	~CustomGeo();
 
 	void AddPoint(const Vector3 p);
+	void AddPointUV(const Vector2 uv);
+	void AddPointColor(const Vector3 c);
 	//PODVector<Vector3>* GetPoints(){return &points_;};
 	//void SetPoint(const unsigned short i, const Vector3 p);
 
@@ -43,6 +45,8 @@ private:
 	SharedPtr<Node> node_;
 
 	PODVector<Vector3> points_;
+	PODVector<Vector2> uvs_;
+	PODVector<Vector3> colors_;
 	PODVector<unsigned> ids_;
 	Vector< PODVector<unsigned> > shared_normal_ids_;
 	PODVector<Vector3> normals_;

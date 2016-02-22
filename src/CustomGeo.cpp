@@ -24,11 +24,20 @@ CustomGeo::CustomGeo(Context* context):
 }
 CustomGeo::~CustomGeo(){}
 
-void CustomGeo::AddPoint(const Vector3 p){
+void CustomGeo::AddPoint(const Vector3 p)
+{
 	points_.Push(p);
 	FitBB(p);
 	//add empty value to shared_normals_ids
 	shared_normal_ids_.Push(PODVector<unsigned>());
+}
+void CustomGeo::AddPointUV(const Vector2 uv)
+{
+	uvs_.Push(uv);
+}
+void CustomGeo::AddPointColor(const Vector3 c)
+{
+	colors_.Push(c);
 }
 
 /*void CustomGeo::SetPoint(const unsigned short i, const Vector3 p)
@@ -109,6 +118,7 @@ void CustomGeo::DoSubdivide(){
 
 	}
 }
+//https://github.com/MonkeyFirst/urho3d-component-tail-generator/blob/master/TailGenerator.cpp
 void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const unsigned layer, const unsigned mask)
 {
 	node_ = node;
@@ -120,7 +130,11 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 
 	for(unsigned i = 0; i < numVertices; ++i)
 	{
-		unsigned ii = i*6;
+		unsigned skip = 6;
+		skip+=(colors_.Size()>0)?3:0;
+		skip+=(uvs_.Size()>0)?2:0;
+		unsigned ii = i*skip;
+
 		vertexData[ii] = points_[ids_[i]].x_;
 		vertexData[ii+1] = points_[ids_[i]].y_;
 		vertexData[ii+2] = points_[ids_[i]].z_;
@@ -143,6 +157,21 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 			//vertexData[ii+5] = normals_[ids_[i/3]].z_;
 		}
 
+		//colors
+		if(colors_.Size()>0)
+		{
+			vertexData[ii+6] = colors_[ids_[i]].x_;
+			vertexData[ii+7] = colors_[ids_[i]].y_;
+			vertexData[ii+8] = colors_[ids_[i]].z_;
+		}
+		//uvss
+		if(uvs_.Size()>0)
+		{
+			unsigned uvoff = (colors_.Size()>0)?9:6;
+			vertexData[ii+uvoff] = uvs_[ids_[i]].x_;
+			vertexData[ii+uvoff+1] = uvs_[ids_[i]].y_;
+		}
+
 		indexData[i]=i;
 	}
 	/////
@@ -156,7 +185,18 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 
 	// Shadowed buffer needed for raycasts to work, and so that data can be automatically restored on device loss
 	vb->SetShadowed(true);
-	vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL);
+	if(uvs_.Size()>0 && colors_.Size()>0)
+	{
+		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_COLOR|MASK_TEXCOORD1);
+	}
+	else if(uvs_.Size()>0 && colors_.Size()==0)
+	{
+		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_TEXCOORD1);
+	}
+	else if(uvs_.Size()==0 && colors_.Size()==0)
+	{
+		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL);
+	}
 	vb->SetData(vertexData);
 
 	ib->SetShadowed(true);
