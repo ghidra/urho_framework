@@ -61,12 +61,12 @@ if NOT "%1"=="" (
         			call:makeAlias "CMake" "!URHOPATH!\CMake" "!PROJECTPATH!CMake"
         		)
         		echo ***********************************
-			    echo -link dll folder
+			    echo -copy dll file
 			    if NOT "!DRYRUN!"=="" (
 			    	echo 	-DRYRUN
 			    	echo 	"!URHOBUILD!\bin\Urho3D.dll !PROJECTPATH!bin\Urho3D.dll"
 			    ) else (
-			    	call:makeAliasFile "Urho3D.dll" "!URHOBUILD!\bin\Urho3D.dll" "!PROJECTPATH!\bin\Urho3D.dll"
+			    	call:copyFile "Urho3D.dll" "!URHOBUILD!\bin\Urho3D.dll" "!PROJECTPATH!bin\Urho3D.dll"
 			    )
         		echo ***********************************
       			echo copy CMakeLists.txt
@@ -175,6 +175,6 @@ goto:EOF
 	if exist %~3 (
 	  echo           -%~1 already exists
 	) else (
-	  xcopy /s %~3 %~2
+	  xcopy /s %~2 %~3*
 	)
 	GOTO:EOF
