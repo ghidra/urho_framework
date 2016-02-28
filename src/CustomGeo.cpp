@@ -125,14 +125,17 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 
 	unsigned num = ids_.Size();
 	const unsigned numVertices = num;
-	float vertexData[num*6];
+	
+	unsigned skip = 6;//need to make sure I set up the vertex buffers right skipping the right number of values
+	skip+=(colors_.Size()>0)?3:0;
+	skip+=(uvs_.Size()>0)?2:0;
+
+	float vertexData[num*skip];
 	unsigned short indexData[num];
 
 	for(unsigned i = 0; i < numVertices; ++i)
 	{
-		unsigned skip = 6;
-		skip+=(colors_.Size()>0)?3:0;
-		skip+=(uvs_.Size()>0)?2:0;
+		
 		unsigned ii = i*skip;
 
 		vertexData[ii] = points_[ids_[i]].x_;
