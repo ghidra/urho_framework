@@ -2,7 +2,7 @@ notes:
 
 -------
 urho_build.bat
-	-needs to be made
+	-cd !URHOBUILD! cannot find the directory
 
 ------
 bash

@@ -71,7 +71,7 @@ if NOT "%1"=="" (
         		echo ***********************************
       			echo copy CMakeLists.txt
       			if exist "!PROJECTPATH!\CMakeLists.txt" (
-      				echo "CMakeLists.txt already exists"
+      				echo           "-CMakeLists.txt already exists"
       			) else (
       				if NOT "!DRYRUN!"=="" (
       					echo "CMakeLists.txt will need to be copied"
@@ -82,18 +82,37 @@ if NOT "%1"=="" (
       				)
       			)
 
+      			echo ***********************************
+      			echo make cmakebat file
+      			SET CMAKEBAT=cmake . -G "MinGW Makefiles"
+      			if exist "!PROJECTPATH!\cmakebat.bat" (
+      				echo           "-cmakebat.bat already exists"
+      			) else (
+      				if NOT "!DRYRUN!"=="" (
+      					echo "cmakebat.bat will be created"
+      				) else (
+      					echo      "cmakebat.bat created"
+      					echo. 2>!PROJECTPATH!cmakebat.bat
+      					echo !CMAKEBAT! > !PROJECTPATH!cmakebat.bat
+      				)
+      			)
+
         		echo ***********************************
     			echo editor script
-    			SET EDITOR=!URHOBUILD!\bin\Urho3DPlayer.exe \Scripts\Editor.as -pp !PROJECTPATH!\bin -p "CoreData;Data;Resources"
+    			SET EDITOR=!URHOBUILD!\bin\Urho3DPlayer.exe \Scripts\Editor.as -pp !PROJECTPATH!bin -p "CoreData;Data;Resources"
 		        if NOT "!DRYRUN!"=="" (
 		        	echo 	-DRYRUN
 		        	echo 	!EDITOR!
 		        ) else (
-			        if exist "editor.bat" (
-			          echo !EDITOR! > !PROJECTPATH!editor.bat
-			          echo           -editor.bat edited
+			        if exist "!PROJECTPATH!\editor.bat" (
+			        	if 1==0 (
+			          		echo !EDITOR! > !PROJECTPATH!editor.bat
+			          		echo           -editor.bat edited
+			          	) else (
+			          		echo           "-editor.bat already exists"
+			          	)
 			        ) else (
-			          echo. 2>editor.bat
+			          echo. 2>!PROJECTPATH!editor.bat
 			          echo !EDITOR! > !PROJECTPATH!editor.bat
 			          echo           -editor.bat created
 			        )
