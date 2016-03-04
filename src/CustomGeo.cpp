@@ -46,7 +46,7 @@ void CustomGeo::AddPointColor(const Vector3 c)
 	FitBB(p);
 }*/
 
-void CustomGeo::AddTriangle(const unsigned p1, const unsigned p2, const unsigned p3)
+void CustomGeo::AddTriangle(const unsigned p1, const unsigned p2, const unsigned p3,const bool t)
 {
 	ids_.Push(p1);
 	ids_.Push(p2);
@@ -58,6 +58,8 @@ void CustomGeo::AddTriangle(const unsigned p1, const unsigned p2, const unsigned
 	shared_normal_ids_[p3].Push(si);
 
 	normals_.Push(Normal(points_[p1],points_[p2],points_[p3]));
+	if(t)
+		tangents_.Push(Tangent(normals_[normals_.Size()-1]));
 }
 //http://stackoverflow.com/questions/12662891/c-passing-member-function-as-argument
 void CustomGeo::Surface(const unsigned slices, const unsigned stacks, Vector3 (CustomGeo::*fptr)(void*, float, float), void* context)
@@ -129,6 +131,7 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 	unsigned skip = 6;//need to make sure I set up the vertex buffers right skipping the right number of values
 	skip+=(colors_.Size()>0)?3:0;
 	skip+=(uvs_.Size()>0)?2:0;
+	skip+=(tangents_.Size()>0)?4:0;
 
 	float vertexData[num*skip];
 	unsigned short indexData[num];
@@ -170,9 +173,18 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 		//uvss
 		if(uvs_.Size()>0)
 		{
-			unsigned uvoff = (colors_.Size()>0)?9:6;
-			vertexData[ii+uvoff] = uvs_[ids_[i]].x_;
-			vertexData[ii+uvoff+1] = uvs_[ids_[i]].y_;
+			unsigned ioff = (colors_.Size()>0)?9:6;
+			vertexData[ii+ioff] = uvs_[ids_[i]].x_;
+			vertexData[ii+ioff+1] = uvs_[ids_[i]].y_;
+		}
+		if(tangents_.Size()>0)
+		{
+			unsigned ioff = (colors_.Size()>0)?9:6;
+			ioff+=(colors_.Size()>0)?2:0;
+			vertexData[ii+ioff] = tangents_[ids_[i]].x_;
+			vertexData[ii+ioff+1] = tangents_[ids_[i]].y_;
+			vertexData[ii+ioff+2] = tangents_[ids_[i]].z_;
+			vertexData[ii+ioff+3] = 1.0f;
 		}
 
 		indexData[i]=i;
@@ -188,15 +200,32 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 
 	// Shadowed buffer needed for raycasts to work, and so that data can be automatically restored on device loss
 	vb->SetShadowed(true);
-	if(uvs_.Size()>0 && colors_.Size()>0)
+	if(uvs_.Size()>0 && colors_.Size()>0 && tangents_.Size()>0)
+	{
+		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_COLOR|MASK_TEXCOORD1|MASK_TANGENT);
+	}
+	else if(uvs_.Size()>0 && colors_.Size()==0 && tangents_.Size()>0)
+	{
+		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_TEXCOORD1|MASK_TANGENT);
+	}
+	else if(uvs_.Size()==0 && colors_.Size()>0 && tangents_.Size()>0)
+	{
+		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_COLOR|MASK_TANGENT);
+	}
+	else if(uvs_.Size()==0 && colors_.Size()==0 && tangents_.Size()>0)
+	{
+		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_TANGENT);
+	}
+	//no tangents 
+	else if(uvs_.Size()>0 && colors_.Size()>0 && tangents_.Size()==0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_COLOR|MASK_TEXCOORD1);
 	}
-	else if(uvs_.Size()>0 && colors_.Size()==0)
+	else if(uvs_.Size()>0 && colors_.Size()==0 && tangents_.Size()==0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_TEXCOORD1);
 	}
-	else if(uvs_.Size()==0 && colors_.Size()==0)
+	else if(uvs_.Size()==0 && colors_.Size()==0 && tangents_.Size()==0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL);
 	}
@@ -258,6 +287,10 @@ Vector3 CustomGeo::GetSmoothNormal(const unsigned i)
 		avg+=normals_[shared_normal_ids_[i][j]];
 	}
 	return avg/float(si);
+}
+Vector3 CustomGeo::Tangent(Vector3 n)
+{
+	return (Vector3::RIGHT - n * n.DotProduct(Vector3::RIGHT)).Normalized();
 }
 ///-----surfaces
 //http://prideout.net/blog/?p=44

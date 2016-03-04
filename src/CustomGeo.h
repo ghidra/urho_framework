@@ -23,7 +23,7 @@ public:
 	//PODVector<Vector3>* GetPoints(){return &points_;};
 	//void SetPoint(const unsigned short i, const Vector3 p);
 
-	void AddTriangle(const unsigned p1, const unsigned p2, const unsigned p3);
+	void AddTriangle(const unsigned p1, const unsigned p2, const unsigned p3, const bool t=false);//t is to calc tangents
 	void Surface(const unsigned slices, const unsigned stacks, Vector3 (CustomGeo::*fptr)(void*, float, float), void* context);
 	void Subdivide(const unsigned short depth=1);
 	void GetSphere(const unsigned short u, const unsigned short v);
@@ -34,6 +34,7 @@ public:
 private:
 
 	Vector3 Normal(const Vector3& p1, const Vector3& p2, const Vector3& p3);
+	Vector3 Tangent(Vector3 n);
 	Vector3 GetSmoothNormal(const unsigned i);
 	void FitBB(const Vector3 p);
 	void Debug(const String label, const String value);
@@ -47,6 +48,7 @@ private:
 	PODVector<Vector3> points_;
 	PODVector<Vector2> uvs_;
 	PODVector<Vector3> colors_;
+	PODVector<Vector3> tangents_;
 	PODVector<unsigned> ids_;
 	Vector< PODVector<unsigned> > shared_normal_ids_;
 	PODVector<Vector3> normals_;
