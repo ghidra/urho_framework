@@ -58,8 +58,8 @@ void CustomGeo::AddTriangle(const unsigned p1, const unsigned p2, const unsigned
 	shared_normal_ids_[p3].Push(si);
 
 	normals_.Push(Normal(points_[p1],points_[p2],points_[p3]));
-	if(t)
-		tangents_.Push(Tangent(normals_[normals_.Size()-1]));
+	if( t && uvs_.Size()>0 )//we have to have us to figure out the tangents
+		tangents_.Push(Tangent(p1,p2,p3));//tangents_.Push(Tangent(normals_[normals_.Size()-1]));//
 }
 //http://stackoverflow.com/questions/12662891/c-passing-member-function-as-argument
 void CustomGeo::Surface(const unsigned slices, const unsigned stacks, Vector3 (CustomGeo::*fptr)(void*, float, float), void* context)
@@ -180,10 +180,10 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 		if(tangents_.Size()>0)
 		{
 			unsigned ioff = (colors_.Size()>0)?9:6;
-			ioff+=(colors_.Size()>0)?2:0;
-			vertexData[ii+ioff] = tangents_[ids_[i]].x_;
-			vertexData[ii+ioff+1] = tangents_[ids_[i]].y_;
-			vertexData[ii+ioff+2] = tangents_[ids_[i]].z_;
+			ioff+=(uvs_.Size()>0)?2:0;
+			vertexData[ii+ioff] = tangents_[i/3].x_;
+			vertexData[ii+ioff+1] = tangents_[i/3].y_;
+			vertexData[ii+ioff+2] = tangents_[i/3].z_;
 			vertexData[ii+ioff+3] = 1.0f;
 		}
 
@@ -290,7 +290,22 @@ Vector3 CustomGeo::GetSmoothNormal(const unsigned i)
 }
 Vector3 CustomGeo::Tangent(Vector3 n)
 {
+	//tis method from urho3d::terrain
 	return (Vector3::RIGHT - n * n.DotProduct(Vector3::RIGHT)).Normalized();
+}
+Vector3 CustomGeo::Tangent(const unsigned p1, const unsigned p2, const unsigned p3)
+{
+	//tis method from here: http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-13-normal-mapping/
+	Vector3 deltaPos1 = points_[p2]-points_[p1];
+    Vector3 deltaPos2 = points_[p3]-points_[p1];
+
+    Vector2 deltaUV1 = uvs_[p2]-uvs_[p1];
+    Vector2 deltaUV2 = uvs_[p3]-uvs_[p1];
+
+    float r = 1.0f / (deltaUV1.x_ * deltaUV2.y_ - deltaUV1.y_ * deltaUV2.x_);
+    
+    return (deltaPos1 * deltaUV2.y_   - deltaPos2 * deltaUV1.y_)*r;
+    //bitangent can be calced too: bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
 }
 ///-----surfaces
 //http://prideout.net/blog/?p=44

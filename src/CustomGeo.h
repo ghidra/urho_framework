@@ -35,6 +35,7 @@ private:
 
 	Vector3 Normal(const Vector3& p1, const Vector3& p2, const Vector3& p3);
 	Vector3 Tangent(Vector3 n);
+	Vector3 Tangent(const unsigned p1, const unsigned p2, const unsigned p3);//diferent method
 	Vector3 GetSmoothNormal(const unsigned i);
 	void FitBB(const Vector3 p);
 	void Debug(const String label, const String value);
