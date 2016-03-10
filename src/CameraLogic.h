@@ -17,7 +17,7 @@ public:
     CameraLogic(Context* context);
 
     static void RegisterObject(Context* context);
-    virtual void FixedUpdate(float timeStep);
+    virtual void PostUpdate(float timeStep);
 
     //setters
     virtual void SetCameraType(const String& cameraType){ cameraType_ = cameraType; }

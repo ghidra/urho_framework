@@ -26,7 +26,8 @@ CameraLogic::CameraLogic(Context* context) :
 {
     // Only the scene update event is needed: unsubscribe from the rest for optimization
     //context->RegisterFactory<CameraLogic>();
-    SetUpdateEventMask(USE_FIXEDUPDATE);
+    //post update appears to give the smoothest results
+    SetUpdateEventMask(USE_POSTUPDATE);
 }
 
 void CameraLogic::RegisterObject(Context* context)
@@ -57,7 +58,7 @@ void CameraLogic::SetCameraParameters( VariantMap& parms)
     //outDirectionOrientation_ = orientation;
 }
 
-void CameraLogic::FixedUpdate(float timeStep)
+void CameraLogic::PostUpdate(float timeStep)
 {
     // Do not move if the UI has a focused element (the console)
     if (GetSubsystem<UI>()->GetFocusElement())
