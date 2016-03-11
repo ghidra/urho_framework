@@ -48,7 +48,7 @@ protected:
     //virtual void PlaySound(const String& soundName);
     virtual void SetRigidBody(const float mass = 1.0f, const float friction = 1.0f);
     virtual void HandleNodeCollision(StringHash eventType, VariantMap& eventData);
-    float Fit(float v, float l1, float h1, float l2, float h2);
+    float Fit(float v, float l1, float h1, float l2=0.0f, float h2=1.0f);
     //virtual void WorldCollision(VariantMap& eventData);
 
     String mesh_;
