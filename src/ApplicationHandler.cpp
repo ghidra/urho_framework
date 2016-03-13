@@ -42,7 +42,8 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     touchEnabled_(false),
     screenJoystickIndex_(M_MAX_UNSIGNED),
     screenJoystickSettingsIndex_(M_MAX_UNSIGNED),
-    paused_(false)
+    paused_(false),
+    reflectionViewportEnabled_(false)
 {
     //CameraLogic::RegisterObject(context);
     //context->RegisterFactory<CameraLogic>();
@@ -82,7 +83,7 @@ void ApplicationHandler::Start()
     // Create console and debug HUD
     CreateConsoleAndDebugHud();
 
-    ResourceCache* cache = GetSubsystem<ResourceCache>();
+    //ResourceCache* cache = GetSubsystem<ResourceCache>();
     //cache->AddResourceDir("/home/jimmy/Documents/projects/urho/urho_vania/bin/Resources");
 
     //----
@@ -208,6 +209,49 @@ void ApplicationHandler::SetupViewport()
     SharedPtr<Viewport> viewport(new Viewport(context_, scene_, cameraNode_->GetComponent<Camera>()));
     renderer->SetViewport(0, viewport);
 }
+void ApplicationHandler::SetupReflectionViewport(Node* waterPlaneNode)
+{
+    reflectionViewportEnabled_ = true;
+
+    Graphics* graphics = GetSubsystem<Graphics>();
+    Renderer* renderer = GetSubsystem<Renderer>();
+    ResourceCache* cache = GetSubsystem<ResourceCache>(); 
+
+    // Create a mathematical plane to represent the water in calculations
+    waterPlane_ = Plane(waterPlaneNode->GetWorldRotation() * Vector3(0.0f, 1.0f, 0.0f), waterPlaneNode->GetWorldPosition());
+    // Create a downward biased plane for reflection view clipping. Biasing is necessary to avoid too aggressive clipping
+    waterClipPlane_ = Plane(waterPlaneNode->GetWorldRotation() * Vector3(0.0f, 1.0f, 0.0f), waterPlaneNode->GetWorldPosition() -
+        Vector3(0.0f, 0.1f, 0.0f));
+
+    // Create camera for water reflection
+    // It will have the same farclip and position as the main viewport camera, but uses a reflection plane to modify
+    // its position when rendering
+    reflectionCameraNode_ = cameraNode_->CreateChild();
+    Camera* reflectionCamera = reflectionCameraNode_->CreateComponent<Camera>();
+    reflectionCamera->SetFarClip(750.0);
+    reflectionCamera->SetViewMask(0x7fffffff); // Hide objects with only bit 31 in the viewmask (the water plane)
+    reflectionCamera->SetAutoAspectRatio(false);
+    reflectionCamera->SetUseReflection(true);
+    reflectionCamera->SetReflectionPlane(waterPlane_);
+    reflectionCamera->SetUseClipping(true); // Enable clipping of geometry behind water plane
+    reflectionCamera->SetClipPlane(waterClipPlane_);
+    // The water reflection texture is rectangular. Set reflection camera aspect ratio to match
+    reflectionCamera->SetAspectRatio((float)graphics->GetWidth() / (float)graphics->GetHeight());
+    // View override flags could be used to optimize reflection rendering. For example disable shadows
+    //reflectionCamera->SetViewOverrideFlags(VO_DISABLE_SHADOWS);
+
+    // Create a texture and setup viewport for water reflection. Assign the reflection texture to the diffuse
+    // texture unit of the water material
+    int texSize = 1024;
+    SharedPtr<Texture2D> renderTexture(new Texture2D(context_));
+    renderTexture->SetSize(texSize, texSize, Graphics::GetRGBFormat(), TEXTURE_RENDERTARGET);
+    renderTexture->SetFilterMode(FILTER_BILINEAR);
+    RenderSurface* surface = renderTexture->GetRenderSurface();
+    SharedPtr<Viewport> rttViewport(new Viewport(context_, scene_, reflectionCamera));
+    surface->SetViewport(0, rttViewport);
+    Material* waterMat = cache->GetResource<Material>("Materials/Water.xml");
+    waterMat->SetTexture(TU_DIFFUSE, renderTexture);
+}
 
 void ApplicationHandler::SubscribeToEvents()
 {
@@ -252,6 +296,12 @@ void ApplicationHandler::ToggleFullscreen()
     if(applicationInput_)
     {
         applicationInput_->ToggleFullscreen();
+        if(reflectionViewportEnabled_)
+        {
+            Graphics* graphics = GetSubsystem<Graphics>();
+            Camera* reflectionCamera = reflectionCameraNode_->GetComponent<Camera>();
+            reflectionCamera->SetAspectRatio((float)graphics->GetWidth() / (float)graphics->GetHeight()); 
+        }
     } 
 }
 

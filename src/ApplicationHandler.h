@@ -49,6 +49,8 @@ public:
     /// Camera scene node.
     SharedPtr<Node> cameraNode_;
 
+    unsigned GetReflectionViewMask(){return 0x80000000;};// Set a different viewmask on the water plane to be able to hide it from the reflection camera
+
 protected:
     /// Return XML patch instructions for screen joystick layout for a specific sample app, if any.
     //virtual String GetScreenJoystickPatchString() const { return String::EMPTY; }
@@ -63,6 +65,7 @@ protected:
     void CreateScene();
     /// Construct an instruction text to the UI.
     void SetupViewport();
+    void SetupReflectionViewport(Node* waterPlaneNode);
     /// Subscribe to application-wide logic update and post-render update events.
     void SubscribeToEvents();
 
@@ -99,6 +102,11 @@ protected:
     bool paused_;
     /// Flag for drawing debug geometry.
     bool drawDebug_;
+
+    Plane waterPlane_;
+    Plane waterClipPlane_;
+    bool reflectionViewportEnabled_;
+    SharedPtr<Node> reflectionCameraNode_;//might not need t be public
 
     ApplicationInput * applicationInput_ = NULL;
 };
