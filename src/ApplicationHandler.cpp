@@ -10,6 +10,7 @@
 #include <Urho3D/Input/Input.h>
 #include <Urho3D/Input/InputEvents.h>
 #include <Urho3D/Graphics/Renderer.h>
+#include <Urho3D/Graphics/RenderSurface.h>
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Scene/SceneEvents.h>
@@ -209,7 +210,7 @@ void ApplicationHandler::SetupViewport()
     SharedPtr<Viewport> viewport(new Viewport(context_, scene_, cameraNode_->GetComponent<Camera>()));
     renderer->SetViewport(0, viewport);
 }
-void ApplicationHandler::SetupReflectionViewport(Node* waterPlaneNode)
+void ApplicationHandler::SetupReflectionViewport(Node* waterPlaneNode, const String mat)
 {
     reflectionViewportEnabled_ = true;
 
@@ -243,14 +244,15 @@ void ApplicationHandler::SetupReflectionViewport(Node* waterPlaneNode)
     // Create a texture and setup viewport for water reflection. Assign the reflection texture to the diffuse
     // texture unit of the water material
     int texSize = 1024;
-    SharedPtr<Texture2D> renderTexture(new Texture2D(context_));
-    renderTexture->SetSize(texSize, texSize, Graphics::GetRGBFormat(), TEXTURE_RENDERTARGET);
-    renderTexture->SetFilterMode(FILTER_BILINEAR);
-    RenderSurface* surface = renderTexture->GetRenderSurface();
+    //SharedPtr<Texture2D> renderTexture(new Texture2D(context_));
+    reflectionTexture_ = new Texture2D(context_);
+    reflectionTexture_->SetSize(texSize, texSize, Graphics::GetRGBFormat(), TEXTURE_RENDERTARGET);
+    reflectionTexture_->SetFilterMode(FILTER_BILINEAR);
+    RenderSurface* surface = reflectionTexture_->GetRenderSurface();
     SharedPtr<Viewport> rttViewport(new Viewport(context_, scene_, reflectionCamera));
     surface->SetViewport(0, rttViewport);
-    Material* waterMat = cache->GetResource<Material>("Materials/Water.xml");
-    waterMat->SetTexture(TU_DIFFUSE, renderTexture);
+    Material* waterMat = cache->GetResource<Material>("Materials/"+mat+".xml");
+    waterMat->SetTexture(TU_DIFFUSE, reflectionTexture_);
 }
 
 void ApplicationHandler::SubscribeToEvents()

@@ -5,6 +5,7 @@
 #pragma once
 
 #include <Urho3D/Engine/Application.h>
+#include <Urho3D/Graphics/Texture2D.h>
 #include "ApplicationInput.h"
 
 namespace Urho3D
@@ -50,7 +51,7 @@ public:
     SharedPtr<Node> cameraNode_;
 
     unsigned GetReflectionViewMask(){return 0x80000000;};// Set a different viewmask on the water plane to be able to hide it from the reflection camera
-
+    SharedPtr<Texture2D> GetReflectionTexture(){return reflectionTexture_;};
 protected:
     /// Return XML patch instructions for screen joystick layout for a specific sample app, if any.
     //virtual String GetScreenJoystickPatchString() const { return String::EMPTY; }
@@ -65,7 +66,7 @@ protected:
     void CreateScene();
     /// Construct an instruction text to the UI.
     void SetupViewport();
-    void SetupReflectionViewport(Node* waterPlaneNode);
+    void SetupReflectionViewport(Node* waterPlaneNode,const String mat = "Water");
     /// Subscribe to application-wide logic update and post-render update events.
     void SubscribeToEvents();
 
@@ -107,6 +108,7 @@ protected:
     Plane waterClipPlane_;
     bool reflectionViewportEnabled_;
     SharedPtr<Node> reflectionCameraNode_;//might not need t be public
+    SharedPtr<Texture2D> reflectionTexture_;
 
     ApplicationInput * applicationInput_ = NULL;
 };
