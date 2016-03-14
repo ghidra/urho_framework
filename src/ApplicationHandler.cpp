@@ -229,7 +229,7 @@ void ApplicationHandler::SetupReflectionViewport(Node* waterPlaneNode, const Str
     // its position when rendering
     reflectionCameraNode_ = cameraNode_->CreateChild();
     Camera* reflectionCamera = reflectionCameraNode_->CreateComponent<Camera>();
-    reflectionCamera->SetFarClip(750.0);
+    reflectionCamera->SetFarClip(300.0);
     reflectionCamera->SetViewMask(0x7fffffff); // Hide objects with only bit 31 in the viewmask (the water plane)
     reflectionCamera->SetAutoAspectRatio(false);
     reflectionCamera->SetUseReflection(true);
@@ -244,14 +244,16 @@ void ApplicationHandler::SetupReflectionViewport(Node* waterPlaneNode, const Str
     // Create a texture and setup viewport for water reflection. Assign the reflection texture to the diffuse
     // texture unit of the water material
     int texSize = 1024;
-    //SharedPtr<Texture2D> renderTexture(new Texture2D(context_));
-    reflectionTexture_ = new Texture2D(context_);
+    //SharedPtr<Texture2D> renderTexture_(new Texture2D(context_));
+    SharedPtr<Texture2D> reflectionTexture_(new Texture2D(context_));
+    //reflectionTexture_ = new Texture2D(context_);
     reflectionTexture_->SetSize(texSize, texSize, Graphics::GetRGBFormat(), TEXTURE_RENDERTARGET);
     reflectionTexture_->SetFilterMode(FILTER_BILINEAR);
     RenderSurface* surface = reflectionTexture_->GetRenderSurface();
     SharedPtr<Viewport> rttViewport(new Viewport(context_, scene_, reflectionCamera));
     surface->SetViewport(0, rttViewport);
     Material* waterMat = cache->GetResource<Material>("Materials/"+mat+".xml");
+    //Material* waterMat = cache->GetResource<Material>("Materials/WaterSurface.xml");
     waterMat->SetTexture(TU_DIFFUSE, reflectionTexture_);
 }
 

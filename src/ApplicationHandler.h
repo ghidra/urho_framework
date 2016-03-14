@@ -51,7 +51,7 @@ public:
     SharedPtr<Node> cameraNode_;
 
     unsigned GetReflectionViewMask(){return 0x80000000;};// Set a different viewmask on the water plane to be able to hide it from the reflection camera
-    SharedPtr<Texture2D> GetReflectionTexture(){return reflectionTexture_;};
+    //SharedPtr<Texture2D> GetReflectionTexture(){return reflectionTexture_;};
 protected:
     /// Return XML patch instructions for screen joystick layout for a specific sample app, if any.
     //virtual String GetScreenJoystickPatchString() const { return String::EMPTY; }
@@ -108,7 +108,7 @@ protected:
     Plane waterClipPlane_;
     bool reflectionViewportEnabled_;
     SharedPtr<Node> reflectionCameraNode_;//might not need t be public
-    SharedPtr<Texture2D> reflectionTexture_;
+    //SharedPtr<Texture2D> reflectionTexture_;
 
     ApplicationInput * applicationInput_ = NULL;
 };
