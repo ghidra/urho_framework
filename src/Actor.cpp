@@ -23,7 +23,7 @@ Actor::Actor(Context* context) :
     canCollect_(false),
     collision_layer_(1),
     collision_mask_(60),
-    material_("")
+    material_("DefaultGrey")
 {
     // Only the scene update event is needed: unsubscribe from the rest for optimization
     //SetUpdateEventMask(USE_FIXEDUPDATE);
