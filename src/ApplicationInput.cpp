@@ -391,12 +391,12 @@ void ApplicationInput::ToggleFullscreen()
         unsigned posy = unsigned(resh.y_/2.0);
         IntVector2 pos = IntVector2(posx,posy);
 
-        graphics->SetMode(unsigned(res.x_/2.0),unsigned(res.y_/2.0),false,true,false,false,false,1);
+        graphics->SetMode(unsigned(res.x_/2.0),unsigned(res.y_/2.0),false,true,false,false,false,false,1);
         graphics->SetWindowPosition(pos.x_,pos.y_);
 
         fullscreen_=false;
     }else{
-        graphics->SetMode(res.x_,res.y_,false,true,false,false,false,1);
+        graphics->SetMode(res.x_,res.y_,false,true,false,false,false,false,1);
         graphics->SetWindowPosition(0,0);
 
         fullscreen_=true;
