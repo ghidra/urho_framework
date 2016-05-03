@@ -139,6 +139,13 @@ void Projectile::Setup(VariantMap& parms)
     if( parms.Contains("usegravity") ) usegravity= parms["usegravity"].GetBool();
     if( parms.Contains("raytest") ) ray_test_= parms["raytest"].GetBool();
 
+    //collision_layer_ = 2;
+    //collision_mask_ = 56;
+
+    if( parms.Contains("collision_layer") ) collision_layer_= parms["collision_layer"].GetInt();
+    if( parms.Contains("collision_mask") ) collision_mask_= parms["collision_mask"].GetInt();
+    SetCollisionLayers(collision_layer_,collision_mask_);
+
     RigidBody* body = node_->GetComponent<RigidBody>();
     if(!usegravity)
         body->SetUseGravity(false);

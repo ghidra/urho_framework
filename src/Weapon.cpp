@@ -23,6 +23,8 @@ Weapon::Weapon(Context* context) :
     num_projectiles_(1),
     projectile_speed_(80.0f),
     projectile_range_(20.0f),
+    projectile_collision_layer_(2),
+    projectile_collision_mask_(56),
     continuous_(false),
     //continuous_spawned_(false),
     mag_size_(16),
@@ -105,6 +107,12 @@ void Weapon::SetFireRate(const float fireRate){firing_interval_ = 1000.0f/(fireR
 void Weapon::SetProjectileSpeed(const float speed){projectile_speed_=speed;}
 void Weapon::SetProjectileRange(const float range){projectile_range_=range;}
 void Weapon::SetProjectileContinuous(const bool continuous){continuous_=continuous;}
+void Weapon::SetProjectileCollision(const unsigned layer, const unsigned mask)
+{
+    projectile_collision_layer_=layer;
+    projectile_collision_mask_=mask;
+}
+
 
 void Weapon::SetMagSize(const unsigned size,  const float rate)
 {

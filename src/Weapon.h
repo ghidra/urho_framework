@@ -38,6 +38,7 @@ public:
     virtual void SetProjectileSpeed(const float speed);
     virtual void SetProjectileRange(const float range);
     virtual void SetProjectileContinuous(const bool continuous);
+    virtual void SetProjectileCollision(const unsigned layer, const unsigned mask=56);
     bool IsFiring(){return firing_;};
     bool IsReloading(){return reloading_;};
     bool IsContinuous(){return continuous_;};
@@ -75,6 +76,8 @@ protected:
     unsigned num_projectiles_;
     float projectile_speed_;
     float projectile_range_;
+    unsigned projectile_collision_layer_;
+    unsigned projectile_collision_mask_;
     bool continuous_;//for continus type projectiles, ie laser
     //bool continuous_spawned_;//weather a continuous projectile has been spawned
 
