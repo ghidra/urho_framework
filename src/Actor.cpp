@@ -124,6 +124,7 @@ void Actor::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
         }*/
     }
 }
+void Actor::OnProjectileHitActor(Actor* victim){};
 
 float Actor::Fit(float v, float l1, float h1, float l2, float h2)
 {

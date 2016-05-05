@@ -39,6 +39,7 @@ public:
     bool canCollect_;//can collect pickups
 
     virtual void TakeDamage(const float amount, const Vector3 pos = Vector3(), const Vector3 dir= Vector3(), const unsigned level = 0, const enum DamageType type = DT_BALISTIC);//called from something that hits this... like a projectile
+    virtual void OnProjectileHitActor(Actor* victim);
     
 protected:
 

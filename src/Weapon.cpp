@@ -77,6 +77,11 @@ void Weapon::Setup()
 
 }
 
+void Weapon::SetOwner(SharedPtr<Actor> owner)
+{
+    owner_=owner;
+}
+
 ////firing mechanisms
 void Weapon::Reload(const float timeStep)
 {
@@ -203,6 +208,12 @@ void Weapon::Recoil()
 void Weapon::SpawnProjectile()
 {
     Recoil();
+}
+
+void Weapon::OnProjectileHitActor(Actor* victim)
+{
+    //we've hit something, useful for enemies that have hit the player to up thier fitness
+    debug_->LogWarning( String(victim->GetNode()->GetName()) );
 }
 
 /*Vector3 Weapon::GetLeftHandTarget()

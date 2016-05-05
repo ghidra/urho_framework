@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Actor.h"
+#include "Weapon.h"
 
 using namespace Urho3D;
 
@@ -37,6 +38,8 @@ public:
     virtual void Impact(Node* node, const Vector3 pos, const Vector3 dir);
     //virtual void Impact(RigidBody* body, const Vector3 pos, const Vector3 dir);
     //virtual void Attach(Node* bone);
+    void SetOwner(SharedPtr<Weapon> owner);
+    SharedPtr<Weapon> GetOwner(){return owner_;};
 
 protected:
     
@@ -52,6 +55,8 @@ protected:
     float collision_size_;//this is the collision size
     float collision_size_half_;//this is the collision size
     bool ray_test_;//weather we want to do ray testing for better collision results on fast projectiles
+
+    SharedPtr<Weapon> owner_;
    
 };
 #endif

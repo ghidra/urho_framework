@@ -153,6 +153,11 @@ void Projectile::Setup(VariantMap& parms)
     body->SetLinearVelocity(dir_);
 }
 
+void Projectile::SetOwner(SharedPtr<Weapon> owner)
+{
+    owner_=owner;
+}
+
 void Projectile::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
 {
     //Weapons only really care about collision with the character
@@ -184,6 +189,10 @@ void Projectile::Impact(Node* node, const Vector3 pos, const Vector3 dir)
     if(actor!=NULL)
     {
         actor->TakeDamage(damage_,pos,dir,level_);
+        if(owner_!=NULL)//if we were passed a weapon owner, then call OnProjectileHit method
+        {
+            owner_->OnProjectileHitActor(actor);
+        }
     }
     if(node_!=NULL)
         node_->Remove();

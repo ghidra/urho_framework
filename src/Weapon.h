@@ -43,6 +43,10 @@ public:
     bool IsReloading(){return reloading_;};
     bool IsContinuous(){return continuous_;};
 
+    virtual void SetOwner(SharedPtr<Actor> owner);
+    SharedPtr<Actor> GetOwner(){return owner_;};
+    virtual void OnProjectileHitActor(Actor* victim);
+
     virtual void StartReload();
     virtual void Reload(const float timeStep);
     //virtual unsigned GetFiring(){return firing_;};
@@ -93,7 +97,10 @@ protected:
 
     Vector3 lefthand_off_;//the constant offset of the IK position
 
+    SharedPtr<Actor> owner_;
+
 private:
+    
     SharedPtr<Node> lefthand_grip_;//node that is the grip of the weapons for the left had
     Vector3 lefthand_target_;
 };
