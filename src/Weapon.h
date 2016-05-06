@@ -55,6 +55,9 @@ public:
     virtual Vector3 GetLeftHandTarget(){return lefthand_target_;};
     virtual void SetMagSize(const unsigned size,  const float rate);
     //virtual void UpdateMagRemains(const unsigned amount);//this is called incase we do something else for reloading
+    virtual unsigned GetMagSize(){return mag_size_;};
+    virtual unsigned GetMagRemain(){return mag_remains_;};
+    virtual float GetFireRate(){return firing_interval_;};
 
 protected:
 
