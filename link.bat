@@ -1,12 +1,13 @@
 @echo OFF
 setlocal EnableDelayedExpansion
-SET DRYRUN=%3
+SET DRYRUN=%4
 
 if NOT "%1"=="" (
 	if NOT "%2"=="" (
 		::get the project root folder
 		SET URHOPATH=%1
     	SET URHOBUILD=%2
+    	SET OVERWRITE=%3
 
 		if exist "!URHOPATH!" (
 			if exist "!URHOBUILD!" (
@@ -56,9 +57,9 @@ if NOT "%1"=="" (
 	        		echo 		"!URHOPATH!\CMake"
 	        		echo 		"!PROJECTPATH!CMake"
         		) else (
-	        		call:makeAlias "CoreData" "!URHOPATH!\bin\CoreData" "!PROJECTPATH!bin\CoreData"
-        			call:makeAlias "Data" "!URHOPATH!\bin\Data" "!PROJECTPATH!bin\Data"
-        			call:makeAlias "CMake" "!URHOPATH!\CMake" "!PROJECTPATH!CMake"
+	        		call:makeAlias "CoreData" "!URHOPATH!\bin\CoreData" "!PROJECTPATH!bin\CoreData" "!OVERWRITE!"
+        			call:makeAlias "Data" "!URHOPATH!\bin\Data" "!PROJECTPATH!bin\Data" "!OVERWRITE!"
+        			call:makeAlias "CMake" "!URHOPATH!\CMake" "!PROJECTPATH!CMake" "!OVERWRITE!"
         		)
         		echo ***********************************
 			    echo -copy dll file
@@ -66,7 +67,7 @@ if NOT "%1"=="" (
 			    	echo 	-DRYRUN
 			    	echo 	"!URHOBUILD!\bin\Urho3D.dll !PROJECTPATH!bin\Urho3D.dll"
 			    ) else (
-			    	call:copyFile "Urho3D.dll" "!URHOBUILD!\bin\Urho3D.dll" "!PROJECTPATH!bin\Urho3D.dll"
+			    	call:copyFile "Urho3D.dll" "!URHOBUILD!\bin\Urho3D.dll" "!PROJECTPATH!bin\Urho3D.dll" "!OVERWRITE!"
 			    )
         		echo ***********************************
       			echo copy CMakeLists.txt
@@ -78,7 +79,7 @@ if NOT "%1"=="" (
       				) else (
       					echo      "CMakeLists.txt created"
           				echo            "-!!!! MANUALLY UPDATE PROJECT AND TARGET NAME !!!!"
-      					call:copyFile "CmakeLists.txt" "%~dp0\CMakeLists.txt" "!PROJECTPATH!\CMakeLists.txt"
+      					call:copyFile "CmakeLists.txt" "%~dp0\CMakeLists.txt" "!PROJECTPATH!\CMakeLists.txt" "!OVERWRITE!"
       				)
       			)
 
@@ -149,7 +150,12 @@ goto:EOF
 
 :makeAlias
 	if exist %~3 (
-	  echo           -%~1 already exists
+		echo           -%~1 already exists
+		if %~4 == 1 (
+			call:removeLinkedFolder %~3
+			mklink /J %~3 %~2
+			echo                -%~1 but we replaced it anyway
+		)
 	) else (
 	  mklink /J %~3 %~2
 	)
@@ -192,7 +198,12 @@ goto:EOF
 
 :copyFile
 	if exist %~3 (
-	  echo           -%~1 already exists
+	  	echo           -%~1 already exists
+	  	if %~4 == 1 (
+			call:removeLinkedFile %~3
+			 xcopy /s %~2 %~3*
+			echo                -%~1 but we replaced it anyway
+		)
 	) else (
 	  xcopy /s %~2 %~3*
 	)
