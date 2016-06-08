@@ -3,16 +3,22 @@
 # needs 2 arguments
 # argument 1: Urho3D source
 # argument 2: Urho3D build folder
-# argument 3 (optional): triggers a dry run, and doesnt do anything
+# argument 3: overwrite
+# argument 4 (optional): triggers a dry run, and doesnt do anything
 
 make_alias(){
-  #$1 FOLDER $2 LINKEDFOLDER $3 NEWFOLDER
+  #$1 FOLDER $2 LINKEDFOLDER $3 NEWFOLDER $4 OVERWRITE
   if [ ! -e $3 ];then
     #link does not exist, we can make it
     ln -s $2 $3
     echo "          -"$1" directory LINKED"
   else
     echo "          -"$1" link ALREADY EXISTS"
+    if [ ! -z $4 ];then
+     rm -f $3
+     ln -s $2 $3
+     echo "               -we replaced it anyway"
+    fi
   fi
 }
 
@@ -28,7 +34,8 @@ make_folder(){
 
 URHOPATH=`cd "$1"; pwd`
 URHOBUILD=`cd "$2"; pwd`
-DRYRUN=$3
+OVERWRITE=$3
+DRYRUN=$4
 
 if [ $# -eq 0 ];then
   echo "***********************************"
@@ -91,9 +98,9 @@ else
         echo "          "$URHOPATH"/bin/Data"
         echo "          "$PROJECTPATH"/bin/Data"
       else
-        make_alias "CMake" $URHOPATH"/CMake" $PROJECTPATH"/CMake"
-        make_alias "CoreData" $URHOPATH"/bin/CoreData" $PROJECTPATH"/bin/CoreData"
-        make_alias "Data" $URHOPATH"/bin/Data" $PROJECTPATH"/bin/Data"
+        make_alias "CMake" $URHOPATH"/CMake" $PROJECTPATH"/CMake" $OVERWRITE
+        make_alias "CoreData" $URHOPATH"/bin/CoreData" $PROJECTPATH"/bin/CoreData" $OVERWRITE
+        make_alias "Data" $URHOPATH"/bin/Data" $PROJECTPATH"/bin/Data" $OVERWRITE
       fi
 
       echo "***********************************"
