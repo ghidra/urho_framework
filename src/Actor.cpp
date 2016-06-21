@@ -39,7 +39,8 @@ void Actor::FixedUpdate(float timeStep)
     if (duration_ >= 0.0f){
       duration_ -= timeStep;
       if (duration_ <= 0.0f)
-          node_->Remove();
+        if(node_!=NULL)
+            node_->Remove();
     }
 }
 void Actor::Setup()
