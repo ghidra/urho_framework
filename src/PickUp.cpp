@@ -14,7 +14,8 @@ PickUp::PickUp(Context* context) :
     Actor(context),
     collected_(false)
 {
-    SetUpdateEventMask(USE_FIXEDUPDATE);
+    SetUpdateEventMask(USE_FIXEDUPDATE | USE_FIXEDPOSTUPDATE);
+    //SetUpdateEventMask(USE_FIXEDUPDATE);
     collision_layer_ = 4;
     collision_mask_ = 33;
 }

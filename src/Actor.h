@@ -31,6 +31,8 @@ public:
     ~Actor();
 
     virtual void FixedUpdate(float timeStep);
+    virtual void FixedPostUpdate(float timeStep);
+
     Node* GetNode(){return node_;};
     RigidBody* GetBody(){return body_;};
     CollisionShape* GetShape(){return shape_;};
@@ -40,6 +42,9 @@ public:
 
     virtual void TakeDamage(const float amount, const Vector3 pos = Vector3(), const Vector3 dir= Vector3(), const unsigned level = 0, const enum DamageType type = DT_BALISTIC);//called from something that hits this... like a projectile
     virtual void OnProjectileHitActor(Actor* victim);
+
+    void MarkForRemoval();
+    bool MarkedForRemoval(){return markedForRemoval_;};
     
 protected:
 
@@ -93,6 +98,9 @@ protected:
     float contactImpulse_;
 
     Debug* debug_=NULL;
+
+    bool markedForRemoval_;
+
 /*
 COLLISION LAYERS AND MASKS
 --------------------------------

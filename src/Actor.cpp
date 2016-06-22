@@ -23,10 +23,12 @@ Actor::Actor(Context* context) :
     canCollect_(false),
     collision_layer_(1),
     collision_mask_(60),
-    material_("DefaultGrey")
+    material_("DefaultGrey"),
+    markedForRemoval_(false)
 {
     // Only the scene update event is needed: unsubscribe from the rest for optimization
     //SetUpdateEventMask(USE_FIXEDUPDATE);
+    //SetUpdateEventMask(USE_FIXEDPOSTUPDATE);
     debug_ = new Debug(context_);
 }
 Actor::~Actor(){}
@@ -39,8 +41,17 @@ void Actor::FixedUpdate(float timeStep)
     if (duration_ >= 0.0f){
       duration_ -= timeStep;
       if (duration_ <= 0.0f)
-        if(node_!=NULL)
-            node_->Remove();
+        MarkForRemoval();
+        //if(node_!=NULL)
+        //    node_->Remove();
+    }
+}
+void Actor::FixedPostUpdate(float timeStep)
+{
+    if( markedForRemoval_ && node_!=NULL )
+    {
+        //debug_->LogWarning("weell");
+        node_->Remove();
     }
 }
 void Actor::Setup()
@@ -87,6 +98,12 @@ void Actor::SetRigidBody(const float mass, const float friction)
     body_->SetMass(mass);
     body_->SetFriction(friction);
 }
+
+void Actor::MarkForRemoval()
+{
+  markedForRemoval_=true;;
+}
+
 void Actor::TakeDamage(const float amount, const Vector3 pos, const Vector3 dir, const unsigned level, const enum DamageType type)
 {
     health_-=amount;

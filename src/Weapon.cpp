@@ -213,7 +213,7 @@ void Weapon::SpawnProjectile()
 void Weapon::OnProjectileHitActor(Actor* victim)
 {
     //we've hit something, useful for enemies that have hit the player to up thier fitness
-    debug_->LogWarning( String(victim->GetNode()->GetName()) );
+    //debug_->LogWarning( String(victim->GetNode()->GetName()) );
 }
 
 /*Vector3 Weapon::GetLeftHandTarget()
