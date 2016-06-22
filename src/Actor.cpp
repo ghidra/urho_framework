@@ -17,6 +17,7 @@
 
 Actor::Actor(Context* context) :
     LogicComponent(context),
+    mesh_(String("Box.mdl")),
     duration_(-0.1f),
     health_(100.0f),
     maxHealth_(100.0f),
