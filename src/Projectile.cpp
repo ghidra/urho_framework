@@ -190,7 +190,7 @@ void Projectile::Impact(Node* node, const Vector3 pos, const Vector3 dir)
 {
     RigidBody* body = node->GetComponent<RigidBody>();
     Actor* actor = node->GetDerivedComponent<Actor>();
-    body->ApplyImpulse(dir);
+    body->ApplyImpulse(dir*0.01f);
     if(actor!=NULL)
     {
         actor->TakeDamage(damage_,pos,dir,level_);
