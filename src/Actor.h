@@ -35,7 +35,7 @@ public:
 
     Node* GetNode(){return node_;};
     RigidBody* GetBody(){return body_;};
-    CollisionShape* GetShape(){return shape_;};
+    //CollisionShape* GetShape(){return shape_;};
     void SetCollisionLayers(const unsigned layer, const unsigned mask);
 
     bool canCollect_;//can collect pickups
@@ -84,8 +84,8 @@ protected:
 
     float timeIncrement_;
 
-    WeakPtr<RigidBody> body_;
-    WeakPtr<CollisionShape> shape_;
+    RigidBody* body_;
+    CollisionShape* shape_;
 
     //character collision masks as default
     unsigned collision_layer_;//=1;
