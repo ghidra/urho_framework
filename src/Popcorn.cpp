@@ -14,8 +14,7 @@ Popcorn::Popcorn(Context* context) :
     LogicComponent(context),
     mesh_(String("Box.mdl")),
     duration_(0.4f),
-    material_("DefaultGrey"),
-    gravity_(Vector3(0.0,-9.0,0.0))
+    material_("DefaultGrey")
 {
     debug_ = new Debug(context_);
 }
@@ -23,6 +22,11 @@ Popcorn::~Popcorn(){}
 
 void Popcorn::FixedUpdate(float timeStep)
 {
+    //lets move the object accourding to our forces
+    velocity_ += (gravity_*timeStep) + (force_*timeStep);
+    Vector3 p = node_->GetWorldPosition();
+    node_->SetWorldPosition( p + velocity_ );
+
     timeIncrement_+=timeStep;
     // Disappear when duration expired
     if (duration_ >= 0.0f){
@@ -33,16 +37,24 @@ void Popcorn::FixedUpdate(float timeStep)
     }
 }
 
-void Popcorn::Setup()
+void Popcorn::Setup(Vector3 dir, Vector3 g, Vector3 f, Vector3 angular, float ang_var)
 {
-    ResourceCache* cache = GetSubsystem<ResourceCache>();
+    velocity_ = dir;
+    gravity_ = g;
+    force_ = f;
+
+    angular_ = angular;//the angluar velocity. The normalized should be the rotation axis, the lenth the speed
+    angular_variance_ = ang_var;
+
+
+    /*ResourceCache* cache = GetSubsystem<ResourceCache>();
 
     StaticModel* object = node_->CreateComponent<StaticModel>();
     object->SetModel(cache->GetResource<Model>("Models/"+mesh_));
     if(material_!="")
         object->SetMaterial(cache->GetResource<Material>("Materials/"+material_+".xml"));
     object->SetCastShadows(true);
-
+    */
 }
 
 float Popcorn::Fit(float v, float l1, float h1, float l2, float h2)
