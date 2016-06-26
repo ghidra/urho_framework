@@ -14,25 +14,34 @@ Popcorn::Popcorn(Context* context) :
     LogicComponent(context),
     mesh_(String("Box.mdl")),
     duration_(0.4f),
-    material_("DefaultGrey")
+    material_("DefaultGrey"),
+    static_(false)
 {
     debug_ = new Debug(context_);
 }
 Popcorn::~Popcorn(){}
 
+void Popcorn::SetStatic(bool enable )
+{
+    static_=enable;
+}
+
 void Popcorn::FixedUpdate(float timeStep)
 {
-    //lets move the object accourding to our forces
-    velocity_ += (gravity_*timeStep) + (force_*timeStep);
-    Vector3 p = node_->GetWorldPosition();
-    node_->SetWorldPosition( p + velocity_ );
-
-    //get the rotation information
-    float rot_speed = angular_.Length();
-    if(rot_speed>0.001)
+    if(!static_)
     {
-        Quaternion rot = Quaternion( 240.0*rot_speed*timeStep,angular_.Normalized() );
-        node_->SetWorldRotation(  rot * node_->GetWorldRotation() );
+        //lets move the object accourding to our forces
+        velocity_ += (gravity_*timeStep) + (force_*timeStep);
+        Vector3 p = node_->GetWorldPosition();
+        node_->SetWorldPosition( p + velocity_ );
+
+        //get the rotation information
+        float rot_speed = angular_.Length();
+        if(rot_speed>0.001)
+        {
+            Quaternion rot = Quaternion( 240.0*rot_speed*timeStep,angular_.Normalized() );
+            node_->SetWorldRotation(  rot * node_->GetWorldRotation() );
+        }
     }
 
     //now deal with Actor type time increment

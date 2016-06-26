@@ -25,7 +25,8 @@ public:
 protected:
 
     virtual void Setup(Vector3 dir = Vector3::UP , Vector3 g = Vector3(0.0,-9.0,0.0), Vector3 f = Vector3(), Vector3 angular = Vector3(), float ang_var = 0.0f );
-
+    void SetStatic(bool enable = true);
+    
     float Fit(float v, float l1, float h1, float l2=0.0f, float h2=1.0f);
 
     String mesh_;
@@ -33,6 +34,8 @@ protected:
 
     float duration_;
     float timeIncrement_;
+
+    bool static_;
     
     Vector3 velocity_;
     Vector3 gravity_;
