@@ -27,6 +27,15 @@ void Popcorn::FixedUpdate(float timeStep)
     Vector3 p = node_->GetWorldPosition();
     node_->SetWorldPosition( p + velocity_ );
 
+    //get the rotation information
+    float rot_speed = angular_.Length();
+    if(rot_speed>0.001)
+    {
+        Quaternion rot = Quaternion( 240.0*rot_speed*timeStep,angular_.Normalized() );
+        node_->SetWorldRotation(  rot * node_->GetWorldRotation() );
+    }
+
+    //now deal with Actor type time increment
     timeIncrement_+=timeStep;
     // Disappear when duration expired
     if (duration_ >= 0.0f){
