@@ -24,8 +24,8 @@ Projectile::Projectile(Context* context) :
     collision_size_(3.0f),
     ray_test_(false)
 {
-    SetUpdateEventMask(USE_FIXEDUPDATE | USE_FIXEDPOSTUPDATE);
-    //SetUpdateEventMask(USE_FIXEDPOSTUPDATE);
+    //SetUpdateEventMask(USE_FIXEDUPDATE | USE_FIXEDPOSTUPDATE);
+    SetUpdateEventMask(USE_FIXEDUPDATE);
     mesh_ = String("Sphere.mdl");
     collision_layer_ = 2;
     collision_mask_ = 56;
@@ -199,9 +199,9 @@ void Projectile::Impact(Node* node, const Vector3 pos, const Vector3 dir)
             owner_->OnProjectileHitActor(actor);
         }
     }
-    //if(node_!=NULL)
-    //    node_->Remove();
-    MarkForRemoval();
+    if(node_!=NULL)
+        node_->Remove();
+    //MarkForRemoval();
 }
 /*void Projectile::Impact(RigidBody* body, const Vector3 pos, const Vector3 dir)
 {

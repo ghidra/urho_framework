@@ -64,12 +64,15 @@ void Pawn::FixedUpdate(float timeStep)
 {
     Actor::FixedUpdate(timeStep);
     //rigid body data
-    if(node_->HasComponent<RigidBody>())
+    if(node_!=NULL)
     {
-        velocity_ = body_->GetLinearVelocity();
+        if(node_->HasComponent<RigidBody>())
+        {
+            velocity_ = body_->GetLinearVelocity();
+        }
+        planeVelocity_ = Vector3(velocity_.x_, 0.0f, velocity_.z_);
+        jumpVelocity_ = Vector3(0.0f, velocity_.y_, 0.0f);
     }
-    planeVelocity_ = Vector3(velocity_.x_, 0.0f, velocity_.z_);
-    jumpVelocity_ = Vector3(0.0f, velocity_.y_, 0.0f);
 }
 
 /*void Pawn::Setup()

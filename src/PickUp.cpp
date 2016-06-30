@@ -14,8 +14,8 @@ PickUp::PickUp(Context* context) :
     Actor(context),
     collected_(false)
 {
-    SetUpdateEventMask(USE_FIXEDUPDATE | USE_FIXEDPOSTUPDATE);
-    //SetUpdateEventMask(USE_FIXEDUPDATE);
+    //SetUpdateEventMask(USE_FIXEDUPDATE | USE_FIXEDPOSTUPDATE);
+    SetUpdateEventMask(USE_FIXEDUPDATE);
     collision_layer_ = 4;
     collision_mask_ = 33;
 }
@@ -25,7 +25,10 @@ void PickUp::FixedUpdate(float timeStep)
 {
     Actor::FixedUpdate(timeStep);
 
-    node_->SetWorldPosition( node_->GetWorldPosition()*Vector3(1.0,0.0,1.0) );
+    if(node_!=NULL)
+    {
+        node_->SetWorldPosition( node_->GetWorldPosition()*Vector3(1.0,0.0,1.0) );
+    }
 }
 void PickUp::Setup()
 {

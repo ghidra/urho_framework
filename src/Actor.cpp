@@ -25,7 +25,8 @@ Actor::Actor(Context* context) :
     collision_layer_(1),
     collision_mask_(60),
     material_("DefaultGrey"),
-    markedForRemoval_(false)
+    markedForRemoval_(false),
+    side_(SIDE_NEUTRAL)
 {
     // Only the scene update event is needed: unsubscribe from the rest for optimization
     //SetUpdateEventMask(USE_FIXEDUPDATE);
@@ -46,15 +47,22 @@ void Actor::FixedUpdate(float timeStep)
         //if(node_!=NULL)
         //    node_->Remove();
     }
+    
+    if( markedForRemoval_ && node_!=NULL )
+    {
+        //debug_->LogWarning("weell");
+        node_->Remove();
+    }
+
 }
-void Actor::FixedPostUpdate(float timeStep)
+/*void Actor::FixedPostUpdate(float timeStep)
 {
     if( markedForRemoval_ && node_!=NULL )
     {
         //debug_->LogWarning("weell");
         node_->Remove();
     }
-}
+}*/
 void Actor::Setup()
 {
     ResourceCache* cache = GetSubsystem<ResourceCache>();
@@ -80,6 +88,10 @@ void Actor::Setup()
     //here we are setting the ragdoll object waiting to accept some commands to build out
     //ragdoll_ = node_->CreateComponent<RagDoll>();//
 
+}
+void Actor::SetSide(const unsigned side)
+{
+    side_=side;
 }
 void Actor::SetCollisionLayers(const unsigned layer, const unsigned mask)
 {

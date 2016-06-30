@@ -31,7 +31,7 @@ public:
     ~Actor();
 
     virtual void FixedUpdate(float timeStep);
-    virtual void FixedPostUpdate(float timeStep);
+    //virtual void FixedPostUpdate(float timeStep);
 
     Node* GetNode(){return node_;};
     RigidBody* GetBody(){return body_;};
@@ -49,6 +49,7 @@ public:
 protected:
 
     virtual void Setup();
+    virtual void SetSide(const unsigned side);
     //virtual bool Damage(Actor * origin, float amount);
     //virtual bool Heal(float amount);
     //virtual void PlaySound(const String& soundName);
