@@ -64,7 +64,7 @@ void Projectile::FixedUpdate(float timeStep)
 {
     Actor::FixedUpdate(timeStep);
     //get the position
-    if(node_!=NULL)
+    if(node_!=NULL && !markedForRemoval_ )
     {
 
         Vector3 pos = node_->GetWorldPosition();
@@ -90,8 +90,9 @@ void Projectile::FixedUpdate(float timeStep)
         //if(node_!=NULL)
         //{
 
-        shape_->SetPosition( Vector3(0.0f,(resize-collision_size_half_),0.0f) );
-        shape_->SetSize(Vector3(collision_size_,resize+collision_size_,collision_size_));
+        //shape_->SetPosition( Vector3(0.0f,(resize-collision_size_half_),0.0f) );
+        //shape_->SetSize(Vector3(collision_size_,resize+collision_size_,collision_size_));
+        
         //i need to consider stretching this based on movement
         //debug_->Hud("vel",String(resize) );
 
