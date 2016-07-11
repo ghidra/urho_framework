@@ -252,13 +252,14 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 	//make a triangle mesh rigid shape if flagged
 	if(rigid)
 	{
+		CollisionShape* shape_ = node_->CreateComponent<CollisionShape>();
+    	shape_->SetTriangleMesh(fromScratchModel);
+    	
 		RigidBody* body_ = node_->CreateComponent<RigidBody>();
     	body_->SetCollisionLayer(layer);
     	body_->SetCollisionMask(mask);
     	body_->SetMass(0.0f);
     	//body_->SetFriction(friction);
-    	CollisionShape* shape_ = node_->CreateComponent<CollisionShape>();
-    	shape_->SetTriangleMesh(fromScratchModel);
 	}
 }
 
