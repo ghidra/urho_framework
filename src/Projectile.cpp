@@ -51,6 +51,7 @@ void Projectile::Start()
 
     shape_ = node_->CreateComponent<CollisionShape>();
     shape_->SetCapsule( collision_size_, collision_size_ );
+    shape_->SetRotation( Quaternion::IDENTITY );//maybe it will carsh less
     //shape_->SetBox( Vector3(collision_size_, collision_size_,collision_size_) );
 
     pos_born_ = node_->GetWorldPosition();

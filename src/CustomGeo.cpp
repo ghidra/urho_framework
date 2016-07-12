@@ -257,12 +257,12 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
     	body_->SetCollisionMask(mask);
     	body_->SetMass(0.0f);
     	//body_->SetPosition(Vector3::ZERO);
-    	//body_->SetRotation(Quaternion::IDENTITY);
+    	body_->SetRotation(Quaternion::IDENTITY);
     	//body_->SetFriction(friction);
     	CollisionShape* shape_ = node_->CreateComponent<CollisionShape>();
     	shape_->SetTriangleMesh(fromScratchModel);
     	//shape_->SetPosition(Vector3::ZERO);
-    	//shape_->SetRotation(Quaternion::IDENTITY);
+    	shape_->SetRotation(Quaternion::IDENTITY);
 	}
 }
 
