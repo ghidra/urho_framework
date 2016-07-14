@@ -24,7 +24,7 @@ PickUp::~PickUp(){}
 void PickUp::FixedUpdate(float timeStep)
 {
     Actor::FixedUpdate(timeStep);
-    node_->SetWorldPosition( node_->GetWorldPosition()*Vector3(1.0,0.0,1.0) );
+    //node_->SetWorldPosition( node_->GetWorldPosition()*Vector3(1.0,0.0,1.0) );
     CheckForRemoval();
 }
 void PickUp::Setup()

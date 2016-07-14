@@ -35,6 +35,7 @@ public:
     void SetFullscreen(const bool value);
     void ToggleFullscreen();
     //Controls controls_;
+    void SetMouseVisible(const bool b = true);
 
     bool IsDebugCamera(){return debugCamera_;}
     bool IsDebugDrawPhysics(){return debugDrawPhysics_;}
@@ -69,6 +70,10 @@ private:
 
     bool paused_;
     bool quit_;
+
+
+    //mouse stuff
+    bool mouseVisible_;
     //debug bools
     bool debugCamera_;
     bool debugDrawPhysics_;

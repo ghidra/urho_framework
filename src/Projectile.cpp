@@ -200,8 +200,9 @@ void Projectile::Impact(Node* node, const Vector3 pos, const Vector3 dir)
         }
     }
     if(node_!=NULL)
-        node_->Remove();
-    //MarkForRemoval();
+        MarkForRemoval();
+        //node_->Remove();
+        
 }
 /*void Projectile::Impact(RigidBody* body, const Vector3 pos, const Vector3 dir)
 {

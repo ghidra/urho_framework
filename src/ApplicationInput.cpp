@@ -89,6 +89,12 @@ void ApplicationInput::SetCameraParameters( VariantMap& parms )
 {
     actor_ = actor;
 }*/
+void ApplicationInput::SetMouseVisible(const bool b)
+{
+    mouseVisible_=b;
+    Input* input = GetSubsystem<Input>();
+    input->SetMouseVisible(true);
+}
 
 void ApplicationInput::InitTouchInput()
 {
