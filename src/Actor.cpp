@@ -48,11 +48,11 @@ void Actor::FixedUpdate(float timeStep)
         //    node_->Remove();
     }
     
-    if( markedForRemoval_ && node_!=NULL )
-    {
+    //if( markedForRemoval_ && node_!=NULL )
+    //{
         //debug_->LogWarning("weell");
-        node_->Remove();
-    }
+    //    node_->Remove();
+    //}
 
 }
 /*void Actor::FixedPostUpdate(float timeStep)
@@ -105,16 +105,28 @@ void Actor::SetCollisionLayers(const unsigned layer, const unsigned mask)
 }
 void Actor::SetRigidBody(const float mass, const float friction)
 {
-    body_ = node_->CreateComponent<RigidBody>();
-    body_->SetCollisionLayer(collision_layer_);
-    body_->SetCollisionMask(collision_mask_);
-    body_->SetMass(mass);
-    body_->SetFriction(friction);
+    //only set if we do not already have a rigidbody
+    if(body_==NULL)
+    {
+        body_ = node_->CreateComponent<RigidBody>();
+        body_->SetCollisionLayer(collision_layer_);
+        body_->SetCollisionMask(collision_mask_);
+        body_->SetMass(mass);
+        body_->SetFriction(friction);
+    }
 }
 
 void Actor::MarkForRemoval()
 {
-  markedForRemoval_=true;;
+    markedForRemoval_=true;
+}
+
+void Actor::CheckForRemoval()
+{
+    if(markedForRemoval_ && node_!=NULL)
+    {
+        node_->Remove();
+    }
 }
 
 void Actor::TakeDamage(const float amount, const Vector3 pos, const Vector3 dir, const unsigned level, const enum DamageType type)

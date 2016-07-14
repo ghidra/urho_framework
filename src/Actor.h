@@ -44,7 +44,8 @@ public:
     virtual void OnProjectileHitActor(Actor* victim);
 
     void MarkForRemoval();
-    bool MarkedForRemoval(){return markedForRemoval_;};
+    void CheckForRemoval();
+    //bool MarkedForRemoval(){return markedForRemoval_;};
     
 protected:
 
@@ -85,8 +86,8 @@ protected:
 
     float timeIncrement_;
 
-    RigidBody* body_;
-    CollisionShape* shape_;
+    RigidBody* body_=NULL;
+    CollisionShape* shape_=NULL;
 
     //character collision masks as default
     unsigned collision_layer_;//=1;

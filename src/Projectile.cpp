@@ -65,44 +65,42 @@ void Projectile::FixedUpdate(float timeStep)
 {
     Actor::FixedUpdate(timeStep);
     //get the position
-    if(node_!=NULL && !markedForRemoval_ )
+
+
+    Vector3 pos = node_->GetWorldPosition();
+    dir_ = body_->GetLinearVelocity();
+    //Vector3 travelled = pos_last_-pos;
+    float resize = dir_.Length()*timeStep;
+    
+    //for fast moving bullets we need to do some raycasting to make sure we dont go through
+
+    //get the physics world to do some raycasting
+    if(ray_test_)
     {
-
-        Vector3 pos = node_->GetWorldPosition();
-        dir_ = body_->GetLinearVelocity();
-        //Vector3 travelled = pos_last_-pos;
-        float resize = dir_.Length()*timeStep;
-        
-        //for fast moving bullets we need to do some raycasting to make sure we dont go through
-
-        //get the physics world to do some raycasting
-        if(ray_test_)
+        PhysicsRaycastResult result;
+        PhysicsWorld* pw = node_->GetScene()->GetComponent<PhysicsWorld>();
+        pw->RaycastSingle( result,Ray(body_->GetPosition(), dir_), speed_ *timeStep, body_->GetCollisionMask() );
+        if(result.body_ != NULL)
         {
-            PhysicsRaycastResult result;
-            PhysicsWorld* pw = node_->GetScene()->GetComponent<PhysicsWorld>();
-            pw->RaycastSingle( result,Ray(body_->GetPosition(), dir_), speed_ *timeStep, body_->GetCollisionMask() );
-            if(result.body_ != NULL)
-            {
-                //result.body_->ApplyImpulse(dir_);
-                Impact(result.body_->GetNode(),result.position_,dir_);
-            }
+            //result.body_->ApplyImpulse(dir_);
+            Impact(result.body_->GetNode(),result.position_,dir_);
         }
-
-        //if(node_!=NULL)
-        //{
-
-        //shape_->SetPosition( Vector3(0.0f,(resize-collision_size_half_),0.0f) );
-        //shape_->SetSize(Vector3(collision_size_,resize+collision_size_,collision_size_));
-        
-        //i need to consider stretching this based on movement
-        //debug_->Hud("vel",String(resize) );
-
-        //delete based on range
-        Vector3 diff = pos_born_-pos;
-        if(diff.Length()>range_)      
-            MarkForRemoval();
-            //node_->Remove();
     }
+
+    //if(node_!=NULL)
+    //{
+
+    //shape_->SetPosition( Vector3(0.0f,(resize-collision_size_half_),0.0f) );
+    //shape_->SetSize(Vector3(collision_size_,resize+collision_size_,collision_size_));
+    
+    //i need to consider stretching this based on movement
+    //debug_->Hud("vel",String(resize) );
+
+    //delete based on range
+    Vector3 diff = pos_born_-pos;
+    if(diff.Length()>range_)      
+        MarkForRemoval();
+        //node_->Remove();
 
     //pos_last_ = pos;
 }
