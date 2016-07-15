@@ -37,30 +37,7 @@ void Projectile::RegisterObject(Context* context)
     context->RegisterFactory<Projectile>();
 
 }
-void Projectile::Start()
-{
-    ResourceCache* cache = GetSubsystem<ResourceCache>();
 
-    StaticModel* object = node_->CreateComponent<StaticModel>();
-    object->SetModel(cache->GetResource<Model>("Models/"+mesh_));
-    //object->SetMaterial(cache->GetResource<Material>("Materials/Jack.xml"));
-    object->SetCastShadows(true);
-    node_->SetScale(0.25f);
-
-    SetRigidBody();
-
-    shape_ = node_->CreateComponent<CollisionShape>();
-    shape_->SetCapsule( collision_size_, collision_size_ );
-    shape_->SetRotation( Quaternion::IDENTITY );//maybe it will carsh less
-    //shape_->SetBox( Vector3(collision_size_, collision_size_,collision_size_) );
-
-    pos_born_ = node_->GetWorldPosition();
-    pos_last_ = node_->GetWorldPosition();
-    collision_size_half_ = collision_size_/2.0f;
-
-    //start checking for collision
-    SubscribeToEvent(GetNode(), E_NODECOLLISION, URHO3D_HANDLER(Projectile, HandleNodeCollision));
-}
 void Projectile::FixedUpdate(float timeStep)
 {
     Actor::FixedUpdate(timeStep);
@@ -75,6 +52,7 @@ void Projectile::FixedUpdate(float timeStep)
     //for fast moving bullets we need to do some raycasting to make sure we dont go through
 
     //get the physics world to do some raycasting
+    /*TURN OFF THE RAY CASTING FOR NOW
     if(ray_test_)
     {
         PhysicsRaycastResult result;
@@ -86,6 +64,7 @@ void Projectile::FixedUpdate(float timeStep)
             Impact(result.body_->GetNode(),result.position_,dir_);
         }
     }
+    */
 
     //if(node_!=NULL)
     //{
@@ -104,8 +83,34 @@ void Projectile::FixedUpdate(float timeStep)
 
     //pos_last_ = pos;
 }
+void Projectile::SetupBase()
+{
+    ResourceCache* cache = GetSubsystem<ResourceCache>();
+
+    StaticModel* object = node_->CreateComponent<StaticModel>();
+    object->SetModel(cache->GetResource<Model>("Models/"+mesh_));
+    //object->SetMaterial(cache->GetResource<Material>("Materials/Jack.xml"));
+    object->SetCastShadows(true);
+    node_->SetScale(0.25f);
+
+    SetRigidBody();
+    CreateCollisionShape();
+
+    //shape_ = node_->CreateComponent<CollisionShape>();
+    shape_->SetCapsule( collision_size_, collision_size_ );
+    shape_->SetRotation( Quaternion::IDENTITY );//maybe it will carsh less
+    //shape_->SetBox( Vector3(collision_size_, collision_size_,collision_size_) );
+
+    pos_born_ = node_->GetWorldPosition();
+    pos_last_ = node_->GetWorldPosition();
+    collision_size_half_ = collision_size_/2.0f;
+
+    //start checking for collision
+    SubscribeToEvent(GetNode(), E_NODECOLLISION, URHO3D_HANDLER(Projectile, HandleNodeCollision));
+}
 void Projectile::Setup(const Vector3 direction)
 {
+    SetupBase();
     //GetSubsystem<DebugHud>()->SetAppStats("projectile:", String("trying to make projectile") );
 
 	/*ResourceCache* cache = GetSubsystem<ResourceCache>();
@@ -129,12 +134,14 @@ void Projectile::Setup(const Vector3 direction)
     body->SetTrigger(true);
     */
     dir_ = direction*speed_;
-    RigidBody* body = node_->GetComponent<RigidBody>();
-    body->SetLinearVelocity(dir_);
+    //RigidBody* body = node_->GetComponent<RigidBody>();
+    body_->SetLinearVelocity(dir_);
 }
 
 void Projectile::Setup(VariantMap& parms)
 {
+    SetupBase();
+
     Vector3 direction = Vector3::FORWARD;
     bool usegravity = true;
 
@@ -151,11 +158,10 @@ void Projectile::Setup(VariantMap& parms)
     if( parms.Contains("collision_mask") ) collision_mask_= parms["collision_mask"].GetInt();
     SetCollisionLayers(collision_layer_,collision_mask_);
 
-    RigidBody* body = node_->GetComponent<RigidBody>();
-    if(!usegravity)
-        body->SetUseGravity(false);
+    //RigidBody* body = node_->GetComponent<RigidBody>();
+    if(!usegravity) body_->SetUseGravity(false);
     dir_ = direction*speed_;
-    body->SetLinearVelocity(dir_);
+    body_->SetLinearVelocity(dir_);
 }
 
 void Projectile::SetOwner(SharedPtr<Weapon> owner)
@@ -175,7 +181,7 @@ void Projectile::HandleNodeCollision(StringHash eventType, VariantMap& eventData
 
     //Actor* actor = static_cast<Actor*>(otherNode->GetComponent<Actor>());
     Actor* actor = otherNode->GetDerivedComponent<Actor>();
-    debug_->Hud("projectile hit",otherNode->GetName());
+    //debug_->Hud("projectile hit",otherNode->GetName());
 
     //Impact(otherNode->GetComponent<RigidBody>(),contactPosition_,dir_);
     Impact(otherNode,contactPosition_,dir_);
@@ -188,20 +194,18 @@ void Projectile::HandleNodeCollision(StringHash eventType, VariantMap& eventData
 }
 void Projectile::Impact(Node* node, const Vector3 pos, const Vector3 dir)
 {
-    RigidBody* body = node->GetComponent<RigidBody>();
+    //RigidBody* body = node->GetComponent<RigidBody>();
     Actor* actor = node->GetDerivedComponent<Actor>();
-    body->ApplyImpulse(dir*0.01f);
+    //if(body!=NULL) body->ApplyImpulse(dir*0.001f);
     if(actor!=NULL)
     {
         actor->TakeDamage(damage_,pos,dir,level_);
         if(owner_!=NULL)//if we were passed a weapon owner, then call OnProjectileHit method
-        {
             owner_->OnProjectileHitActor(actor);
-        }
     }
-    if(node_!=NULL)
-        MarkForRemoval();
-        //node_->Remove();
+    
+    MarkForRemoval();
+    //node_->Remove();
         
 }
 /*void Projectile::Impact(RigidBody* body, const Vector3 pos, const Vector3 dir)

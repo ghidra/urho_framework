@@ -30,8 +30,8 @@ public:
     
     static void RegisterObject(Context* context);
 
-    virtual void Start();
     virtual void FixedUpdate(float timeStep);
+    virtual void SetupBase();//base setup method
     virtual void Setup(const Vector3 direction);
     virtual void Setup(VariantMap& parms);
     //virtual float GetDamage(){return damage_;};

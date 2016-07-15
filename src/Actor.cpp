@@ -115,6 +115,12 @@ void Actor::SetRigidBody(const float mass, const float friction)
         body_->SetFriction(friction);
     }
 }
+void Actor::CreateCollisionShape()
+{
+    //this hopefully keeps us from creating more than one accedentally
+    if(shape_==NULL)
+        shape_ = node_->CreateComponent<CollisionShape>();
+}
 
 void Actor::MarkForRemoval()
 {
