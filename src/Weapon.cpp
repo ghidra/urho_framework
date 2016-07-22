@@ -192,8 +192,8 @@ void Weapon::Recoil()
 
     //initlal rotation of fire_direction
     Vector3 rotoff = rot*fire_off_;
-    ProjectileSpawnPosition_ = pos+rotoff;
-    ProjectileSpawnDirection_ = rotoff.Normalized()*Vector3(1.0f,1.0f,0.0f);//make sure its stays on plane
+    projectile_spawn_position_ = pos+rotoff;
+    projectile_spawn_direction_ = rotoff.Normalized()*Vector3(1.0f,1.0f,0.0f);//make sure its stays on plane
 
     //get rotation axis
     //Vector3 rotaxis = dir.CrossProduct(Vector3(0.0f,1.0f,0.0f));//local to the gun
@@ -209,7 +209,15 @@ void Weapon::SpawnProjectile()
 {
     Recoil();
 }
+Node* Weapon::ProjectileFactory(const Vector3 offset)
+{
+    Node* projectileNode;
 
+    projectileNode = node_->GetScene()->CreateChild("projectile");
+    projectileNode->SetPosition(projectile_spawn_position_+offset);
+
+    return projectileNode;
+}
 void Weapon::OnProjectileHitActor(Actor* victim)
 {
     //we've hit something, useful for enemies that have hit the player to up thier fitness

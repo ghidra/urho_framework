@@ -69,9 +69,10 @@ protected:
     //virtual void FireLogic(float timeStep);
     virtual void Recoil();
     virtual void SpawnProjectile();
+    Node* ProjectileFactory(const Vector3 offset = Vector3::ZERO);
 
-    Vector3 ProjectileSpawnPosition_;
-    Vector3 ProjectileSpawnDirection_;
+    Vector3 projectile_spawn_position_;
+    Vector3 projectile_spawn_direction_;
 
     //virtual void SetLeftHandOffset();//set the offest. sets itself on fire. needs to always be set
 
