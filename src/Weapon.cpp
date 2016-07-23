@@ -149,7 +149,7 @@ void Weapon::Fire(float timeStep)
             if(firing_timer_ > firing_interval_ )
             {
                 firing_timer_=0.0f;
-                mag_remains_-=1;
+                mag_remains_-=(num_projectiles_>mag_remains_)?mag_remains_:num_projectiles_;
                 //we dont need to spawn if we are continuous
                 //debug_->Hud("PROJECTILE",String(continuous_));
                 if(!continuous_)
@@ -167,7 +167,7 @@ void Weapon::Fire(float timeStep)
         {
             firing_ = true;
             firing_timer_ = timeStep;
-            mag_remains_-=1;
+            mag_remains_-=(num_projectiles_>mag_remains_)?mag_remains_:num_projectiles_;
             SpawnProjectile();
         }
     }
