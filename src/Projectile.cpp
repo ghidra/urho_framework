@@ -96,6 +96,10 @@ void Projectile::SetupBase()
     SetRigidBody();
     CreateCollisionShape();
 
+    //make it a trigger only
+    RigidBody* body = node_->GetComponent<RigidBody>();
+    body->SetTrigger(true);
+
     //shape_ = node_->CreateComponent<CollisionShape>();
     shape_->SetCapsule( collision_size_, collision_size_ );
     shape_->SetRotation( Quaternion::IDENTITY );//maybe it will carsh less
