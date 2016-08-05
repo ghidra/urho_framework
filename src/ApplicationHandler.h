@@ -4,9 +4,12 @@
 
 #pragma once
 
+#include <Urho3D/Container/Ptr.h>
 #include <Urho3D/Engine/Application.h>
 #include <Urho3D/Graphics/Texture2D.h>
+
 #include "ApplicationInput.h"
+#include "ConfigManager.h"
 
 namespace Urho3D
 {
@@ -46,6 +49,7 @@ public:
     /// Cleanup after the main loop. Called by Application.
     virtual void Stop();
 
+    SharedPtr<ConfigManager> cfg_;
     SharedPtr<Scene> scene_;
     /// Camera scene node.
     SharedPtr<Node> cameraNode_;

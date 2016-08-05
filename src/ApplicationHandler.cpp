@@ -46,15 +46,22 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     paused_(false),
     reflectionViewportEnabled_(false)
 {
+    cfg_ = new ConfigManager(context, String::EMPTY, false, false);
+    context->RegisterSubsystem(cfg_);
+    ConfigFile::RegisterObject(context);
     //CameraLogic::RegisterObject(context);
     //context->RegisterFactory<CameraLogic>();
 }
 
 void ApplicationHandler::Setup()
 {
+
     // Modify engine startup parameters
     engineParameters_["WindowTitle"] = GetTypeName();
     engineParameters_["LogName"]     = GetSubsystem<FileSystem>()->GetAppPreferencesDir("urho3d", "logs") + GetTypeName() + ".log";
+
+    if (!engineParameters_.Contains("LogLevel"))
+        engineParameters_["LogLevel"] = LOG_ERROR;
     //engineParameters_["FullScreen"]  = false;
     engineParameters_["Headless"]    = false;
     //engineParameters_["WindowResizable"] = true;
@@ -63,6 +70,59 @@ void ApplicationHandler::Setup()
     engineParameters_["VSync"] = true; // need this on my slow laptop
     engineParameters_["ResourcePaths"] = "Data;CoreData;Resources";//or
     //cache->AddResourceDir("Resources");
+
+
+    // Override engine parameters with those from configuration file and app arguments.
+
+    const Vector<String>& args = GetArguments();
+
+    String configFilePath = "Resources/" + GetTypeName() + ".cfg";
+    if (cfg_->Load(configFilePath, true))
+    {
+        URHO3D_LOGINFO("Configuration file loaded: " + configFilePath);
+    }
+    else
+    {
+        URHO3D_LOGWARNINGF("Cannot find configuration file: ", configFilePath.CString()); // raw, Log not yet loaded
+    }
+
+    // If LogLevel is not in program arguments, set it from config.
+    bool foundArgLog(false);
+    for (const String& i: args)
+    {
+        if (i.ToLower() == "-log")
+            foundArgLog = true;
+    }
+    if (!foundArgLog)
+    {
+        const char* logLevelPrefixes[] = { "DEBUG", "INFO", "WARNING", "ERROR", 0 }; // IO/Log.cpp
+        String logLevel = cfg_->GetString("engine", "LogLevel");
+        logLevel.ToUpper();
+        unsigned cfgLogLevelIndex = GetStringListIndex(logLevel.CString(), logLevelPrefixes, M_MAX_UNSIGNED);
+        if (cfgLogLevelIndex != M_MAX_UNSIGNED)
+        {
+            GetSubsystem<Log>()->SetLevel(cfgLogLevelIndex);
+            engineParameters_["LogLevel"] = cfgLogLevelIndex;
+        }
+    }
+
+    if (cfg_->Has("engine", "ResourcePaths"))
+    {
+        engineParameters_["ResourcePaths"] = cfg_->Get("engine", "ResourcePaths");
+    }
+    if (!engineParameters_.Contains("WindowWidth"))
+    {
+        engineParameters_["WindowWidth"] = cfg_->GetInt("engine", "WindowWidth", 800);
+    }
+    if (!engineParameters_.Contains("WindowHeight"))
+    {
+        engineParameters_["WindowHeight"] = cfg_->GetInt("engine", "WindowHeight", 600);
+    }
+    if (!engineParameters_.Contains("FullScreen"))
+    {
+        engineParameters_["FullScreen"] = cfg_->GetBool("engine", "FullScreen", false);
+    }
+
 }
 
 void ApplicationHandler::Start()
@@ -112,7 +172,7 @@ void ApplicationHandler::SetApplicationInput(ApplicationInput* applicationInput,
 {
     applicationInput_ = applicationInput;
     applicationInput_->SetCameraNode(cameraNode_);
-    applicationInput_->SetFullscreen(fullscreen);
+///@j    applicationInput_->SetFullscreen(fullscreen);
     //CameraLogic* cameraLogic_ = cameraNode_->CreateComponent<CameraLogic>();
     //cameraLogic_->SetCameraType(cameraType);
 }
