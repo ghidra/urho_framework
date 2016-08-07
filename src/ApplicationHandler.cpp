@@ -93,7 +93,7 @@ void ApplicationHandler::Setup()
         if (i.ToLower() == "-log")
             foundArgLog = true;
     }
-    if (!foundArgLog)
+    if (!foundArgLog && cfg_->Has("engine", "LogLevel"))
     {
         const char* logLevelPrefixes[] = { "DEBUG", "INFO", "WARNING", "ERROR", 0 }; // IO/Log.cpp
         String logLevel = cfg_->GetString("engine", "LogLevel");
