@@ -79,11 +79,11 @@ void ApplicationHandler::Setup()
     String configFilePath = "Resources/" + GetTypeName() + ".cfg";
     if (cfg_->Load(configFilePath, true))
     {
-        URHO3D_LOGINFO("Configuration file loaded: " + configFilePath);
+        URHO3D_LOGRAW(String("Configuration file loaded: ") + configFilePath + "\n"); // raw, Log not yet active
     }
     else
     {
-        URHO3D_LOGWARNINGF("Cannot find configuration file: ", configFilePath.CString()); // raw, Log not yet loaded
+        URHO3D_LOGRAW(String("Cannot load configuration file: ") + configFilePath + "\n"); // raw, Log not yet active
     }
 
     // If LogLevel is not in program arguments, set it from config.
