@@ -52,13 +52,13 @@ bool ConfigManager::Has(const Urho3D::String& section, const Urho3D::String& par
 
 // Set value
 void ConfigManager::Set(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Variant& value) {
-  auto sectionMap = GetSection(section, true);
+  SettingsMap* sectionMap = GetSection(section, true);
 
   sectionMap->operator[](parameter) = value; }
 
 // Get value
 const Urho3D::Variant ConfigManager::Get(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Variant& defaultValue) {
-  auto sectionMap = GetSection(section);
+  SettingsMap* sectionMap = GetSection(section);
 
   // Section Doesn't exist
   if (!sectionMap) {
@@ -72,7 +72,7 @@ const Urho3D::Variant ConfigManager::Get(const Urho3D::String& section, const Ur
   return (*sectionMap)[parameter]; }
 
 const Urho3D::String ConfigManager::GetString(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::String& defaultValue) {
-  auto value = Get(section, parameter);
+  Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_STRING) {
     return value.GetString(); }
@@ -85,7 +85,7 @@ const Urho3D::String ConfigManager::GetString(const Urho3D::String& section, con
   return defaultValue; }
 
 const int ConfigManager::GetInt(const Urho3D::String& section, const Urho3D::String& parameter, const int defaultValue) {
-  auto value = Get(section, parameter);
+  Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_INT
       && value.GetInt() != defaultValue) {
@@ -102,7 +102,7 @@ const int ConfigManager::GetInt(const Urho3D::String& section, const Urho3D::Str
   return defaultValue; }
 
 const int ConfigManager::GetUInt(const Urho3D::String& section, const Urho3D::String& parameter, const unsigned defaultValue) {
-  auto value = Get(section, parameter);
+  Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_INT
       && value.GetUInt() != defaultValue) {
@@ -119,7 +119,7 @@ const int ConfigManager::GetUInt(const Urho3D::String& section, const Urho3D::St
   return defaultValue; }
 
 const bool ConfigManager::GetBool(const Urho3D::String& section, const Urho3D::String& parameter, const bool defaultValue) {
-  auto value = Get(section, parameter);
+  Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_BOOL) {
     return value.GetBool(); }
@@ -135,7 +135,7 @@ const bool ConfigManager::GetBool(const Urho3D::String& section, const Urho3D::S
   return defaultValue; }
 
 const float ConfigManager::GetFloat(const Urho3D::String& section, const Urho3D::String& parameter, const float defaultValue) {
-  auto value = Get(section, parameter);
+  Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_FLOAT) {
     return value.GetFloat(); }
@@ -151,7 +151,7 @@ const float ConfigManager::GetFloat(const Urho3D::String& section, const Urho3D:
   return defaultValue; }
 
 const Urho3D::Vector2 ConfigManager::GetVector2(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Vector2& defaultValue) {
-  auto value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_VECTOR2) {
     return value.GetVector2(); }
@@ -167,7 +167,7 @@ const Urho3D::Vector2 ConfigManager::GetVector2(const Urho3D::String& section, c
   return defaultValue; }
 
 const Urho3D::Vector3 ConfigManager::GetVector3(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Vector3& defaultValue) {
-  auto value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_VECTOR3) {
     return value.GetVector3(); }
@@ -183,7 +183,7 @@ const Urho3D::Vector3 ConfigManager::GetVector3(const Urho3D::String& section, c
   return defaultValue; }
 
 const Urho3D::Vector4 ConfigManager::GetVector4(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Vector4& defaultValue) {
-  auto value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_VECTOR4) {
     return value.GetVector4(); }
@@ -199,7 +199,7 @@ const Urho3D::Vector4 ConfigManager::GetVector4(const Urho3D::String& section, c
   return defaultValue; }
 
 const Urho3D::Quaternion ConfigManager::GetQuaternion(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Quaternion& defaultValue) {
-  auto value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_QUATERNION) {
     return value.GetQuaternion(); }
@@ -215,7 +215,7 @@ const Urho3D::Quaternion ConfigManager::GetQuaternion(const Urho3D::String& sect
   return defaultValue; }
 
 const Urho3D::Color ConfigManager::GetColor(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Color& defaultValue) {
-  auto value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_COLOR) {
     return value.GetColor(); }
@@ -231,7 +231,7 @@ const Urho3D::Color ConfigManager::GetColor(const Urho3D::String& section, const
   return defaultValue; }
 
 const Urho3D::IntRect ConfigManager::GetIntRect(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::IntRect& defaultValue) {
-  auto value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_INTRECT) {
     return value.GetIntRect(); }
@@ -247,7 +247,7 @@ const Urho3D::IntRect ConfigManager::GetIntRect(const Urho3D::String& section, c
   return defaultValue; }
 
 const Urho3D::IntVector2 ConfigManager::GetIntVector2(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::IntVector2& defaultValue) {
-  auto value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_INTVECTOR2) {
     return value.GetIntVector2(); }
@@ -263,7 +263,7 @@ const Urho3D::IntVector2 ConfigManager::GetIntVector2(const Urho3D::String& sect
   return defaultValue; }
 
 const Urho3D::Matrix3 ConfigManager::GetMatrix3(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Matrix3& defaultValue) {
-  auto value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_MATRIX3) {
     return value.GetMatrix3(); }
@@ -279,7 +279,7 @@ const Urho3D::Matrix3 ConfigManager::GetMatrix3(const Urho3D::String& section, c
   return defaultValue; }
 
 const Urho3D::Matrix3x4 ConfigManager::GetMatrix3x4(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Matrix3x4& defaultValue) {
-  auto value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_MATRIX3X4) {
     return value.GetMatrix3x4(); }
@@ -295,7 +295,7 @@ const Urho3D::Matrix3x4 ConfigManager::GetMatrix3x4(const Urho3D::String& sectio
   return defaultValue; }
 
 const Urho3D::Matrix4 ConfigManager::GetMatrix4(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Matrix4& defaultValue) {
-  auto value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_MATRIX4) {
     return value.GetMatrix4(); }
@@ -316,7 +316,7 @@ void ConfigManager::Clear() {
 
 // Load settings from file
 bool ConfigManager::Load(const Urho3D::String& fileName, bool overwriteExisting) {
-  auto fileSystem = context_->GetSubsystem<Urho3D::FileSystem>();
+  const Urho3D::FileSystem* fileSystem = context_->GetSubsystem<Urho3D::FileSystem>();
 
   ConfigFile configFile(context_);
 
@@ -330,10 +330,10 @@ bool ConfigManager::Load(const Urho3D::String& fileName, bool overwriteExisting)
   return Load(configFile, overwriteExisting); }
 
 bool ConfigManager::Load(ConfigFile& configFile, bool overwriteExisting) {
-  auto map = configFile.GetMap();
+  const ConfigMap* map = configFile.GetMap();
 
   SettingsMap* section = 0;
-  for (auto itr = map->Begin(); itr != map->End(); itr++) {
+  for (Urho3D::Vector<ConfigSection>::ConstIterator itr = map->Begin(); itr != map->End(); itr++) {
     if (itr->Begin() == itr->End()) {
       continue; }
 
@@ -343,10 +343,10 @@ bool ConfigManager::Load(ConfigFile& configFile, bool overwriteExisting) {
       header = *(itr->Begin());
       header = ConfigFile::ParseHeader(header); }
 
-    auto section = GetSection(header, true);
+    const SettingsMap* section = GetSection(header, true);
 
-    for (auto section_itr = ++itr->Begin(); section_itr != itr->End(); section_itr++) {
-      auto line = *section_itr;
+    for (Urho3D::Vector<Urho3D::String>::ConstIterator section_itr = ++itr->Begin(); section_itr != itr->End(); section_itr++) {
+      const Urho3D::String& line = *section_itr;
 
       Urho3D::String parameter;
       Urho3D::String value;
@@ -360,7 +360,7 @@ bool ConfigManager::Load(ConfigFile& configFile, bool overwriteExisting) {
 
 // Save settings to file
 bool ConfigManager::Save(const Urho3D::String& fileName, bool smartSave) {
-  auto fileSystem = GetSubsystem<Urho3D::FileSystem>();
+  const Urho3D::FileSystem* fileSystem = GetSubsystem<Urho3D::FileSystem>();
 
   Urho3D::SharedPtr<ConfigFile> configFile(new ConfigFile(context_));
 
@@ -391,12 +391,12 @@ bool ConfigManager::Save(ConfigFile& configFile) {
 
 void ConfigManager::SaveSettingsMap(Urho3D::String section, SettingsMap& map, ConfigFile& configFile) {
   // Save out parameters
-  for (auto itr = map.Begin(); itr != map.End(); itr++) {
+  for (SettingsMap::Iterator itr = map.Begin(); itr != map.End(); itr++) {
     // Skip over sub-sections
     if (itr->second_.GetType() == Urho3D::VAR_VOIDPTR) {
       continue; }
 
-    auto value = itr->first_;
+    Urho3D::String value = itr->first_;
 
     // Set parameter
     if (itr->second_.GetType() == Urho3D::VAR_STRING) {
@@ -442,7 +442,7 @@ void ConfigManager::SaveSettingsMap(Urho3D::String section, SettingsMap& map, Co
       configFile.Set(section, value, Urho3D::String(itr->second_.GetMatrix4())); } }
 
   // Save out sub-sections
-  for (auto itr = map.Begin(); itr != map.End(); itr++) {
+  for (SettingsMap::ConstIterator itr = map.Begin(); itr != map.End(); itr++) {
     // Skip over parameter
     if (itr->second_.GetType() != Urho3D::VAR_VOIDPTR) {
       continue; }
@@ -450,8 +450,8 @@ void ConfigManager::SaveSettingsMap(Urho3D::String section, SettingsMap& map, Co
     Urho3D::String path = section;
     path.Append(itr->first_);
 
-    auto fsdf = map[section];
-    auto value = static_cast<SettingsMap*>(itr->second_.GetVoidPtr());
+    Urho3D::Variant fsdf = map[section];
+    SettingsMap* value = static_cast<SettingsMap*>(itr->second_.GetVoidPtr());
 
     if (value) {
       // Save sub-section
@@ -474,15 +474,15 @@ SettingsMap* ConfigManager::GetSection(const Urho3D::String& section, bool creat
   // Comments will ignore splits behind them
   while (splitPos != Urho3D::String::NPOS) {
     // Find next comment split
-    auto commentSplitPos = splitPos;
-    auto hashPos = section.Find("#", commentSplitPos);
-    auto slashesPos = section.Find("//", commentSplitPos);
+    unsigned commentSplitPos = splitPos;
+    unsigned hashPos = section.Find("#", commentSplitPos);
+    unsigned slashesPos = section.Find("//", commentSplitPos);
     commentSplitPos = (hashPos < slashesPos) ? hashPos : slashesPos;
 
     // Find next split
-    auto lastSplitPos = splitPos;
-    auto dotPos = section.Find(".", lastSplitPos);
-    auto slashPos = section.Find("/", lastSplitPos);
+    unsigned lastSplitPos = splitPos;
+    unsigned dotPos = section.Find(".", lastSplitPos);
+    unsigned slashPos = section.Find("/", lastSplitPos);
     splitPos = (dotPos < slashPos) ? dotPos : slashPos;
 
     // Ignore splits after comments
@@ -492,18 +492,18 @@ SettingsMap* ConfigManager::GetSection(const Urho3D::String& section, bool creat
     if (splitPos == Urho3D::String::NPOS) {
       length = section.Length() - lastSplitPos; }
 
-    auto sub = section.Substring(lastSplitPos, length);
+    Urho3D::String sub = section.Substring(lastSplitPos, length);
 
     if (sub != Urho3D::String::EMPTY) {
       split.Push(sub); } }
 
   SettingsMap* currentMap = &_map;
-  for (auto itr = split.Begin(); itr != split.End(); itr++) {
-    auto section = *itr;
+  for (Urho3D::Vector<Urho3D::String>::ConstIterator itr = split.Begin(); itr != split.End(); itr++) {
+    Urho3D::String section = *itr;
 
     // Find section
     SettingsMap* newMap = 0;
-    for (auto map_itr = currentMap->Begin(); map_itr != currentMap->End(); map_itr++) {
+    for (SettingsMap::ConstIterator map_itr = currentMap->Begin(); map_itr != currentMap->End(); map_itr++) {
       if (map_itr->first_ == section) {
         newMap = static_cast<SettingsMap*>(map_itr->second_.GetVoidPtr());
 
