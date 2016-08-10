@@ -49,6 +49,7 @@ public:
     /// Cleanup after the main loop. Called by Application.
     virtual void Stop();
 
+    String cfgFileName_;
     SharedPtr<ConfigManager> cfg_;
     SharedPtr<Scene> scene_;
     /// Camera scene node.
