@@ -22,7 +22,7 @@ void State::Enter(Pawn* pawn)
 {
 	pawn_  = pawn;
 }
-void State::Update()
+void State::Update(float timeStep)
 {
 }
 void State::Exit()

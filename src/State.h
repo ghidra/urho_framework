@@ -21,7 +21,7 @@ public:
 
     virtual State* HandleInput(Controls& ctrl);
     virtual void Enter(Pawn* pawn);
-    virtual void Update();
+    virtual void Update(float timeStep = 0.0);
     virtual void Exit();
 
     virtual void Debug(const String label, const String value);
