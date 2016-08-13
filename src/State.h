@@ -25,6 +25,7 @@ public:
     virtual void Exit();
 
     virtual void Debug(const String label, const String value);
+    virtual String Name(){return String(name_);};
 
 protected:
 
