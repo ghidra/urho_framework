@@ -16,7 +16,7 @@
 CameraLogic::CameraLogic(Context* context) :
     LogicComponent(context),
     cameraDistanceMin_(1.0f),
-    cameraDistanceMax_(5.0f),
+    cameraDistanceMax_(50.0f),
     cameraDistanceIni_(20.0f),
     targetOffset_(Vector3(0.0f,0.0f,0.0f)),
     outDirection_(Vector3(0.0f,0.0f,-1.0f)),
@@ -118,8 +118,27 @@ void CameraLogic::PostUpdate(float timeStep)
     {
         if(target_)//this will only work if I have a target
         {
-            //i need the targets position, orientation, to get my cameras position and orientation
+                //i need the targets position, orientation, to get my cameras position and orientation
             Vector3 target_position = target_->GetWorldPosition()+(target_->GetWorldRotation() * targetOffset_);
+            unsigned count = 1;
+            unsigned s = targets_.Size();
+            //lets get the average position of targets, check the targets array
+            /*for(unsigned t = 0; t<s; ++t)
+            {
+                SharedPtr<Node> n = targets_.At(s-t-1);
+                if(n != NULL)
+                {
+                    target_position += n->GetWorldPosition();
+                    ++count;
+                }
+                else
+                {
+                    targets_.Erase(s-t);//get it off the roster if it doesnt exist
+                }
+            }*/
+            //if (count>1) target_position-=target_->GetWorldRotation() * targetOffset_;
+            //target_position/=float(count);
+            
             //Quaternion target_orientation = target_->GetWorldRotation();//i may or may not need this at the moment
 
             Vector3 rotated_origin = outDirectionOrientation_ * outDirection_* cameraDistance_;
@@ -141,6 +160,10 @@ void CameraLogic::PostUpdate(float timeStep)
     //    drawDebug_ = !drawDebug_;
     
     //LOGINFO("updating i guess");
+}
+void CameraLogic::AddTarget(SharedPtr<Node> target)
+{
+    targets_.Push(target);
 }
 
 Vector3 CameraLogic::SmoothPosition(float timeStep) {

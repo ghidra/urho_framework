@@ -27,6 +27,8 @@ public:
 
     virtual void ShakeCamera(const Vector3 shake);
 
+    virtual void AddTarget(SharedPtr<Node> target);
+
 
 private:
 
@@ -41,7 +43,8 @@ private:
     float pitch_;
 
     String cameraType_;
-    SharedPtr<Node> target_;
+    SharedPtr<Node> target_;//our main focus target
+    Vector< SharedPtr<Node> > targets_;//if we want to focus on more tha one
     Vector3 targetOffset_;//a positional offset to aim at from the target node
 
     Vector3 newPosition_;//the target position, for smoothing
