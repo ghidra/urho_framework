@@ -18,6 +18,7 @@ PickUp::PickUp(Context* context) :
     SetUpdateEventMask(USE_FIXEDUPDATE);
     collision_layer_ = 4;
     collision_mask_ = 33;
+    //material_="";
 }
 PickUp::~PickUp(){}
 
