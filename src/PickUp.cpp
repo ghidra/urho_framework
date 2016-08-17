@@ -12,7 +12,8 @@
 
 PickUp::PickUp(Context* context) :
     Actor(context),
-    collected_(false)
+    collected_(false),
+    life_span_(-1.0f)
 {
     //SetUpdateEventMask(USE_FIXEDUPDATE | USE_FIXEDPOSTUPDATE);
     SetUpdateEventMask(USE_FIXEDUPDATE);
@@ -25,6 +26,8 @@ PickUp::~PickUp(){}
 void PickUp::FixedUpdate(float timeStep)
 {
     Actor::FixedUpdate(timeStep);
+
+    life_=duration_/life_span_;
     //node_->SetWorldPosition( node_->GetWorldPosition()*Vector3(1.0,0.0,1.0) );
     CheckForRemoval();
 }

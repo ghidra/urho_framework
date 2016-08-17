@@ -35,6 +35,8 @@ protected:
     virtual void HandleNodeCollision(StringHash eventType, VariantMap& eventData);
 
     bool collected_;
+    float life_span_;
+    float life_;//this will be the normalized life value
    
 };
 #endif
