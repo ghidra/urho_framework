@@ -88,10 +88,8 @@ void ApplicationHandler::Setup()
 
     // If LogLevel is not in program arguments, set it from config.
     bool foundArgLog(false);
-    //for (const String& i: args)
     for (unsigned i=0; i< args.Size(); i++)
     {
-        //if (i.ToLower() == "-log")
         if (args[i].ToLower() == "-log")
             foundArgLog = true;
     }
