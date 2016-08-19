@@ -7,6 +7,7 @@
 
 #include <Urho3D/Physics/RigidBody.h>
 #include <Urho3D/Physics/CollisionShape.h>
+#include <Urho3D/Graphics/Material.h>
 
 #include "Debug.h"
 
@@ -89,6 +90,9 @@ protected:
 
     RigidBody* body_=NULL;
     CollisionShape* shape_=NULL;
+
+    SharedPtr<Material> assignedMaterial_;
+    bool materialIsUnique_;
 
     //character collision masks as default
     unsigned collision_layer_;//=1;

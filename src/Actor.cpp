@@ -25,6 +25,7 @@ Actor::Actor(Context* context) :
     collision_layer_(1),
     collision_mask_(60),
     material_("DefaultGrey"),
+    materialIsUnique_(false),
     markedForRemoval_(false),
     side_(SIDE_NEUTRAL)
 {
@@ -73,7 +74,7 @@ void Actor::Setup()
     //AnimatedModel* object = node_->CreateComponent<AnimatedModel>();
     StaticModel* object = node_->CreateComponent<StaticModel>();
     object->SetModel(cache->GetResource<Model>("Models/"+mesh_));
-    if(material_!="")
+    if(material_!="" && !materialIsUnique_)
         object->SetMaterial(cache->GetResource<Material>("Materials/"+material_+".xml"));
     object->SetCastShadows(true);
 
