@@ -23,6 +23,7 @@ Weapon::Weapon(Context* context) :
     num_projectiles_(1),
     projectile_speed_(80.0f),
     projectile_range_(20.0f),
+    projectile_recoil_(1.0f),
     projectile_collision_layer_(2),
     projectile_collision_mask_(56),
     continuous_(false),
@@ -110,6 +111,7 @@ void Weapon::StartReload()
 void Weapon::SetProjectileRate(const unsigned rate){num_projectiles_=rate;}
 void Weapon::SetFireRate(const float fireRate){firing_interval_ = 1000.0f/(fireRate*1000.0f);}
 void Weapon::SetProjectileSpeed(const float speed){projectile_speed_=speed;}
+void Weapon::SetProjectileRecoil(const float recoil){projectile_recoil_=recoil;}
 void Weapon::SetProjectileRange(const float range){projectile_range_=range;}
 void Weapon::SetProjectileContinuous(const bool continuous){continuous_=continuous;}
 void Weapon::SetProjectileCollision(const unsigned layer, const unsigned mask)
