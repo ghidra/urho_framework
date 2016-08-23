@@ -4,6 +4,7 @@
 #include <Urho3D/Core/CoreEvents.h>
 #include <Urho3D/Engine/DebugHud.h>
 #include <Urho3D/Physics/CollisionShape.h>
+#include <Urho3D/IO/Log.h>
 #include <Urho3D/IO/MemoryBuffer.h>
 #include <Urho3D/Physics/PhysicsEvents.h>
 #include <Urho3D/Physics/PhysicsWorld.h>
@@ -12,7 +13,7 @@
 using namespace Urho3D;
 
 ProjectileTargeting::ProjectileTargeting(Context* context):
-  Component(context), readied_(true), period_(300.0f)
+  Component(context), readied_(true), period_(1.0f)
 {
 }
 ProjectileTargeting::~ProjectileTargeting()
@@ -29,6 +30,10 @@ void ProjectileTargeting::RegisterObject(Context* context)
 
 void ProjectileTargeting::Setup()
 {
+    collisionShape_ = node_->GetComponent<CollisionShape>();
+    if (!collisionShape_)
+        URHO3D_LOGWARNING("ProjectileTargeting Setup() without CollisionShape in node.");
+
     SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(ProjectileTargeting, HandleUpdate));
     SubscribeToEvent(GetNode(), E_NODECOLLISION, URHO3D_HANDLER(ProjectileTargeting, HandleNodeCollision));
 }
@@ -43,7 +48,8 @@ void ProjectileTargeting::HandleUpdate(StringHash eventType, VariantMap& eventDa
     if (nextPeriod_ <= 0)
     {
         readied_ = true;
-        node_->GetComponent<CollisionShape>()->SetEnabled(true);
+        if (collisionShape_)
+            collisionShape_->SetEnabled(true);
         nextPeriod_ += period_; // Wrap timer.
     }
 }
@@ -61,5 +67,6 @@ void ProjectileTargeting::HandleNodeCollision(StringHash eventType, VariantMap& 
     target_ = otherNode;
     //GetSubsystem<DebugHud>()->SetAppStats("targeting target ", target_->GetName());
     readied_ = false;
-    node_->GetComponent<CollisionShape>()->SetEnabled(false);
+    if (collisionShape_)
+        collisionShape_->SetEnabled(false);
 }

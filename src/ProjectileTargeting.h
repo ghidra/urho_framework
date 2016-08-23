@@ -11,6 +11,7 @@ namespace Urho3D
 
 class Node;
 class Scene;
+class CollisionShape;
 
 }
 
@@ -28,6 +29,7 @@ public:
 
     WeakPtr<Projectile> projectile_; /// The Projectile we target for.
     WeakPtr<Node> target_; /// The Node we are targeting.
+    WeakPtr<CollisionShape> collisionShape_;
     float period_; /// The time between target checks.
     float nextPeriod_; /// The time left before the next target check.
     bool readied_; /// Target check ready.

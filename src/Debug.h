@@ -4,6 +4,7 @@
 #pragma once
 
 #include <Urho3D/Core/Object.h>
+#include <Urho3D/Engine/DebugHud.h>
 
 using namespace Urho3D;
 
@@ -19,4 +20,5 @@ public:
     void Hud(const String label, const String value);
     void LogWarning(const String value);
 };
+#define dbg(LABEL, STRING) context_->GetSubsystem<DebugHud>()->SetAppStats(LABEL,STRING)
 #endif
