@@ -2,7 +2,6 @@
 
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Core/CoreEvents.h>
-#include <Urho3D/Engine/DebugHud.h>
 #include <Urho3D/Physics/CollisionShape.h>
 #include <Urho3D/IO/Log.h>
 #include <Urho3D/IO/MemoryBuffer.h>
@@ -26,7 +25,6 @@ void ProjectileTargeting::RegisterObject(Context* context)
 {
     context->RegisterFactory<ProjectileTargeting>();
 }
-
 
 void ProjectileTargeting::Setup()
 {
@@ -54,7 +52,6 @@ void ProjectileTargeting::HandleUpdate(StringHash eventType, VariantMap& eventDa
     }
 }
 
-
 void ProjectileTargeting::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
 {
     if (!readied_)
@@ -65,7 +62,6 @@ void ProjectileTargeting::HandleNodeCollision(StringHash eventType, VariantMap& 
         return;
 
     target_ = otherNode;
-    //GetSubsystem<DebugHud>()->SetAppStats("targeting target ", target_->GetName());
     readied_ = false;
     if (collisionShape_)
         collisionShape_->SetEnabled(false);
