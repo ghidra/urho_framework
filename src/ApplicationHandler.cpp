@@ -35,6 +35,7 @@
 
 #include "ApplicationInput.h"
 #include "ApplicationHandler.h"
+#include "AutoRemover.h"
 
 #include <Urho3D/IO/Log.h>
 
@@ -49,6 +50,8 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     cfg_ = new ConfigManager(context, String::EMPTY, false, false);
     context->RegisterSubsystem(cfg_);
     ConfigFile::RegisterObject(context);
+    AutoRemover::RegisterObject(context);
+
     //CameraLogic::RegisterObject(context);
     //context->RegisterFactory<CameraLogic>();
 }
