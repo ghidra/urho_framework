@@ -68,7 +68,7 @@ void ApplicationHandler::Setup()
     //engineParameters_["WindowResizable"] = true;
     //engineParameters_["WindowWidth"] = 800;
     //engineParameters_["WindowHeight"] = 600;
-    engineParameters_["VSync"] = true; // need this on my slow laptop
+    //engineParameters_["VSync"] = true; // need this on my slow laptop
     engineParameters_["ResourcePaths"] = "Data;CoreData;Resources";//or
     //cache->AddResourceDir("Resources");
 
@@ -111,13 +111,17 @@ void ApplicationHandler::Setup()
     {
         engineParameters_["ResourcePaths"] = cfg_->Get("engine", "ResourcePaths");
     }
-    if (!engineParameters_.Contains("WindowWidth"))
+    /*if (!engineParameters_.Contains("WindowWidth"))
     {
         engineParameters_["WindowWidth"] = cfg_->GetInt("engine", "WindowWidth", 800);
     }
     if (!engineParameters_.Contains("WindowHeight"))
     {
         engineParameters_["WindowHeight"] = cfg_->GetInt("engine", "WindowHeight", 600);
+    }*/
+    if (!engineParameters_.Contains("VSync"))
+    {
+        engineParameters_["VSync"] = cfg_->GetInt("engine", "VSync", false);
     }
     if (!engineParameters_.Contains("FullScreen"))
     {
