@@ -121,7 +121,7 @@ void ApplicationHandler::Setup()
     }*/
     if (!engineParameters_.Contains("VSync"))
     {
-        engineParameters_["VSync"] = cfg_->GetInt("engine", "VSync", false);
+        engineParameters_["VSync"] = cfg_->GetBool("engine", "VSync", false);
     }
     if (!engineParameters_.Contains("FullScreen"))
     {
