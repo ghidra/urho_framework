@@ -19,35 +19,41 @@ StateMachine::~StateMachine(){}
 
 void StateMachine::Setup(Controller* controller, Pawn* pawn)
 {
-    if(controller_!=NULL) controller_ = controller;
-    if(pawn!=NULL) pawn_ = pawn;
-
-   //debug_->Hud("STATEMACHINE","STATE MACHINE READY");
-}
-void StateMachine::SetPawn(Pawn* pawn)
-{
-    pawn_=pawn;
+    controller_ = controller;
+    pawn_ = pawn;
 }
 
 void StateMachine::SetState(State* state)
 {
     state_ = state;
     state_->Enter(pawn_);
-    //debug_->Hud("STATEMACHINE:",state_->Name());
+    debug_->Hud("STATEMACHINESTATE:",state_->Name());
+}
+String StateMachine::StateName()
+{
+    if(state_!=NULL)
+    {
+        return state_->Name();
+    }
+    else
+    {
+        return String("UNKNOWN");
+    }
 }
 //--------
 void StateMachine::Update(float timeStep)
 {
-    //debug_->Hud("STATEMACHINE:","NOT looping here");
+    debug_->Hud("STATEMACHINE:","NOT looping here");
     if(controller_!=NULL)
     {
-        //debug_->Hud("STATEMACHINE:","looping here");
+        debug_->Hud("STATEMACHINE:","looping here");
         Controls& ctrl = controller_->controls_;
         //--------------------------------------------------
         //--------------------------------------------------
         ///state stuff
         if(state_ != NULL)
         {
+            debug_->Hud("STATEMACHINE:","we are a state");
             State* state = state_->HandleInput(ctrl);
             if (state != NULL)
             {

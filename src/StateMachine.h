@@ -26,7 +26,7 @@ public:
     virtual void Setup(Controller* controller, Pawn* pawn = NULL);
     virtual void Update(float timeStep);
     virtual void SetState(State* state);
-    virtual void SetPawn(Pawn* pawn);
+    virtual String StateName();
 
 protected:
  
