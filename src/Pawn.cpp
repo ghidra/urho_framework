@@ -29,6 +29,7 @@ Pawn::Pawn(Context* context) :
     inAirThresholdTime_(0.1f),
     okToJump_(true),
     inAirTimer_(0.0f)
+    //state_machine_(new StateMachine(context))
 {
     // Only the scene update event is needed: unsubscribe from the rest for optimization
     //SetUpdateEventMask(USE_FIXEDUPDATE);
@@ -48,6 +49,7 @@ Pawn::~Pawn(){}
 void Pawn::Possess(Controller* controller)
 {
     controller_ = controller;
+    //state_machine_->Setup(controller_,static_cast<Pawn*>(this));
 }
 
 void Pawn::EquipWeapon(Weapon* weapon)
@@ -58,6 +60,7 @@ void Pawn::SetState(State* state)
 {
     state_ = state;
     state_->Enter(this);
+    //state_machine_->SetState(state);
 }
 
 void Pawn::FixedUpdate(float timeStep)
