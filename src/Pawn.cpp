@@ -58,8 +58,8 @@ void Pawn::EquipWeapon(Weapon* weapon)
 }
 void Pawn::SetState(State* state)
 {
-    state_ = state;
-    state_->Enter(this);
+    //state_ = state;
+    //state_->Enter(this);
     state_machine_->SetState(state);
 }
 

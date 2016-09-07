@@ -14,7 +14,7 @@
 
 //#include <Urho3D/Graphics/AnimationController.h>
 
-class State;
+//class State;
 class StateMachine;
 //class RagDoll;
 
@@ -92,7 +92,7 @@ protected:
     String rootName_;//the name of the root node, to grab for world transforms
     bool facingDirection_;//the direction I am facing. left=0 or right=1;
     
-    WeakPtr<State> state_;
+    //WeakPtr<State> state_;
     WeakPtr<StateMachine> state_machine_;//may not need state soon enough
     //State* stateArms_ = NULL;
 
