@@ -37,9 +37,9 @@ void Popcorn::FixedUpdate(float timeStep)
 
         //get the rotation information
         float rot_speed = angular_.Length();
-        if(rot_speed>0.001)
+        if(rot_speed>0.001f)
         {
-            Quaternion rot = Quaternion( 240.0*rot_speed*timeStep,angular_.Normalized() );
+            Quaternion rot = Quaternion( 240.0f*rot_speed*timeStep,angular_.Normalized() );
             node_->SetWorldRotation(  rot * node_->GetWorldRotation() );
         }
     }

@@ -19,8 +19,6 @@ public:
 
     
     virtual void FixedUpdate(float timeStep);
-
-    Node* GetNode(){return node_;};
     
 protected:
 

@@ -72,7 +72,7 @@ const Urho3D::Variant ConfigManager::Get(const Urho3D::String& section, const Ur
   return (*sectionMap)[parameter]; }
 
 const Urho3D::String ConfigManager::GetString(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::String& defaultValue) {
-  Urho3D::Variant value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_STRING) {
     return value.GetString(); }
@@ -85,7 +85,7 @@ const Urho3D::String ConfigManager::GetString(const Urho3D::String& section, con
   return defaultValue; }
 
 const int ConfigManager::GetInt(const Urho3D::String& section, const Urho3D::String& parameter, const int defaultValue) {
-  Urho3D::Variant value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_INT
       && value.GetInt() != defaultValue) {
@@ -102,7 +102,7 @@ const int ConfigManager::GetInt(const Urho3D::String& section, const Urho3D::Str
   return defaultValue; }
 
 const int ConfigManager::GetUInt(const Urho3D::String& section, const Urho3D::String& parameter, const unsigned defaultValue) {
-  Urho3D::Variant value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_INT
       && value.GetUInt() != defaultValue) {
@@ -119,7 +119,7 @@ const int ConfigManager::GetUInt(const Urho3D::String& section, const Urho3D::St
   return defaultValue; }
 
 const bool ConfigManager::GetBool(const Urho3D::String& section, const Urho3D::String& parameter, const bool defaultValue) {
-  Urho3D::Variant value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_BOOL) {
     return value.GetBool(); }
@@ -135,7 +135,7 @@ const bool ConfigManager::GetBool(const Urho3D::String& section, const Urho3D::S
   return defaultValue; }
 
 const float ConfigManager::GetFloat(const Urho3D::String& section, const Urho3D::String& parameter, const float defaultValue) {
-  Urho3D::Variant value = Get(section, parameter);
+  const Urho3D::Variant value = Get(section, parameter);
 
   if (value.GetType() == Urho3D::VAR_FLOAT) {
     return value.GetFloat(); }

@@ -65,9 +65,7 @@ bool ConfigFile::BeginLoad(Urho3D::Deserializer& source) {
       //currentMap = &_configMap[sectionName];
 
       _configMap.Push(ConfigSection());
-      configSection = &_configMap.Back();
-
-    }
+      configSection = &_configMap.Back(); }
 
     configSection->Push(line); }
 
@@ -313,7 +311,7 @@ void ConfigFile::Set(const Urho3D::String& section, const Urho3D::String& parame
   Urho3D::String* line = 0;
   unsigned separatorPos = 0;
   for (Urho3D::Vector<Urho3D::String>::Iterator itr = configSection->Begin(); itr != configSection->End(); itr++) {
-    // Find property seperator
+    // Find property separator
     separatorPos = itr->Find("=");
     if (separatorPos == Urho3D::String::NPOS) {
       separatorPos = itr->Find(":"); }
@@ -377,7 +375,7 @@ const Urho3D::String ConfigFile::ParseHeader(Urho3D::String line) {
 const void ConfigFile::ParseProperty(Urho3D::String line, Urho3D::String& property, Urho3D::String& value) {
   line = ParseComments(line);
 
-  // Find property seperator
+  // Find property separator
   unsigned separatorPos = line.Find("=");
   if (separatorPos == Urho3D::String::NPOS) {
     separatorPos = line.Find(":"); }
