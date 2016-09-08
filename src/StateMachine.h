@@ -28,6 +28,8 @@ public:
     virtual void SetState(State* state);
     virtual String StateName();
 
+    void DebugStateName();
+
 protected:
  
     WeakPtr<State> state_;  

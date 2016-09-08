@@ -27,7 +27,7 @@ void StateMachine::SetState(State* state)
 {
     state_ = state;
     state_->Enter(pawn_);
-    debug_->Hud("STATEMACHINESTATE:",state_->Name());
+    //debug_->Hud("STATEMACHINESTATE:",state_->Name());
 }
 String StateMachine::StateName()
 {
@@ -68,4 +68,9 @@ void StateMachine::Update(float timeStep)
             //state_->Debug("State",state_->Name());
         }
     }
+}
+///void debugging
+void StateMachine::DebugStateName()
+{
+    debug_->Hud("Debug State Name",StateName());
 }
