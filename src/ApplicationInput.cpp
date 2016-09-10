@@ -150,7 +150,7 @@ void ApplicationInput::HandleUpdate(StringHash eventType, VariantMap& eventData)
             controls_.Set(CTRL_FIRE, true);
         }
         controls_.Set(CTRL_JUMP, input->GetKeyDown(KEY_SPACE));
-
+        controls_.Set(CTRL_ALL, input->GetKeyDown(KEY_RETURN));
     
     }
     //now if we have possessed something, we can send it commands
