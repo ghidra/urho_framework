@@ -128,6 +128,12 @@ void ApplicationHandler::Setup()
         engineParameters_["FullScreen"] = cfg_->GetBool("engine", "FullScreen", false);
     }
 
+    if (!engineParameters_.Contains("MultiSample"))
+    {
+        unsigned multiSample(cfg_->GetUInt("engine", "MultiSample", 1));
+        engineParameters_["MultiSample"] = multiSample;
+    }
+
 }
 
 void ApplicationHandler::Start()
