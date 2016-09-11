@@ -124,7 +124,6 @@ void CustomGeo::DoSubdivide(){
 void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const unsigned layer, const unsigned mask)
 {
 	node_ = node;
-
 	unsigned num = ids_.Size();
 	const unsigned numVertices = num;
 	
@@ -199,36 +198,43 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 	SharedPtr<Geometry> geom(new Geometry(context_));
 
 	// Shadowed buffer needed for raycasts to work, and so that data can be automatically restored on device loss
+	
+	//---
 	vb->SetShadowed(true);
 	if(uvs_.Size()>0 && colors_.Size()>0 && tangents_.Size()>0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_COLOR|MASK_TEXCOORD1|MASK_TANGENT);
 	}
-	else if(uvs_.Size()>0 && colors_.Size()==0 && tangents_.Size()>0)
+	else if(uvs_.Size()>0 && colors_.Size()<=0 && tangents_.Size()>0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_TEXCOORD1|MASK_TANGENT);
 	}
-	else if(uvs_.Size()==0 && colors_.Size()>0 && tangents_.Size()>0)
+	else if(uvs_.Size()<=0 && colors_.Size()>0 && tangents_.Size()>0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_COLOR|MASK_TANGENT);
 	}
-	else if(uvs_.Size()==0 && colors_.Size()==0 && tangents_.Size()>0)
+	else if(uvs_.Size()<=0 && colors_.Size()<=0 && tangents_.Size()>0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_TANGENT);
 	}
-	//no tangents 
-	else if(uvs_.Size()>0 && colors_.Size()>0 && tangents_.Size()==0)
+	//no tangents
+	else if(uvs_.Size()==0 && colors_.Size()>0 && tangents_.Size()==0)
+	{
+		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_COLOR);
+	}
+	else if(uvs_.Size()>0 && colors_.Size()>0 && tangents_.Size()<=0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_COLOR|MASK_TEXCOORD1);
 	}
-	else if(uvs_.Size()>0 && colors_.Size()==0 && tangents_.Size()==0)
+	else if(uvs_.Size()>0 && colors_.Size()<=0 && tangents_.Size()<=0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_TEXCOORD1);
 	}
-	else if(uvs_.Size()==0 && colors_.Size()==0 && tangents_.Size()==0)
+	else if(uvs_.Size()<=0 && colors_.Size()<=0 && tangents_.Size()<=0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL);
 	}
+
 	vb->SetData(vertexData);
 
 	ib->SetShadowed(true);
