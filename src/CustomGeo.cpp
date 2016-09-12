@@ -35,7 +35,7 @@ void CustomGeo::AddPointUV(const Vector2 uv)
 {
 	uvs_.Push(uv);
 }
-void CustomGeo::AddPointColor(const Vector3 c)
+void CustomGeo::AddPointColor(const Color c)
 {
 	colors_.Push(c);
 }
@@ -128,7 +128,7 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 	const unsigned numVertices = num;
 	
 	unsigned skip = 6;//need to make sure I set up the vertex buffers right skipping the right number of values
-	skip+=(colors_.Size()>0)?3:0;
+	skip+=(colors_.Size()>0)?4:0;
 	skip+=(uvs_.Size()>0)?2:0;
 	skip+=(tangents_.Size()>0)?4:0;
 
@@ -165,20 +165,23 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 		//colors
 		if(colors_.Size()>0)
 		{
-			vertexData[ii+6] = colors_[ids_[i]].x_;
-			vertexData[ii+7] = colors_[ids_[i]].y_;
-			vertexData[ii+8] = colors_[ids_[i]].z_;
+			//URHO3D_LOGWARNING("A: "+String(colors_[i/3]));
+			//URHO3D_LOGWARNING("B: "+String(colors_[ids_[i]]));
+			vertexData[ii+6] = colors_[ids_[i]].r_;
+			vertexData[ii+7] = colors_[ids_[i]].g_;
+			vertexData[ii+8] = colors_[ids_[i]].b_;
+			vertexData[ii+9] = colors_[ids_[i]].a_;
 		}
 		//uvss
 		if(uvs_.Size()>0)
 		{
-			unsigned ioff = (colors_.Size()>0)?9:6;
+			unsigned ioff = (colors_.Size()>0)?10:6;
 			vertexData[ii+ioff] = uvs_[ids_[i]].x_;
 			vertexData[ii+ioff+1] = uvs_[ids_[i]].y_;
 		}
 		if(tangents_.Size()>0)
 		{
-			unsigned ioff = (colors_.Size()>0)?9:6;
+			unsigned ioff = (colors_.Size()>0)?10:6;
 			ioff+=(uvs_.Size()>0)?2:0;
 			vertexData[ii+ioff] = tangents_[i/3].x_;
 			vertexData[ii+ioff+1] = tangents_[i/3].y_;
@@ -201,6 +204,16 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 	
 	//---
 	vb->SetShadowed(true);
+
+	PODVector<VertexElement> elements;
+    elements.Push(VertexElement(TYPE_VECTOR3, SEM_POSITION));
+    elements.Push(VertexElement(TYPE_VECTOR3, SEM_NORMAL));
+    if( colors_.Size()>0 ) elements.Push(VertexElement(TYPE_VECTOR4, SEM_COLOR));
+    if( uvs_.Size()>0 ) elements.Push(VertexElement(TYPE_VECTOR2, SEM_TEXCOORD));
+    if( tangents_.Size()>0 ) elements.Push(VertexElement(TYPE_VECTOR4, SEM_TANGENT));
+    
+    vb->SetSize(numVertices, elements);
+/*
 	if(uvs_.Size()>0 && colors_.Size()>0 && tangents_.Size()>0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_COLOR|MASK_TEXCOORD1|MASK_TANGENT);
@@ -221,6 +234,7 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 	else if(uvs_.Size()==0 && colors_.Size()>0 && tangents_.Size()==0)
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL|MASK_COLOR);
+		//URHO3D_LOGWARNING("THE SIZE: "+String(vb->GetVertexSize()));
 	}
 	else if(uvs_.Size()>0 && colors_.Size()>0 && tangents_.Size()<=0)
 	{
@@ -234,7 +248,7 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 	{
 		vb->SetSize(numVertices, MASK_POSITION|MASK_NORMAL);
 	}
-
+*/
 	vb->SetData(vertexData);
 
 	ib->SetShadowed(true);

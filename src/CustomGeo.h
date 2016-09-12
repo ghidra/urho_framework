@@ -19,7 +19,7 @@ public:
 
 	void AddPoint(const Vector3 p);
 	void AddPointUV(const Vector2 uv);
-	void AddPointColor(const Vector3 c);
+	void AddPointColor(const Color c);
 	//PODVector<Vector3>* GetPoints(){return &points_;};
 	//void SetPoint(const unsigned short i, const Vector3 p);
 
@@ -48,7 +48,7 @@ private:
 
 	PODVector<Vector3> points_;
 	PODVector<Vector2> uvs_;
-	PODVector<Vector3> colors_;
+	PODVector<Color> colors_;
 	PODVector<Vector3> tangents_;
 	PODVector<unsigned> ids_;
 	Vector< PODVector<unsigned> > shared_normal_ids_;
