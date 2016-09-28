@@ -24,7 +24,7 @@ public:
     ~ProjectileTargeting();
     static void RegisterObject(Context* context);
     void Setup();
-    void HandleUpdate(StringHash eventType, VariantMap& eventData);
+    void HandleSceneUpdate(StringHash eventType, VariantMap& eventData);
     void HandleNodeCollision(StringHash eventType, VariantMap& eventData);
 
     WeakPtr<Projectile> projectile_; /// The Projectile we target for.

@@ -1,13 +1,13 @@
 #include "ProjectileTargeting.h"
 
 #include <Urho3D/Core/Context.h>
-#include <Urho3D/Core/CoreEvents.h>
 #include <Urho3D/Physics/CollisionShape.h>
 #include <Urho3D/IO/Log.h>
 #include <Urho3D/IO/MemoryBuffer.h>
 #include <Urho3D/Physics/PhysicsEvents.h>
 #include <Urho3D/Physics/PhysicsWorld.h>
 #include <Urho3D/Scene/Scene.h>
+#include <Urho3D/Scene/SceneEvents.h>
 
 using namespace Urho3D;
 
@@ -32,16 +32,16 @@ void ProjectileTargeting::Setup()
     if (!collisionShape_)
         URHO3D_LOGWARNING("ProjectileTargeting Setup() without CollisionShape in node.");
 
-    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(ProjectileTargeting, HandleUpdate));
+    SubscribeToEvent(E_SCENEUPDATE, URHO3D_HANDLER(ProjectileTargeting, HandleSceneUpdate));
     SubscribeToEvent(GetNode(), E_NODECOLLISION, URHO3D_HANDLER(ProjectileTargeting, HandleNodeCollision));
 }
 
-void ProjectileTargeting::HandleUpdate(StringHash eventType, VariantMap& eventData)
+void ProjectileTargeting::HandleSceneUpdate(StringHash eventType, VariantMap& eventData)
 {
     if (readied_)
         return; // Don't start period timer until collision is triggered.
 
-    float dt(eventData[Update::P_TIMESTEP].GetFloat());
+    float dt(eventData[SceneUpdate::P_TIMESTEP].GetFloat());
     nextPeriod_ -= dt;
     if (nextPeriod_ <= 0)
     {
