@@ -55,6 +55,7 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     input_(GetSubsystem<Input>()),
     script_(NULL)
 {
+    context_->RegisterSubsystem(new Script(context_));
     cfg_ = new ConfigManager(context, String::EMPTY, false, false);
     context->RegisterSubsystem(cfg_);
     ConfigFile::RegisterObject(context);
@@ -68,9 +69,8 @@ void ApplicationHandler::Setup()
     assert(audio_);
     assert(cache_);
     assert(input_);
- ///@TODO enable script subsystem
- //    script_ = GetSubsystem<Script>();
- //    assert(script_);
+    script_ = GetSubsystem<Script>();
+    assert(script_);
 
     // Modify engine startup parameters
     engineParameters_["WindowTitle"] = GetTypeName();
