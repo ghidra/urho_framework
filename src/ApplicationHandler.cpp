@@ -38,10 +38,16 @@
 #include <Urho3D/UI/UI.h>
 #include <Urho3D/Graphics/Zone.h>
 
+//needed for the script loading
+#include <Urho3D/Core/Main.h>
+#include <Urho3D/IO/Log.h>
+#include <Urho3D/Resource/ResourceEvents.h>
+
 #include "ApplicationInput.h"
 #include "ApplicationHandler.h"
 
 #include <Urho3D/IO/Log.h>
+#include <Urho3D/DebugNew.h>//maybe i need this for scrip loading
 
 ApplicationHandler::ApplicationHandler(Context* context) :
     Application(context),
@@ -71,6 +77,18 @@ void ApplicationHandler::Setup()
     assert(cache_);
     assert(input_);
     assert(script_);
+    
+
+    //load the editor
+    //FileSystem* filesystem = GetSubsystem<FileSystem>();
+    GetScriptFileName();
+
+    // Show usage if not found
+    //if (scriptFileName_.Empty())//here we didnt find a script to run nmow play the game
+    //{
+    //}
+
+
 
     // Modify engine startup parameters
     engineParameters_["WindowTitle"] = GetTypeName();
@@ -211,6 +229,14 @@ void ApplicationHandler::Start()
 
 void ApplicationHandler::Stop()
 {
+
+    if (scriptFile_)
+    {
+        // Execute the optional stop function
+        if (scriptFile_->GetFunction("void Stop()"))
+            scriptFile_->Execute("void Stop()");
+    }
+
     engine_->DumpResources(true);
 }
 
@@ -516,5 +542,45 @@ void ApplicationHandler::HandleStopMusic(StringHash eventType, VariantMap& event
     Node* musicNodeOld(scene_->GetChild("Music"));
     if (musicNodeOld) {
         musicNodeOld->Remove();
+    }
+}
+
+////loading scripts i need this from urho3dplayer.cpp
+void ApplicationHandler::GetScriptFileName()
+{
+    const Vector<String>& arguments = GetArguments();
+    if (arguments.Size() && arguments[0][0] != '-')
+    {
+        scriptFileName_ = GetInternalPath(arguments[0]);
+        if (scriptFileName_ == "editor")
+        {
+            scriptFileName_ = "/Scripts/Editor.as";
+        }
+        else
+        {
+            scriptFileName_ = "";
+        }
+    }
+}
+
+bool ApplicationHandler::LoadScriptFile()
+{
+    if(scriptFileName_!="")
+    {
+        scriptFile_ = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>(scriptFileName_);
+
+        // If script loading is successful, the load the editor
+        if (scriptFile_ && scriptFile_->Execute("void Start()"))
+        {
+            URHO3D_LOGRAW(String("EDITOR CALLED: ") + scriptFileName_ + "\n"); // raw, Log not yet active
+            return true;
+        }else{
+            URHO3D_LOGRAW(String("EDITOR NOT CALLED: ") + scriptFileName_ + "\n"); // raw, Log not yet active
+            return false;
+        }
+    }
+    else
+    {
+        return false;
     }
 }

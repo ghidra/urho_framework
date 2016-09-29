@@ -130,6 +130,16 @@ protected:
     //SharedPtr<Texture2D> reflectionTexture_;
 
     ApplicationInput * applicationInput_ = NULL;
+
+    SharedPtr<ScriptFile> scriptFile_;/// Script file.
+    String scriptFileName_;/// Script file name.
+    bool LoadScriptFile();
+
+private:
+    ////
+    ///loading AS script files
+    void GetScriptFileName();
+    
 };
 
 
