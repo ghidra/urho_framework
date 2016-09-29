@@ -1,4 +1,9 @@
 #include <Urho3D/Urho3D.h>
+#include <Urho3D/AngelScript/Script.h>
+#include <Urho3D/AngelScript/ScriptFile.h>
+#include <Urho3D/Audio/Audio.h>
+#include <Urho3D/Audio/Sound.h>
+#include <Urho3D/Audio/SoundSource3D.h>
 #include <Urho3D/Engine/Application.h>
 #include <Urho3D/Graphics/Camera.h>
 #include <Urho3D/Engine/Console.h>
@@ -44,7 +49,11 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     screenJoystickIndex_(M_MAX_UNSIGNED),
     screenJoystickSettingsIndex_(M_MAX_UNSIGNED),
     paused_(false),
-    reflectionViewportEnabled_(false)
+    reflectionViewportEnabled_(false),
+    audio_(GetSubsystem<Audio>()),
+    cache_(GetSubsystem<ResourceCache>()),
+    input_(GetSubsystem<Input>()),
+    script_(NULL)
 {
     cfg_ = new ConfigManager(context, String::EMPTY, false, false);
     context->RegisterSubsystem(cfg_);
@@ -56,6 +65,12 @@ ApplicationHandler::ApplicationHandler(Context* context) :
 
 void ApplicationHandler::Setup()
 {
+    assert(audio_);
+    assert(cache_);
+    assert(input_);
+ ///@TODO enable script subsystem
+ //    script_ = GetSubsystem<Script>();
+ //    assert(script_);
 
     // Modify engine startup parameters
     engineParameters_["WindowTitle"] = GetTypeName();
@@ -134,6 +149,26 @@ void ApplicationHandler::Setup()
         engineParameters_["MultiSample"] = multiSample;
     }
 
+    if (cfg_->Has("engine", "SoundMaster")) {
+        float soundMasterGain(cfg_->GetFloat("engine", "SoundMaster") / 1.0f);
+        VariantMap& vm(GetEventDataMap());
+        vm[SetMasterGain::P_NAME] = SOUND_MASTER;
+        vm[SetMasterGain::P_GAIN] = soundMasterGain;
+        SendEvent(E_SET_MASTER_GAIN, vm);
+    }
+    if (cfg_->Has("engine", "SoundMusic")) {
+        float soundMusicGain(cfg_->GetFloat("engine", "SoundMusic") / 1.0f);
+        VariantMap& vm(GetEventDataMap());
+        vm[SetMasterGain::P_NAME] = SOUND_MUSIC;
+        vm[SetMasterGain::P_GAIN] = soundMusicGain;
+        SendEvent(E_SET_MASTER_GAIN, vm);
+    }
+    if (cfg_->Has("engine", "SoundBuffer") && cfg_->Has("engine", "SoundMixRate")) {
+        int soundBuffer(cfg_->GetInt("engine", "SoundBuffer", 100));
+        int mixRate(cfg_->GetUInt("engine", "SoundMixRate", 48000));
+        if (!audio_->SetMode(soundBuffer, mixRate, true)) {
+            ErrorExit("Audio::SetMode() failed (disable Config SoundBuffer or SoundMixRate?); soundBuffer "+String(soundBuffer)+" mixRate "+String(mixRate)); }
+    }
 }
 
 void ApplicationHandler::Start()
@@ -334,6 +369,12 @@ void ApplicationHandler::SubscribeToEvents()
     SubscribeToEvent(E_POSTRENDERUPDATE, URHO3D_HANDLER(ApplicationHandler, HandlePostRenderUpdate));
     SubscribeToEvent(E_SCENEUPDATE, URHO3D_HANDLER(ApplicationHandler, HandleSceneUpdate));
     //SubscribeToEvent(E_FIXEDUPDATE, URHO3D_HANDLER(ApplicationHandler, HandleFixedUpdate));
+    SubscribeToEvent(E_SPAWN_SOUND, URHO3D_HANDLER(ApplicationHandler, HandleSpawnSound));
+    SubscribeToEvent(E_SPAWN_SOUND3D, URHO3D_HANDLER(ApplicationHandler, HandleSpawnSound3D));
+    SubscribeToEvent(E_SET_MASTER_GAIN, URHO3D_HANDLER(ApplicationHandler, HandleSetMasterGain));
+    SubscribeToEvent(E_GET_MASTER_GAIN, URHO3D_HANDLER(ApplicationHandler, HandleGetMasterGain));
+    SubscribeToEvent(E_START_MUSIC, URHO3D_HANDLER(ApplicationHandler, HandleStartMusic));
+    SubscribeToEvent(E_STOP_MUSIC, URHO3D_HANDLER(ApplicationHandler, HandleStopMusic));
 
 }
 void ApplicationHandler::HandleUpdate(StringHash eventType, VariantMap& eventData)
@@ -390,5 +431,90 @@ void ApplicationHandler::HandlePostRenderUpdate(StringHash eventType, VariantMap
         if (applicationInput_->IsDebugDrawPhysics())
             scene_->GetComponent<PhysicsWorld>()->DrawDebugGeometry(true);
             //GetSubsystem<Renderer>()->DrawDebugGeometry(false);//this draws lights and boundinbaxes at least
+    }
+}
+
+void ApplicationHandler::HandleSetMasterGain(StringHash eventType, VariantMap& eventData) {
+    const String& soundType(eventData[SetMasterGain::P_NAME].GetString());
+    const float gain(eventData[SetMasterGain::P_GAIN].GetFloat());
+    audio_->SetMasterGain(soundType, gain);
+}
+
+void ApplicationHandler::HandleGetMasterGain(StringHash eventType, VariantMap& eventData) {
+    const String& typeName(eventData[GetMasterGain::P_NAME].GetString());
+    const float gain(audio_->GetMasterGain(typeName));
+    eventData[GetMasterGain::P_GAIN] = gain;
+}
+
+
+void ApplicationHandler::HandleSpawnSound3D(StringHash eventType, VariantMap& eventData) {
+    const String& soundResourceName(eventData[SpawnSound3D::P_NAME].GetString());
+    Sound* sound(cache_->GetResource<Sound>(soundResourceName));
+    if (!sound) {
+        URHO3D_LOGERROR("Sound resource not found: " + soundResourceName);
+        return;
+    }
+    float gain(eventData[SpawnSound3D::P_GAIN].GetFloat());
+    if (gain == 0.0f) {
+        gain = 1.0f;
+    }
+
+    Node* soundNode(scene_->CreateChild(soundResourceName));
+    soundNode->SetPosition(eventData[SpawnSound3D::P_POSITION].GetVector3());
+    SoundSource3D* soundSource(soundNode->CreateComponent<SoundSource3D>());
+    soundSource->SetSoundType(SOUND_MASTER);
+    soundSource->SetAutoRemoveMode(REMOVE_NODE);
+    ///@TODO parameterize?
+    soundSource->SetDistanceAttenuation(1.0f, 10.0f, 1.0f);
+    soundSource->SetGain(gain);
+    soundSource->Play(sound); }
+
+    void ApplicationHandler::HandleSpawnSound(StringHash eventType, VariantMap& eventData) {
+    const String& soundResourceName(eventData[SpawnSound::P_NAME].GetString());
+    Sound* sound(cache_->GetResource<Sound>(soundResourceName));
+    if (!sound) {
+        URHO3D_LOGERROR("Sound resource not found: " + soundResourceName);
+        return;
+    }
+    float gain(eventData[SpawnSound::P_GAIN].GetFloat());
+    if (gain == 0.0f) {
+        gain = 1.0f;
+    }
+    Node* soundNode(scene_->CreateChild(soundResourceName));
+    SoundSource* soundSource(soundNode->CreateComponent<SoundSource>());
+    soundSource->SetAutoRemoveMode(REMOVE_NODE);
+    soundSource->SetSoundType(SOUND_MASTER);
+    soundSource->SetGain(gain);
+    soundSource->Play(sound);
+}
+
+/// Music
+
+void ApplicationHandler::HandleStartMusic(StringHash eventType, VariantMap& eventData) {
+    HandleStopMusic(eventType, eventData);
+    String soundName(eventData[StartMusic::P_NAME].GetString());
+    bool looped(eventData[StartMusic::P_LOOPED].GetBool());
+
+    Sound* sound(cache_->GetResource<Sound>(soundName));
+    if (!sound) {
+        URHO3D_LOGERROR("Music track not found: " + soundName);
+        return;
+    }
+    sound->SetLooped(looped);
+
+    // Create a scene node and a sound source for the music.
+    Node* soundNode(scene_->CreateChild("Music"));
+    SoundSource* soundSource(soundNode->CreateComponent<SoundSource>());
+    // Set its automatic removal and channel, and play it.
+    soundSource->SetAutoRemoveMode(REMOVE_NODE);
+    soundSource->SetSoundType(SOUND_MUSIC);
+    soundSource->Play(sound);
+}
+
+void ApplicationHandler::HandleStopMusic(StringHash eventType, VariantMap& eventData) {
+    // Remove the music player node from the scene.
+    Node* musicNodeOld(scene_->GetChild("Music"));
+    if (musicNodeOld) {
+        musicNodeOld->Remove();
     }
 }

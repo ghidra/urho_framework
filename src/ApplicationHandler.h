@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <Urho3D/AngelScript/Script.h>
 #include <Urho3D/Container/Ptr.h>
 #include <Urho3D/Engine/Application.h>
 #include <Urho3D/Graphics/Texture2D.h>
@@ -13,11 +14,13 @@
 
 namespace Urho3D
 {
-
+class Input;
 class Node;
 class Scene;
+class Script;
 class Sprite;
-
+class Audio;
+class ResourceCache;
 }
 
 // All Urho3D classes reside in namespace Urho3D
@@ -54,6 +57,10 @@ public:
     SharedPtr<Scene> scene_;
     /// Camera scene node.
     SharedPtr<Node> cameraNode_;
+    SharedPtr<Script> script_;
+    ResourceCache* cache_;
+    Audio* audio_;
+    Input* input_;
 
     unsigned GetReflectionViewMask(){return 0x80000000;};// Set a different viewmask on the water plane to be able to hide it from the reflection camera
     //SharedPtr<Texture2D> GetReflectionTexture(){return reflectionTexture_;};
@@ -100,6 +107,13 @@ protected:
 
     void ToggleFullscreen();//we start out in fullscreen mode
 
+    void HandleSetMasterGain(StringHash eventType, VariantMap& eventData);
+    void HandleGetMasterGain(StringHash eventType, VariantMap& eventData);
+    void HandleSpawnSound3D(StringHash eventType, VariantMap& eventData);
+    void HandleSpawnSound(StringHash eventType, VariantMap& eventData);
+    void HandleStartMusic(StringHash eventType, VariantMap& eventData);
+    void HandleStopMusic(StringHash eventType, VariantMap& eventData);
+
     /// Screen joystick index for navigational controls (mobile platforms only).
     unsigned screenJoystickIndex_;
     /// Screen joystick index for settings (mobile platforms only).
@@ -117,6 +131,34 @@ protected:
 
     ApplicationInput * applicationInput_ = NULL;
 };
+
+
+URHO3D_EVENT(E_SPAWN_SOUND3D, SpawnSound3D) {
+  URHO3D_PARAM(P_NAME, name);
+  URHO3D_PARAM(P_GAIN, gain); // float
+  URHO3D_PARAM(P_POSITION, position); }
+
+URHO3D_EVENT(E_SPAWN_SOUND, SpawnSound) {
+  URHO3D_PARAM(P_NAME, name);
+  URHO3D_PARAM(P_GAIN, gain); // float
+}
+
+URHO3D_EVENT(E_START_MUSIC, StartMusic) {
+  URHO3D_PARAM(P_NAME, name);
+  URHO3D_PARAM(P_LOOPED, looped); // bool
+}
+
+URHO3D_EVENT(E_STOP_MUSIC, StopMusic) { }
+
+URHO3D_EVENT(E_SET_MASTER_GAIN, SetMasterGain) {
+  URHO3D_PARAM(P_NAME, name);
+  URHO3D_PARAM(P_GAIN, gain); // float
+}
+
+URHO3D_EVENT(E_GET_MASTER_GAIN, GetMasterGain) {
+  URHO3D_PARAM(P_NAME, name);
+  URHO3D_PARAM(P_GAIN, gain); // float
+}
 
 //#include "Sample.inl"
 
