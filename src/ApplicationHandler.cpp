@@ -56,6 +56,7 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     script_(NULL)
 {
     context_->RegisterSubsystem(new Script(context_));
+    script_ = GetSubsystem<Script>();
     cfg_ = new ConfigManager(context, String::EMPTY, false, false);
     context->RegisterSubsystem(cfg_);
     ConfigFile::RegisterObject(context);
@@ -69,7 +70,6 @@ void ApplicationHandler::Setup()
     assert(audio_);
     assert(cache_);
     assert(input_);
-    script_ = GetSubsystem<Script>();
     assert(script_);
 
     // Modify engine startup parameters
