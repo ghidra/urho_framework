@@ -114,7 +114,7 @@ void ApplicationHandler::Setup()
 
     const Vector<String>& args = GetArguments();
 
-    String configFilePath = "Resources/" + cfgFileName_ + ".cfg";
+    String configFilePath = cfgFileName_ + ".cfg";
     if (cfg_->Load(configFilePath, true))
     {
         URHO3D_LOGRAW(String("Configuration file loaded: ") + configFilePath + "\n"); // raw, Log not yet active
