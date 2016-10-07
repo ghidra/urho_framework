@@ -3,6 +3,7 @@
 #include <Urho3D/Input/Controls.h>
 #include <Urho3D/Graphics/Graphics.h>
 #include <Urho3D/Input/Input.h>
+#include <Urho3D/IO/Log.h>
 #include <Urho3D/Graphics/Renderer.h>
 
 #include <Urho3D/Engine/Application.h>
@@ -283,9 +284,26 @@ void ApplicationInput::HandleKeyDown(StringHash eventType, VariantMap& eventData
     {
         ToggleFullscreen();
     }
-
-
-    
+    else if (key == '[') { // +FOV
+        Camera* cam(cameraNode_->GetComponent<Camera>());
+        if (cam)
+        {
+            cam->SetFov(cam->GetFov() + 2.0f);
+            URHO3D_LOGINFO(String("Camera FOV = ") + String(cam->GetFov()));
+            URHO3D_LOGINFO(String("Camera nearclip = ") + String(cam->GetNearClip()));
+            URHO3D_LOGINFO(String("Camera farclip = ") + String(cam->GetFarClip()));
+        }
+    }
+    else if (key == ']') { // +FOV
+        Camera* cam(cameraNode_->GetComponent<Camera>());
+        if (cam)
+        {
+            cam->SetFov(cam->GetFov() - 2.0f);
+            URHO3D_LOGINFO(String("Camera FOV = ") + String(cam->GetFov()));
+            URHO3D_LOGINFO(String("Camera nearclip = ") + String(cam->GetNearClip()));
+            URHO3D_LOGINFO(String("Camera farclip = ") + String(cam->GetFarClip()));
+        }
+    }
     // Common rendering quality controls, only when UI has no focused element
     else if (!GetSubsystem<UI>()->GetFocusElement())
     {

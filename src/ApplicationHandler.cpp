@@ -335,7 +335,9 @@ void ApplicationHandler::CreateScene()
     // Create the camera. Limit far clip distance to match the fog
     cameraNode_ = scene_->CreateChild("Camera");
     Camera* camera = cameraNode_->CreateComponent<Camera>();
-    camera->SetFarClip(300.0f);
+    camera->SetFov(cfg_->GetFloat("camera", "FOV", 45.0f));
+    camera->SetNearClip(cfg_->GetFloat("camera", "nearClip", 0.1f));
+    camera->SetFarClip(cfg_->GetFloat("camera", "farClip", 300.0f));
 
 }
 void ApplicationHandler::SetupViewport()
