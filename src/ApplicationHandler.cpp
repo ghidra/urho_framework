@@ -110,11 +110,18 @@ void ApplicationHandler::Setup()
     //cache->AddResourceDir("Resources");
 
 
-    // Override engine parameters with those from configuration file and app arguments.
+    // Override engine parameters with those from configuration file and program arguments.
 
     const Vector<String>& args = GetArguments();
 
-    String configFilePath = cfgFileName_ + ".cfg";
+    // Determine the configuration filepath (default or given in program arguments) and load config.
+    String configFilePath = cfgFileName_;
+
+    for (unsigned i=0; i< args.Size(); i++)
+    {
+        if (args[i].ToLower() == "-conf")
+            configFilePath = args[++i];
+    }
     if (cfg_->Load(configFilePath, true))
     {
         URHO3D_LOGRAW(String("Configuration file loaded: ") + configFilePath + "\n"); // raw, Log not yet active
@@ -124,7 +131,7 @@ void ApplicationHandler::Setup()
         URHO3D_LOGRAW(String("Cannot load configuration file: ") + configFilePath + "\n"); // raw, Log not yet active
     }
 
-    // If LogLevel is not in program arguments, set it from config.
+    // If LogLevel is in program arguments, do nothing; otherwise, set it from config.
     bool foundArgLog(false);
     for (unsigned i=0; i< args.Size(); i++)
     {
@@ -499,9 +506,10 @@ void ApplicationHandler::HandleSpawnSound3D(StringHash eventType, VariantMap& ev
     ///@TODO parameterize?
     soundSource->SetDistanceAttenuation(1.0f, 10.0f, 1.0f);
     soundSource->SetGain(gain);
-    soundSource->Play(sound); }
+    soundSource->Play(sound);
+}
 
-    void ApplicationHandler::HandleSpawnSound(StringHash eventType, VariantMap& eventData) {
+void ApplicationHandler::HandleSpawnSound(StringHash eventType, VariantMap& eventData) {
     const String& soundResourceName(eventData[SpawnSound::P_NAME].GetString());
     Sound* sound(cache_->GetResource<Sound>(soundResourceName));
     if (!sound) {
