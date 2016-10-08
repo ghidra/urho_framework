@@ -12,22 +12,36 @@ using namespace Urho3D;
 Remover::Remover(Context* context) :
   Component(context)
   , timeToLive_(-1)
-{}
+{
+}
 
-Remover::~Remover() {}
+Remover::~Remover() {
+}
 
-void Remover::RegisterObject(Context* context) {
-  context->RegisterFactory<Remover>(); }
+void Remover::RegisterObject(Context* context)
+{
+  context->RegisterFactory<Remover>();
+}
 
-void Remover::OnNodeSet(Node* node) {
-  if (!node) {
-    return; }
-  SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(Remover, HandleUpdate)); }
+void Remover::OnNodeSet(Node* node)
+{
+    if (!node)
+    {
+        return;
+    }
+    SubscribeToEvent(E_UPDATE, URHO3D_HANDLER(Remover, HandleUpdate));
+}
 
-void Remover::HandleUpdate(StringHash eventType, VariantMap& eventData) {
+void Remover::HandleUpdate(StringHash eventType, VariantMap& eventData)
+{
   using namespace Update;
   float dt(eventData[P_TIMESTEP].GetFloat());
-  if (timeToLive_ >= 0) {
+  if (timeToLive_ >= 0)
+  {
     timeToLive_ -= dt;
-    if (timeToLive_ <= 0) {
-      node_->Remove(); } } }
+    if (timeToLive_ <= 0)
+    {
+      node_->Remove();
+    }
+  }
+}

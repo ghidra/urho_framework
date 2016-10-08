@@ -3,10 +3,13 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Scene/Component.h>
 
-namespace Urho3D {
-class Node; }
+namespace Urho3D
+{
+class Node;
+}
 
-class Remover : public Urho3D::Component {
+class Remover : public Urho3D::Component
+{
   URHO3D_OBJECT(Remover, Component);
 
 public:

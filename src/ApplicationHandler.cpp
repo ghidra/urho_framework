@@ -503,8 +503,7 @@ void ApplicationHandler::HandleSpawnSound3D(StringHash eventType, VariantMap& ev
     SoundSource3D* soundSource(soundNode->CreateComponent<SoundSource3D>());
     soundSource->SetSoundType(SOUND_MASTER);
     soundSource->SetAutoRemoveMode(REMOVE_NODE);
-    ///@TODO parameterize?
-    soundSource->SetDistanceAttenuation(1.0f, 10.0f, 1.0f);
+    soundSource->SetDistanceAttenuation(1.0f, 10.0f, 1.0f); ///@TODO parameterize?
     soundSource->SetGain(gain);
     soundSource->Play(sound);
 }
