@@ -91,7 +91,7 @@ void Emitter::HandleSceneUpdate(StringHash eventType, VariantMap& eventData) {
 void Emitter::Emit() {
   Node* n(node_->CreateChild("emit"));
 
-  Remover* r(n->CreateComponent<Remover>(CreateMode::LOCAL));
+  Remover* r(n->CreateComponent<Remover>(LOCAL));
   r->timeToLive_ = Random(durationMin_, durationMax_);
 
   RigidBody* body(n->CreateComponent<RigidBody>());
