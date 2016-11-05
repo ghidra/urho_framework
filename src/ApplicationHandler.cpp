@@ -355,6 +355,7 @@ void ApplicationHandler::SetupViewport()
     SharedPtr<Viewport> viewport(new Viewport(context_, scene_, cameraNode_->GetComponent<Camera>()));
     renderer->SetViewport(0, viewport);
 }
+
 void ApplicationHandler::SetupReflectionViewport(Node* waterPlaneNode, const String mat)
 {
     reflectionViewportEnabled_ = true;

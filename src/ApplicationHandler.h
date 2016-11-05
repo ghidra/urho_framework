@@ -21,6 +21,7 @@ class Script;
 class Sprite;
 class Audio;
 class ResourceCache;
+class Variant;
 }
 
 // All Urho3D classes reside in namespace Urho3D
@@ -55,6 +56,7 @@ public:
     String cfgFileName_;
     SharedPtr<ConfigManager> cfg_;
     SharedPtr<Scene> scene_;
+    VariantMap renderTargets_; // Map of RenderTarget settings (bool enabled).
     /// Camera scene node.
     SharedPtr<Node> cameraNode_;
     SharedPtr<Script> script_;
