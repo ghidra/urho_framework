@@ -28,6 +28,7 @@
 
 #include "Controller.h"
 #include "ApplicationInput.h"
+#include "ConfigManager.h"
 #include "CameraLogic.h"
 
 #include <Urho3D/DebugNew.h>
@@ -388,13 +389,24 @@ void ApplicationInput::HandleKeyDown(StringHash eventType, VariantMap& eventData
         // Take screenshot
         else if (key == '9')
         {
-            Graphics* graphics = GetSubsystem<Graphics>();
-            Image screenshot(context_);
-            graphics->TakeScreenShot(screenshot);
-            // Here we save in the Data folder with date and time appended
-            // I expect to have a Resources/Screenshots folder to save into
-            screenshot.SavePNG(GetSubsystem<FileSystem>()->GetProgramDir() + "Resources/Screenshots/Screenshot_" +
-                Time::GetTimeStamp().Replaced(':', '_').Replaced('.', '_').Replaced(' ', '_') + ".png");
+            ConfigManager* cfg = GetSubsystem<ConfigManager>();
+            String dir;
+            if (cfg->Has("engine", "ScreenshotDirectory"))
+                dir = cfg->GetString("engine", "ScreenshotDirectory", "./");
+            else
+                dir = GetSubsystem<FileSystem>()->GetProgramDir() + "Resources/Screenshots/";
+            String filePath = dir + "Screenshot_" + Time::GetTimeStamp().Replaced(':', '_').Replaced('.', '_').Replaced(' ', '_') + ".png";
+            URHO3D_LOGINFO("Screenshot: " + filePath);
+
+            bool dirValid = GetSubsystem<FileSystem>()->CreateDir(dir);
+            if (dirValid) {
+                Graphics* graphics = GetSubsystem<Graphics>();
+                Image screenshot(context_);
+                graphics->TakeScreenShot(screenshot);
+                screenshot.SavePNG(filePath);
+            }
+            else
+                URHO3D_LOGINFO("Screenshot error: invalid ScreenshotDirectory.");
         }
     }
 }
