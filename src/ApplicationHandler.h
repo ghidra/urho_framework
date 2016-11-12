@@ -131,7 +131,7 @@ protected:
     SharedPtr<Node> reflectionCameraNode_;//might not need t be public
     //SharedPtr<Texture2D> reflectionTexture_;
 
-    ApplicationInput * applicationInput_ = NULL;
+    SharedPtr<ApplicationInput> applicationInput_;
 
     SharedPtr<ScriptFile> scriptFile_;/// Script file.
     String scriptFileName_;/// Script file name.
