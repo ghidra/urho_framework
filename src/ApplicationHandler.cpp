@@ -178,21 +178,24 @@ void ApplicationHandler::Setup()
         engineParameters_["MultiSample"] = multiSample;
     }
 
-    if (cfg_->Has("engine", "SoundMaster")) {
+    if (cfg_->Has("engine", "SoundMaster"))
+    {
         float soundMasterGain(cfg_->GetFloat("engine", "SoundMaster") / 1.0f);
         VariantMap& vm(GetEventDataMap());
         vm[SetMasterGain::P_NAME] = SOUND_MASTER;
         vm[SetMasterGain::P_GAIN] = soundMasterGain;
         SendEvent(E_SET_MASTER_GAIN, vm);
     }
-    if (cfg_->Has("engine", "SoundMusic")) {
+    if (cfg_->Has("engine", "SoundMusic"))
+    {
         float soundMusicGain(cfg_->GetFloat("engine", "SoundMusic") / 1.0f);
         VariantMap& vm(GetEventDataMap());
         vm[SetMasterGain::P_NAME] = SOUND_MUSIC;
         vm[SetMasterGain::P_GAIN] = soundMusicGain;
         SendEvent(E_SET_MASTER_GAIN, vm);
     }
-    if (cfg_->Has("engine", "SoundBuffer") && cfg_->Has("engine", "SoundMixRate")) {
+    if (cfg_->Has("engine", "SoundBuffer") && cfg_->Has("engine", "SoundMixRate"))
+    {
         int soundBuffer(cfg_->GetInt("engine", "SoundBuffer", 100));
         int mixRate(cfg_->GetUInt("engine", "SoundMixRate", 48000));
         if (!audio_->SetMode(soundBuffer, mixRate, true)) {
@@ -202,6 +205,7 @@ void ApplicationHandler::Setup()
 
 void ApplicationHandler::Start()
 {
+    URHO3D_LOGDEBUG("Start(); program dir: " + GetSubsystem<FileSystem>()->GetProgramDir());
     /*if (GetPlatform() == "Android" || GetPlatform() == "iOS")
         // On mobile platform, enable touch by adding a screen joystick
         InitTouchInput();
