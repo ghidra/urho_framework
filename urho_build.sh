@@ -31,7 +31,7 @@ else
 			echo "begun build process"
 			if [ -z "$3" ];then
 				echo "standard build"
-				bash $URHOPATH/cmake_generic.sh $URHOBUILD -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_LIB_TYPE=SHARED -DURHO3D_SAMPLES=1 
+				bash $URHOPATH/cmake_generic.sh $URHOBUILD -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_LIB_TYPE=SHARED -DURHO3D_SAMPLES=1 -DVIDEO_MIR=0 
 			else
 				echo "build with core-avx-i"
 				bash $URHOPATH/cmake_generic.sh $URHOBUILD -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_LIB_TYPE=SHARED -DURHO3D_SAMPLES=1 -DURHO3D_DEPLOYMENT_TARGET=generic -DURHO3D_SSE=1
