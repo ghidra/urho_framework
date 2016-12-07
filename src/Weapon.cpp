@@ -70,7 +70,7 @@ void Weapon::Setup()
     //AnimatedModel* object = node_->CreateComponent<AnimatedModel>();
     StaticModel* object = node_->CreateComponent<StaticModel>();
     object->SetModel(cache->GetResource<Model>("Models/"+mesh_));
-    object->SetMaterial(cache->GetResource<Material>("Materials/Jack.xml"));
+    object->SetMaterial(cache->GetResource<Material>("Materials/"+material_+".xml"));
     object->SetCastShadows(true);
 
     lefthand_grip_ = node_->CreateChild("lefthand_grip");
