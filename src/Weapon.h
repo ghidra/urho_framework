@@ -59,6 +59,10 @@ public:
     virtual unsigned GetMagSize(){return mag_size_;};
     virtual unsigned GetMagRemain(){return mag_remains_;};
     virtual float GetFireRate(){return firing_interval_;};
+    virtual unsigned GetProjectileRate(){return num_projectiles_;};//number of projectiles at once
+    virtual float GetProjectileSpeed(){return firing_interval_;};
+    virtual float GetProjectileRange(){return projectile_range_;};
+    virtual float GetProjectileRecoil(){return projectile_recoil_;};
 
 protected:
 

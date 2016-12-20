@@ -35,6 +35,7 @@ public:
     //virtual void Possess(ApplicationInput* applicationInput);
     virtual void Possess(Controller* controller);
     virtual void EquipWeapon(Weapon* weapon);
+    Weapon* GetWeapon(){return weapon_;};
     //virtual void Setup(SharedPtr<Scene> scene, SharedPtr<Node> cameraNode);
 
     float GetMoveForce(){return moveForce_;};
