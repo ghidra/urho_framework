@@ -57,8 +57,10 @@ public:
     virtual void SetMagSize(const unsigned size,  const float rate);
     //virtual void UpdateMagRemains(const unsigned amount);//this is called incase we do something else for reloading
     virtual unsigned GetMagSize(){return mag_size_;};
+    virtual unsigned GetMagSpeed(){return 1.0/reload_interval_;};//this is mostly for debug
     virtual unsigned GetMagRemain(){return mag_remains_;};
-    virtual float GetFireRate(){return firing_interval_;};
+    virtual float GetFireRate(){return fire_rate_;};
+    virtual float GetFiringInterval(){return firing_interval_;};
     virtual unsigned GetProjectileRate(){return num_projectiles_;};//number of projectiles at once
     virtual float GetProjectileSpeed(){return projectile_speed_;};
     virtual float GetProjectileRange(){return projectile_range_;};
@@ -86,6 +88,7 @@ protected:
     float fire_velocity_;
     float firing_timer_;
     float firing_interval_;//the rate of fire
+    float fire_rate_;
     unsigned num_projectiles_;
     float projectile_speed_;
     float projectile_range_;

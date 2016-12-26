@@ -20,6 +20,7 @@ Weapon::Weapon(Context* context) :
     fire_velocity_(50.0f),
     firing_timer_(0.0f),
     firing_interval_(0.2f),
+    fire_rate_(1.0f/firing_interval_),
     num_projectiles_(1),
     projectile_speed_(80.0f),
     projectile_range_(20.0f),
@@ -109,7 +110,7 @@ void Weapon::StartReload()
 }
 
 void Weapon::SetProjectileRate(const unsigned rate){num_projectiles_=rate;}
-void Weapon::SetFireRate(const float fireRate){firing_interval_ = 1000.0f/(fireRate*1000.0f);}
+void Weapon::SetFireRate(const float fireRate){firing_interval_ = 1000.0f/(fireRate*1000.0f); fire_rate_=fireRate;}
 void Weapon::SetProjectileSpeed(const float speed){projectile_speed_=speed;}
 void Weapon::SetProjectileRecoil(const float recoil){projectile_recoil_=recoil;}
 void Weapon::SetProjectileRange(const float range){projectile_range_=range;}
