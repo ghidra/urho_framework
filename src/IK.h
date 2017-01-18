@@ -29,6 +29,13 @@ public:
     virtual void CreateChain(const String bone);
     virtual void SetTarget(Vector3 targetPos);
     virtual void ToggleDebug(){drawDebug_=!drawDebug_;};
+
+    //editor functions
+    virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);
+    void SetEffectorName(const String& effectorName);
+    const String& GetEffectorName() const { return effectorName_; };
+    void SetDEBUG(bool de);
+    bool GetDEBUG() const { return drawDebug_; }
     
 private:
 
@@ -49,6 +56,7 @@ private:
     bool doIK_; // Allow to disable Foot IK, which is only relevant when the character is grounded
 
     Node* effector_;//leftFoot
+    String effectorName_;//stores the name of the node for the editor component stuff
     //Node* rightFoot;
     //Node* rootBone;
     //float length_;//leftLegLength
