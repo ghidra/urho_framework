@@ -574,10 +574,10 @@ void ApplicationHandler::GetScriptFileName()
         {
             scriptFileName_ = "/Scripts/Editor.as";
         }
-        else
+        /*else
         {
             scriptFileName_ = "";
-        }
+        }*/
     }
 }
 

@@ -28,7 +28,7 @@ IK::~IK(){}
 
 void IK::RegisterObject(Context* context)
 {
-    context->RegisterFactory<IK>("Chmup");
+    context->RegisterFactory<IK>("Framework");
 
     URHO3D_ACCESSOR_ATTRIBUTE("EffectorNode", GetEffectorName, SetEffectorName, String, String::EMPTY, AM_DEFAULT);
 }
