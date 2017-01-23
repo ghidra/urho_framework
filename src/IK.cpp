@@ -15,6 +15,10 @@
 #include <Urho3D/Graphics/DebugRenderer.h>
 //#include <Urho3D/Math/Sphere.h>
 
+#include <Urho3D/DebugNew.h>
+#include <Urho3D/IO/Log.h>
+#include <Urho3D/Engine/DebugHud.h>
+
 
 IK::IK(Context* context) :
     LogicComponent(context),
@@ -30,7 +34,8 @@ void IK::RegisterObject(Context* context)
 {
     context->RegisterFactory<IK>("Framework");
 
-    URHO3D_ACCESSOR_ATTRIBUTE("EffectorNode", GetEffectorName, SetEffectorName, String, String::EMPTY, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Effector Node", GetEffectorName, SetEffectorName, String, String::EMPTY, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Draw Debug", GetDEBUG, SetDEBUG, bool, false, AM_DEFAULT);
 }
 
 void IK::CreateChain(const String bone)
@@ -38,11 +43,17 @@ void IK::CreateChain(const String bone)
 	effector_ = node_->GetChild(bone, true);
 	effectorName_=bone;
 
+	URHO3D_LOGWARNING("IK-------- we were given:"+ bone);
+
 	if (!effector_)
 		return;
 
+	URHO3D_LOGWARNING("IK-------- we Actially have a bone named this:"+ bone);
+
 	if (!effector_->GetParent() || !effector_->GetParent()->GetParent())
 		return;
+
+	URHO3D_LOGWARNING("IK-------- And it matches the requirement of having 2 parents");
 }
 
 void IK::SetTarget(Vector3 targetPos)
