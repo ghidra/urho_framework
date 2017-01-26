@@ -54,6 +54,8 @@ void IK::CreateChain(const String bone)
 		return;
 
 	URHO3D_LOGWARNING("IK-------- And it matches the requirement of having 2 parents");
+
+	//Solve(effector_->GetWorldPosition());
 }
 
 void IK::SetTarget(Vector3 targetPos)
@@ -131,6 +133,7 @@ bool IK::Solve(Vector3 targetPos)
 
     if(drawDebug_)
     {
+    	//URHO3D_LOGWARNING("WE ARE DRAWING DEBUG");
 	    DebugRenderer* dbg = effector_->GetScene()->GetComponent<DebugRenderer>();
 	    
 	    /*dbg->AddLine(hipPos,hipPos+tdn,Color(0.0f,1.0f,0.0f),false);

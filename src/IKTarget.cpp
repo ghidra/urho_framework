@@ -38,11 +38,11 @@ void IKTarget::DelayedStart()
 
 void IKTarget::SetIK(const String parentNode)
 {
-	//Node* n = node_->GetScene()->GetNode(parentNode);
-	//IK* ik = n->GetCompnent<IK>();
+	Node* n = node_->GetScene()->GetChild(parentNode,true);
+	IK* ik = n->GetComponent<IK>();
 
-	//if ( ik != NULL )
-	//	SetIK(ik);
+	if ( ik != NULL )
+		SetIK(ik);
 }
 void IKTarget::SetIK(IK* ik)
 {
@@ -53,8 +53,11 @@ void IKTarget::SetIK(IK* ik)
 void IKTarget::HandleSceneDrawableUpdateFinished(StringHash eventType, VariantMap& eventData)
 {
     //solve for ik
-    if(ik_ != NULL)       
-        ik_->SetTarget(node_->GetWorldPosition());
+    if(ik_ != NULL)
+    {
+    	ik_->SetTarget(node_->GetWorldPosition());
+    	//URHO3D_LOGWARNING( String(node_->GetWorldPosition()) );
+    }      
 }
 
 ////EDITOR STUFF
