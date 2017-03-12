@@ -1,5 +1,8 @@
+#include <Urho3D/Precompiled.h>
+
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Scene/Scene.h>
+#include <Urho3D/Core/Context.h>
 
 #include <Urho3D/Graphics/StaticModel.h>
 #include <Urho3D/Resource/ResourceCache.h>
@@ -21,6 +24,9 @@ Actor::Actor(Context* context) :
     duration_(-0.1f),
     health_(100.0f),
     maxHealth_(100.0f),
+    speed_(1.0f),
+    sensitivity_(1.0f),
+    level_(0),
     canCollect_(false),
     collision_layer_(1),
     collision_mask_(60),
@@ -35,6 +41,42 @@ Actor::Actor(Context* context) :
     debug_ = new Debug(context_);
 }
 Actor::~Actor(){}
+
+void Actor::RegisterObject(Context* context)
+{
+    context->RegisterFactory<Actor>("Framework");
+
+    URHO3D_ACCESSOR_ATTRIBUTE("Max Health", GetMaxHealth, SetMaxHealth, float, 100.0f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Level", int, level_, 0, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Duration", GetDuration, SetDuration, float, -0.1f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("side", int, side_, SIDE_NEUTRAL, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Speed", GetSpeed, SetSpeed, float, 1.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Sensitivity", GetSensitivity, SetSensitivity, float, 1.0f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Collision Layer", int, collision_layer_, 1, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Collision Mask", int, collision_mask_, 60, AM_DEFAULT);
+}
+////EDITOR STUFF
+void Actor::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
+{
+    Serializable::OnSetAttribute(attr, src);
+}
+void Actor::SetMaxHealth(float value)
+{
+    maxHealth_=value;
+}
+void Actor::SetDuration(float value)
+{
+    duration_=value;
+}
+void Actor::SetSpeed(float value)
+{
+    speed_=value;
+}
+void Actor::SetSensitivity(float value)
+{
+    sensitivity_=value;
+}
+////
 
 void Actor::FixedUpdate(float timeStep)
 {

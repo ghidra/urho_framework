@@ -48,6 +48,8 @@
 #include "Emitter.h"
 #include "Remover.h"
 
+#include "Actor.h"
+
 #include <Urho3D/IO/Log.h>
 #include <Urho3D/DebugNew.h>//maybe i need this for scrip loading
 
@@ -70,6 +72,8 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     ConfigFile::RegisterObject(context);
     Emitter::RegisterObject(context);
     Remover::RegisterObject(context);
+
+    Actor::RegisterObject(context);
 
     //CameraLogic::RegisterObject(context);
     //context->RegisterFactory<CameraLogic>();

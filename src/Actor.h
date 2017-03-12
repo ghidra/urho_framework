@@ -31,6 +31,8 @@ public:
     Actor(Context* context);
     ~Actor();
 
+    static void RegisterObject(Context* context);
+    
     virtual void FixedUpdate(float timeStep);
     //virtual void FixedPostUpdate(float timeStep);
 
@@ -47,6 +49,17 @@ public:
     void MarkForRemoval();
     void CheckForRemoval();
     //bool MarkedForRemoval(){return markedForRemoval_;};
+
+    //editor functions
+    virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);
+    float GetMaxHealth() const {return maxHealth_;};
+    void SetMaxHealth(float value);
+    float GetDuration() const {return duration_;};
+    void SetDuration(float value);
+    float GetSpeed() const {return speed_;};
+    void SetSpeed(float value);
+    float GetSensitivity()const {return sensitivity_;};
+    void SetSensitivity(float value);
     
 protected:
 
