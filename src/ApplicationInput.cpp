@@ -40,6 +40,7 @@ ApplicationInput::ApplicationInput(Context* context):
     paused_(false),
     quit_(false),
     debugCamera_(false),
+    debugDrawGeometry_(false),
     debugDrawPhysics_(false),
     fullscreen_(true)
 {
@@ -277,6 +278,8 @@ void ApplicationInput::HandleKeyDown(StringHash eventType, VariantMap& eventData
         else
             cameraLogic_->SetCameraType(cameraType_);
     }
+    else if (key == KEY_F6)
+        debugDrawGeometry_ = !debugDrawGeometry_;
     else if (key == KEY_F10)
     {
         GetSubsystem<DebugHud>()->Toggle(1);//just the debug renderer

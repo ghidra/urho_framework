@@ -38,6 +38,7 @@ public:
     void SetMouseVisible(const bool b = true);
 
     bool IsDebugCamera(){return debugCamera_;}
+    bool IsDebugDrawGeometry(){return debugDrawGeometry_;}
     bool IsDebugDrawPhysics(){return debugDrawPhysics_;}
 private:
     /// Construct a new Text instance, containing the 'Hello World' String, and add it to the UI root element.
@@ -76,6 +77,7 @@ private:
     bool mouseVisible_;
     //debug bools
     bool debugCamera_;
+    bool debugDrawGeometry_;
     bool debugDrawPhysics_;
     bool fullscreen_;
 
