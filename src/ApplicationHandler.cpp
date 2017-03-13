@@ -502,9 +502,10 @@ void ApplicationHandler::HandlePostRenderUpdate(StringHash eventType, VariantMap
     // bones properly
     if(applicationInput_)
     {
+        if (applicationInput_->IsDebugDrawGeometry())
+            GetSubsystem<Renderer>()->DrawDebugGeometry(true);
         if (applicationInput_->IsDebugDrawPhysics())
             scene_->GetComponent<PhysicsWorld>()->DrawDebugGeometry(true);
-            //GetSubsystem<Renderer>()->DrawDebugGeometry(false);//this draws lights and boundinbaxes at least
     }
 }
 
