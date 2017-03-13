@@ -17,12 +17,20 @@ public:
     Spawn(Context* context);
     ~Spawn();
 
+    static void RegisterObject(Context* context);
+
     virtual void FixedUpdate(float timeStep);
 
     Node* GetNode(){return node_;};
 
     void MarkForRemoval();
     void CheckForRemoval();
+
+    virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);
+    float GetDuration() const {return duration_;};
+    void SetDuration(float value){duration_=value;};
+    unsigned GetAmount() const {return amount_;};
+    void SetAmount(unsigned value){amount_=value;};
     
 protected:
 

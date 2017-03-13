@@ -26,6 +26,8 @@ public:
     Weapon(Context* context);
     ~Weapon();
 
+    static void RegisterObject(Context* context);
+
     //virtual void FixedUpdate(float timeStep);
     virtual void Update(Controls& ctrl, float timeStep);
     virtual void Setup();

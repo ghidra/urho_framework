@@ -19,6 +19,8 @@ public:
     PawnAnimated(Context* context);
     ~PawnAnimated();
 
+    static void RegisterObject(Context* context);
+
     //virtual void FixedUpdate(float timeStep);
     //virtual void Possess(Controller* controller);
     //virtual void EquipWeapon(Weapon* weapon);

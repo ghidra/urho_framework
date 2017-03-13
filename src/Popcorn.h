@@ -17,8 +17,14 @@ public:
     Popcorn(Context* context);
     ~Popcorn();
 
+    static void RegisterObject(Context* context);
     
     virtual void FixedUpdate(float timeStep);
+
+    //editor functions
+    virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);
+    float GetDuration() const {return duration_;};
+    void SetDuration(float value){duration_ = value;};
     
 protected:
 

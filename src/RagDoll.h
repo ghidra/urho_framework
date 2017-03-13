@@ -28,6 +28,7 @@ public:
 
     void Constrain(const String& boneName, const String& parentName, ConstraintType type, const Vector3& axis, const Vector3& parentAxis, const Vector2& highLimit, const Vector2& lowLimit, bool disableCollision = true);
 
+    virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);
 
 private:
     //virtual void HandleNodeCollision(StringHash eventType, VariantMap& eventData);

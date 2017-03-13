@@ -28,8 +28,8 @@ public:
     Pawn(Context* context);
     ~Pawn();
 
-    //static void RegisterObject(Context* context);
     //virtual void Start();
+    static void RegisterObject(Context* context);
 
     virtual void FixedUpdate(float timeStep);
     //virtual void Possess(ApplicationInput* applicationInput);

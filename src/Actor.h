@@ -32,7 +32,7 @@ public:
     ~Actor();
 
     static void RegisterObject(Context* context);
-    
+
     virtual void FixedUpdate(float timeStep);
     //virtual void FixedPostUpdate(float timeStep);
 
@@ -53,13 +53,13 @@ public:
     //editor functions
     virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);
     float GetMaxHealth() const {return maxHealth_;};
-    void SetMaxHealth(float value);
+    void SetMaxHealth(float value){maxHealth_=value;};
     float GetDuration() const {return duration_;};
-    void SetDuration(float value);
+    void SetDuration(float value){duration_=value;};
     float GetSpeed() const {return speed_;};
-    void SetSpeed(float value);
+    void SetSpeed(float value){speed_=value;};
     float GetSensitivity()const {return sensitivity_;};
-    void SetSensitivity(float value);
+    void SetSensitivity(float value){sensitivity_=value;};
     
 protected:
 

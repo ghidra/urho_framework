@@ -41,6 +41,14 @@ public:
     void SetOwner(SharedPtr<Weapon> owner);
     SharedPtr<Weapon> GetOwner(){return owner_;};
 
+    float GetSpeed() const {return speed_;};
+    void SetSpeed(float value){speed_=value;};
+    float GetRange() const {return range_;};
+    void SetRange(float value){range_=value;};
+    float GetDamage() const {return damage_;};
+    void SetDamage(float value){damage_=value;};
+    
+
 protected:
     
     virtual void HandleNodeCollision(StringHash eventType, VariantMap& eventData);

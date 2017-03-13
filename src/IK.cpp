@@ -1,7 +1,6 @@
-#include <Urho3D/Precompiled.h>
-
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/Context.h>
+#include <Urho3D/Scene/Serializable.h>
 #include <Urho3D/Scene/Scene.h>
 
 #include <Urho3D/Core/CoreEvents.h>

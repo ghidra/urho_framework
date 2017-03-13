@@ -41,6 +41,20 @@ Weapon::Weapon(Context* context) :
 }
 Weapon::~Weapon(){}
 
+void Weapon::RegisterObject(Context* context)
+{
+    context->RegisterFactory<Weapon>("Framework");
+
+    /*URHO3D_ACCESSOR_ATTRIBUTE("Max Health", GetMaxHealth, SetMaxHealth, float, 100.0f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Level", int, level_, 0, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Duration", GetDuration, SetDuration, float, -0.1f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("side", int, side_, SIDE_NEUTRAL, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Speed", GetSpeed, SetSpeed, float, 1.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Sensitivity", GetSensitivity, SetSensitivity, float, 1.0f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Collision Layer", int, collision_layer_, 1, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Collision Mask", int, collision_mask_, 60, AM_DEFAULT);*/
+}
+
 /*void Weapon::FixedUpdate(float timeStep)
 {
     Actor::FixedUpdate(timeStep);

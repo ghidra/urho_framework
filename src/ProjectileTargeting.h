@@ -27,6 +27,10 @@ public:
     void HandleSceneUpdate(StringHash eventType, VariantMap& eventData);
     void HandleNodeCollision(StringHash eventType, VariantMap& eventData);
 
+    virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);
+    float GetPeriod() const {return period_;};
+    void SetPeriod(float value){period_=value;};
+
     WeakPtr<Projectile> projectile_; /// The Projectile we target for.
     WeakPtr<Node> target_; /// The Node we are targeting.
     WeakPtr<CollisionShape> collisionShape_;

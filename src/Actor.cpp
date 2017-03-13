@@ -1,8 +1,7 @@
-#include <Urho3D/Precompiled.h>
-
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Core/Context.h>
+#include <Urho3D/Scene/Serializable.h>
 
 #include <Urho3D/Graphics/StaticModel.h>
 #include <Urho3D/Resource/ResourceCache.h>
@@ -59,22 +58,6 @@ void Actor::RegisterObject(Context* context)
 void Actor::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
 {
     Serializable::OnSetAttribute(attr, src);
-}
-void Actor::SetMaxHealth(float value)
-{
-    maxHealth_=value;
-}
-void Actor::SetDuration(float value)
-{
-    duration_=value;
-}
-void Actor::SetSpeed(float value)
-{
-    speed_=value;
-}
-void Actor::SetSensitivity(float value)
-{
-    sensitivity_=value;
 }
 ////
 

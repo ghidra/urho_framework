@@ -20,6 +20,10 @@ public:
   /// Remove node after this time, only if the value is non-negative.
   float timeToLive_;
 
+  void OnSetAttribute(const Urho3D::AttributeInfo& attr, const Urho3D::Variant& src);
+  float GetDuration() const {return timeToLive_;};
+  void SetDuration(float value){timeToLive_=value;};
+
 protected:
   void OnNodeSet(Urho3D::Node* node);
 

@@ -1,5 +1,6 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/Context.h>
+#include <Urho3D/Scene/Serializable.h>
 #include <Urho3D/Scene/Scene.h>
 
 #include <Urho3D/Physics/PhysicsWorld.h>//for the raycasting
@@ -34,8 +35,11 @@ Projectile::Projectile(Context* context) :
 Projectile::~Projectile(){}
 void Projectile::RegisterObject(Context* context)
 {
-    context->RegisterFactory<Projectile>();
+    context->RegisterFactory<Projectile>("Framework");
 
+    URHO3D_ACCESSOR_ATTRIBUTE("Speed", GetSpeed, SetSpeed, float, 200.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Range", GetRange, SetRange, float, 100.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Damage", GetDamage, SetDamage, float, 1.0f, AM_DEFAULT);
 }
 
 void Projectile::FixedUpdate(float timeStep)

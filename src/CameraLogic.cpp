@@ -1,6 +1,7 @@
 #include <Urho3D/Urho3D.h>
 
 #include <Urho3D/Core/Context.h>
+#include <Urho3D/Scene/Serializable.h>
 
 #include <Urho3D/UI/UI.h>
 #include <Urho3D/Input/Input.h>
@@ -32,8 +33,17 @@ CameraLogic::CameraLogic(Context* context) :
 
 void CameraLogic::RegisterObject(Context* context)
 {
-    context->RegisterFactory<CameraLogic>();
+    context->RegisterFactory<CameraLogic>("Framework");
 
+    //URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Target", GetCameraTarget, SetCameraTarget, ResourceRef, ResourceRef(Node::GetTypeStatic()), AM_DEFAULT);
+    //URHO3D_MIXED_ACCESSOR_ATTRIBUTE("Target Offset", GetTargetOffset, SetTargetOffset, Vector3, Vector3::ZERO, AM_FILE);
+    URHO3D_ACCESSOR_ATTRIBUTE("Camera Distance", GetCameraDistance, SetCameraDistance, float, 20.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Camera Distance Min", GetCameraDistanceMin, SetCameraDistanceMin, float, 1.0f, AM_DEFAULT);
+    URHO3D_ACCESSOR_ATTRIBUTE("Camera Distance Max", GetCameraDistanceMax, SetCameraDistanceMax, float, 50.0f, AM_DEFAULT);
+}
+void CameraLogic::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
+{
+    Serializable::OnSetAttribute(attr, src);
 }
 void CameraLogic::SetCameraParameters(const float distance, const float distance_min, const float distance_max, const Quaternion orientation)
 {

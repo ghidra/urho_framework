@@ -23,7 +23,11 @@ RagDoll::~RagDoll(){}
 
 void RagDoll::RegisterObject(Context* context)
 {
-    context->RegisterFactory<RagDoll>();
+    context->RegisterFactory<RagDoll>("Framework");
+}
+void RagDoll::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
+{
+    Serializable::OnSetAttribute(attr, src);
 }
 
 void RagDoll::Activate()

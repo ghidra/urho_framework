@@ -1,5 +1,7 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Scene/Scene.h>
+#include <Urho3D/Core/Context.h>
+#include <Urho3D/Scene/Serializable.h>
 
 #include <Urho3D/Graphics/AnimatedModel.h>
 #include <Urho3D/Resource/ResourceCache.h>
@@ -44,7 +46,10 @@ void PawnAnimated::Setup()
     ragdoll_ = node_->CreateComponent<RagDoll>();//
 
 }
-
+void PawnAnimated::RegisterObject(Context* context)
+{
+    context->RegisterFactory<PawnAnimated>("Framework");
+}
 void PawnAnimated::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
 {
     Pawn::HandleNodeCollision(eventType, eventData);

@@ -1,6 +1,7 @@
 #include "ProjectileTargeting.h"
 
 #include <Urho3D/Core/Context.h>
+#include <Urho3D/Scene/Serializable.h>
 #include <Urho3D/Physics/CollisionShape.h>
 #include <Urho3D/IO/Log.h>
 #include <Urho3D/IO/MemoryBuffer.h>
@@ -23,7 +24,13 @@ ProjectileTargeting::~ProjectileTargeting()
 
 void ProjectileTargeting::RegisterObject(Context* context)
 {
-    context->RegisterFactory<ProjectileTargeting>();
+    context->RegisterFactory<ProjectileTargeting>("Framework");
+
+    URHO3D_ACCESSOR_ATTRIBUTE("Period", GetPeriod, SetPeriod, float, 1.0f, AM_DEFAULT);
+}
+void ProjectileTargeting::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
+{
+    Serializable::OnSetAttribute(attr, src);
 }
 
 void ProjectileTargeting::Setup()

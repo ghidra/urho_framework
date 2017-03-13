@@ -1,5 +1,7 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Scene/Scene.h>
+#include <Urho3D/Core/Context.h>
+#include <Urho3D/Scene/Serializable.h>
 
 #include "Spawn.h"
 
@@ -12,6 +14,20 @@ Spawn::Spawn(Context* context) :
     debug_ = new Debug(context_);
 }
 Spawn::~Spawn(){}
+
+void Spawn::RegisterObject(Context* context)
+{
+    context->RegisterFactory<Spawn>("Framework");
+
+    URHO3D_ACCESSOR_ATTRIBUTE("Duration", GetDuration, SetDuration, float, -0.1f, AM_DEFAULT);
+    URHO3D_ATTRIBUTE("Amount", int, amount_, 1, AM_DEFAULT);
+}
+////EDITOR STUFF
+void Spawn::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
+{
+    Serializable::OnSetAttribute(attr, src);
+}
+////
 
 void Spawn::FixedUpdate(float timeStep)
 {

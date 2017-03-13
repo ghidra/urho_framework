@@ -1,5 +1,7 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Scene/Scene.h>
+#include <Urho3D/Core/Context.h>
+#include <Urho3D/Scene/Serializable.h>
 
 #include <Urho3D/Graphics/StaticModel.h>
 #include <Urho3D/Resource/ResourceCache.h>
@@ -26,6 +28,19 @@ void Popcorn::SetStatic(bool enable )
     static_=enable;
 }
 
+void Popcorn::RegisterObject(Context* context)
+{
+    context->RegisterFactory<Popcorn>("Framework");
+
+    URHO3D_ACCESSOR_ATTRIBUTE("Duration", GetDuration, SetDuration, float, 0.4f, AM_DEFAULT);
+
+}
+////EDITOR STUFF
+void Popcorn::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
+{
+    Serializable::OnSetAttribute(attr, src);
+}
+/////
 void Popcorn::FixedUpdate(float timeStep)
 {
     if(!static_)

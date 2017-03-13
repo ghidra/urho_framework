@@ -45,10 +45,27 @@
 
 #include "ApplicationInput.h"
 #include "ApplicationHandler.h"
+
+#include "ConfigFile.h"
+#include "Controller.h"
+
 #include "Emitter.h"
 #include "Remover.h"
 
 #include "Actor.h"
+#include "Pawn.h"
+#include "PawnAnimated.h"
+#include "CameraLogic.h"
+#include "PickUp.h"
+#include "Popcorn.h"
+#include "Projectile.h"
+#include "ProjectileTargeting.h"
+#include "RagDoll.h"
+#include "Spawn.h"
+#include "Weapon.h"
+
+#include "IK.h"
+#include "IKTarget.h"
 
 #include <Urho3D/IO/Log.h>
 #include <Urho3D/DebugNew.h>//maybe i need this for scrip loading
@@ -74,9 +91,18 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     Remover::RegisterObject(context);
 
     Actor::RegisterObject(context);
-
-    //CameraLogic::RegisterObject(context);
-    //context->RegisterFactory<CameraLogic>();
+    Pawn::RegisterObject(context);
+    PawnAnimated::RegisterObject(context);
+    CameraLogic::RegisterObject(context);
+    IK::RegisterObject(context);
+    IKTarget::RegisterObject(context);
+    PickUp::RegisterObject(context);
+    Popcorn::RegisterObject(context);
+    Projectile::RegisterObject(context);
+    ProjectileTargeting::RegisterObject(context);
+    RagDoll::RegisterObject(context);
+    Spawn::RegisterObject(context);
+    Weapon::RegisterObject(context); 
 }
 
 void ApplicationHandler::Setup()

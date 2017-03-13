@@ -27,6 +27,8 @@ public:
     PickUp(Context* context);
     ~PickUp();
 
+    static void RegisterObject(Context* context);
+
     virtual void FixedUpdate(float timeStep);
 
 protected:

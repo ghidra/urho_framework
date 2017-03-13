@@ -1,6 +1,7 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Scene/Scene.h>
+#include <Urho3D/Scene/Serializable.h>
 
 #include <Urho3D/Physics/PhysicsEvents.h>//this is for the namespace node collision
 #include <Urho3D/Physics/RigidBody.h>
@@ -22,6 +23,11 @@ PickUp::PickUp(Context* context) :
     //material_="";
 }
 PickUp::~PickUp(){}
+
+void PickUp::RegisterObject(Context* context)
+{
+    context->RegisterFactory<PickUp>("Framework");
+}
 
 void PickUp::FixedUpdate(float timeStep)
 {
