@@ -421,7 +421,8 @@ void ApplicationInput::SetFullscreen(const bool value)
 void ApplicationInput::ToggleFullscreen()
 {
     Graphics* graphics = GetSubsystem<Graphics>();
-    IntVector2 res = graphics->GetDesktopResolution();
+    graphics->ToggleFullscreen();
+    /*IntVector2 res = graphics->GetDesktopResolution(0);
     if(fullscreen_){
         
         //set it to half res i assume
@@ -439,7 +440,7 @@ void ApplicationInput::ToggleFullscreen()
         graphics->SetWindowPosition(0,0);
 
         fullscreen_=true;
-    }
+    }*/
 }
 
 void ApplicationInput::HandleTouchBegin(StringHash eventType, VariantMap& eventData)
