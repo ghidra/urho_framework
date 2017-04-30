@@ -48,7 +48,7 @@ public:
 
     void MarkForRemoval();
     void CheckForRemoval();
-    //bool MarkedForRemoval(){return markedForRemoval_;};
+    bool MarkedForRemoval(){return markedForRemoval_;};
 
     //editor functions
     virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);
