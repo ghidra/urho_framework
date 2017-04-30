@@ -25,6 +25,7 @@ public:
 
     void MarkForRemoval();
     void CheckForRemoval();
+    bool GetMarkedForRemoval(){return markedForRemoval_;};
 
     virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);
     float GetDuration() const {return duration_;};
