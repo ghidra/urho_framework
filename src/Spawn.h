@@ -38,6 +38,12 @@ protected:
     virtual void Setup(const Vector3 pos);
 
     float duration_;
+    float timeIncrement_;
+
+    float spawning_timer_;
+    float spawning_interval_;//the rate of fire
+    float spawn_rate_;
+
     bool markedForRemoval_;
     
     unsigned amount_;//the amount to spawn

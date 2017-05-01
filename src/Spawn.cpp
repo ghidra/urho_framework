@@ -9,6 +9,9 @@ Spawn::Spawn(Context* context) :
     LogicComponent(context),
     duration_(-0.1f),
     amount_(1),
+    spawning_timer_(0.0f),
+    spawning_interval_(0.8f),
+    spawn_rate_(1.0f/spawning_interval_),
     markedForRemoval_(false)
 {
     debug_ = new Debug(context_);
@@ -31,6 +34,8 @@ void Spawn::OnSetAttribute(const AttributeInfo& attr, const Variant& src)
 
 void Spawn::FixedUpdate(float timeStep)
 {
+    timeIncrement_+=timeStep;
+
     if (duration_ >= 0.0f){
       duration_ -= timeStep;
       if (duration_ <= 0.0f)
