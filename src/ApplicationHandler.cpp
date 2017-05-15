@@ -236,6 +236,12 @@ void ApplicationHandler::Setup()
 void ApplicationHandler::Start()
 {
     URHO3D_LOGDEBUG("Start(); program dir: " + GetSubsystem<FileSystem>()->GetProgramDir());
+
+    int maxFPS(cfg_->GetInt("engine", "maxFps"));
+    if (maxFPS >= 0) {
+      engine_->SetMaxFps(maxFPS);
+    }
+
     /*if (GetPlatform() == "Android" || GetPlatform() == "iOS")
         // On mobile platform, enable touch by adding a screen joystick
         InitTouchInput();
