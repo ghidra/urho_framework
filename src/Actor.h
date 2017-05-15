@@ -29,7 +29,7 @@ class Actor : public LogicComponent
     
 public:
     Actor(Context* context);
-    ~Actor();
+    virtual ~Actor();
 
     static void RegisterObject(Context* context);
 

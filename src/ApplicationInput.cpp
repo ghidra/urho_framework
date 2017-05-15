@@ -59,6 +59,7 @@ ApplicationInput::ApplicationInput(Context* context):
     //SubscribeToEvent(E_MOUSEBUTTONDOWN, URHO3D_HANDLER(ApplicationInput, HandleMouseButtonDown));
     //SubscribeToEvent(E_MOUSEBUTTONUP, URHO3D_HANDLER(ApplicationInput, HandleMouseButtonUp));
 }
+ApplicationInput::~ApplicationInput(){}
 
 //void ApplicationInput::SetParameters(ApplicationHandler * applicationHandler)
 //{

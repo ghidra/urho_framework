@@ -16,6 +16,7 @@ class ApplicationInput : public Controller
 public:
     /// Construct.
     ApplicationInput(Context* context);
+    ~ApplicationInput();
 
     bool GetQuit(){return quit_;};
 

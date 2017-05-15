@@ -26,7 +26,7 @@ class Pawn : public Actor
 public:
 
     Pawn(Context* context);
-    ~Pawn();
+    virtual ~Pawn();
 
     //virtual void Start();
     static void RegisterObject(Context* context);

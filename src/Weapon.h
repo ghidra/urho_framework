@@ -24,7 +24,7 @@ class Weapon : public Actor
 public:
 
     Weapon(Context* context);
-    ~Weapon();
+    virtual ~Weapon();
 
     static void RegisterObject(Context* context);
 

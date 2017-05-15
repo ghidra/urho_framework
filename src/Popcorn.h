@@ -15,7 +15,7 @@ class Popcorn : public LogicComponent
     
 public:
     Popcorn(Context* context);
-    ~Popcorn();
+    virtual ~Popcorn();
 
     static void RegisterObject(Context* context);
     

@@ -26,7 +26,7 @@ class Projectile : public Actor
 public:
 
     Projectile(Context* context);
-    ~Projectile();
+    virtual ~Projectile();
     
     static void RegisterObject(Context* context);
 

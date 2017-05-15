@@ -25,7 +25,7 @@ class PickUp : public Actor
 public:
 
     PickUp(Context* context);
-    ~PickUp();
+    virtual ~PickUp();
 
     static void RegisterObject(Context* context);
 

@@ -7,6 +7,7 @@ Controller::Controller(Context* context):
     Object(context)
 {
 }
+Controller::~Controller(){}
 
 void Controller::HandleUpdate(StringHash eventType, VariantMap& eventData)
 {

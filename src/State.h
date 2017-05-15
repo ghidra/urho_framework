@@ -17,7 +17,7 @@ class State : public Object
     
 public:
     State(Context* context);
-    ~State();
+    virtual ~State();
 
     virtual State* HandleInput(Controls& ctrl);
     virtual void Enter(Pawn* pawn);

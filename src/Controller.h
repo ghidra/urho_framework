@@ -31,6 +31,7 @@ class Controller : public Object
 public:
     /// Construct.
     Controller(Context* context);
+    ~Controller();
 
     void HandleUpdate(StringHash eventType, VariantMap& eventData);//this is called from outside this class
 
