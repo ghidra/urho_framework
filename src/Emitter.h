@@ -9,13 +9,16 @@ namespace Urho3D {
 class Node;
 class StringHash; }
 
-class Emitter : public Urho3D::Component {
+class Emitter : public Urho3D::Component
+{
   URHO3D_OBJECT(Emitter, Urho3D::Component);
 
 public:
   Emitter(Urho3D::Context* context);
   ~Emitter();
+
   static void RegisterObject(Urho3D::Context* context);
+
   void Emit();
 
 public:
