@@ -49,7 +49,8 @@ public:
 
   // Gets the settings map
   SettingsMap& GetMap() {
-    return _map; }
+    return _map;
+  }
 
   // Check if value exists
   bool Has(const Urho3D::String& section, const Urho3D::String& parameter);
@@ -81,13 +82,15 @@ public:
 
   // Load settings from file
   bool Load(bool overwriteExisting = true) {
-    return Load(_defaultFileName, overwriteExisting); }
+    return Load(_defaultFileName, overwriteExisting);
+  }
   bool Load(const Urho3D::String& fileName, bool overwriteExisting = true);
   bool Load(ConfigFile& configFile, bool overwriteExisting = true);
 
   // Save settings to file
   bool Save(bool smartSave = true) {
-    return Save(_defaultFileName, smartSave); }
+    return Save(_defaultFileName, smartSave);
+  }
   bool Save(const Urho3D::String& fileName, bool smartSave = true);
   bool Save(ConfigFile& configFile);
   void SaveSettingsMap(Urho3D::String section, SettingsMap& map, ConfigFile& configFile);
@@ -104,6 +107,7 @@ private:
 
   Urho3D::String _defaultFileName;
 
-  SettingsMap _map; };
+  SettingsMap _map;
+};
 //}
 #endif

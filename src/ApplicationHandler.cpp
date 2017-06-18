@@ -79,8 +79,7 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     reflectionViewportEnabled_(false),
     audio_(GetSubsystem<Audio>()),
     cache_(GetSubsystem<ResourceCache>()),
-    input_(GetSubsystem<Input>()),
-    script_(NULL)
+    input_(GetSubsystem<Input>())
 {
     context_->RegisterSubsystem(new Script(context_));
     script_ = GetSubsystem<Script>();

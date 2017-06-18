@@ -33,7 +33,8 @@ SOFTWARE.
 
 namespace Urho3D {
 class File;
-class Variant; }
+class Variant;
+}
 
 //namespace blu
 //{
@@ -51,7 +52,8 @@ public:
   static void RegisterObject(Urho3D::Context* context);
 
   void SetCaseSensitive(bool caseSensitive) {
-    _caseSensitive = caseSensitive; }
+    _caseSensitive = caseSensitive;
+  }
 
   /// Load resource from stream. May be called from a worker thread. Return true if successful.
   virtual bool BeginLoad(Urho3D::Deserializer& source);
@@ -64,7 +66,8 @@ public:
   bool FromString(const Urho3D::String& source);
 
   const ConfigMap* GetMap() {
-    return &_configMap; }
+    return &_configMap;
+  }
 
   bool Has(const Urho3D::String& section, const Urho3D::String& parameter);
 
@@ -95,6 +98,7 @@ public:
 protected:
 
   bool _caseSensitive;
-  ConfigMap _configMap; };
+  ConfigMap _configMap;
+};
 //}
 #endif

@@ -45,13 +45,15 @@ ConfigFile::~ConfigFile() {
 }
 
 void ConfigFile::RegisterObject(Urho3D::Context* context) {
-  context->RegisterFactory<ConfigFile>(); }
+  context->RegisterFactory<ConfigFile>();
+}
 
 bool ConfigFile::BeginLoad(Urho3D::Deserializer& source) {
   unsigned dataSize = source.GetSize();
   if (!dataSize && !source.GetName().Empty()) {
     URHO3D_LOGERROR("Zero sized data in " + source.GetName());
-    return false; }
+    return false;
+  }
 
   _configMap.Push(ConfigSection());
   ConfigSection* configSection = &_configMap.Back();
@@ -65,11 +67,14 @@ bool ConfigFile::BeginLoad(Urho3D::Deserializer& source) {
       //currentMap = &_configMap[sectionName];
 
       _configMap.Push(ConfigSection());
-      configSection = &_configMap.Back(); }
+      configSection = &_configMap.Back();
+    }
 
-    configSection->Push(line); }
+    configSection->Push(line);
+  }
 
-  return true; }
+  return true;
+}
 
 bool ConfigFile::Save(Urho3D::Serializer& dest) const {
   dest.WriteLine("# AUTO-GENERATED");
@@ -77,7 +82,8 @@ bool ConfigFile::Save(Urho3D::Serializer& dest) const {
   // Iterate over all sections, printing out the header followed by the properties
   for (Urho3D::Vector<ConfigSection>::ConstIterator itr = _configMap.Begin(); itr != _configMap.End(); itr++) {
     if (itr->Begin() == itr->End()) {
-      continue; }
+      continue;
+    }
 
     // Don't print section if there's nothing to print
     Urho3D::Vector<Urho3D::String>::ConstIterator section_itr = itr->Begin();
@@ -85,7 +91,8 @@ bool ConfigFile::Save(Urho3D::Serializer& dest) const {
 
     // Doesn't print header if it's empty
     if (header != Urho3D::String::EMPTY) {
-      dest.WriteLine("[" + header + "]"); }
+      dest.WriteLine("[" + header + "]");
+    }
 
     dest.WriteLine("");
 
@@ -98,58 +105,76 @@ bool ConfigFile::Save(Urho3D::Serializer& dest) const {
       ParseProperty(line, property, value);
 
       if (property != Urho3D::String::EMPTY && value != Urho3D::String::EMPTY) {
-        dest.WriteLine(property + "=" + value); } }
+        dest.WriteLine(property + "=" + value);
+      }
+    }
 
-    dest.WriteLine(""); }
+    dest.WriteLine("");
+  }
 
-  return true; }
+  return true;
+}
 
 bool ConfigFile::Save(Urho3D::Serializer& dest, bool smartSave) const {
   if (!smartSave) {
-    return Save(dest); }
+    return Save(dest);
+  }
 
   // Iterate over all sections, printing out the header followed by the properties
   for (Urho3D::Vector<ConfigSection>::ConstIterator itr = _configMap.Begin(); itr != _configMap.End(); itr++) {
     if (itr->Begin() == itr->End()) {
-      continue; }
+      continue;
+    }
 
     for (Urho3D::Vector<Urho3D::String>::ConstIterator section_itr = itr->Begin(); section_itr != itr->End(); section_itr++) {
       const Urho3D::String line = *section_itr;
 
-      dest.WriteLine(line); } }
+      dest.WriteLine(line);
+    }
+  }
 
-  return true; }
+  return true;
+}
 
 bool ConfigFile::FromString(const Urho3D::String& source) {
   if (source.Empty()) {
-    return false; }
+    return false;
+  }
 
   Urho3D::MemoryBuffer buffer(source.CString(), source.Length());
-  return Load(buffer); }
+  return Load(buffer);
+}
 
 bool ConfigFile::Has(const Urho3D::String& section, const Urho3D::String& parameter) {
-  return GetString(section, parameter) != Urho3D::String::EMPTY; }
+  return GetString(section, parameter) != Urho3D::String::EMPTY;
+}
 
 const Urho3D::String ConfigFile::GetString(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::String& defaultValue) {
   // Find the correct section
   ConfigSection* configSection = 0;
   for (Urho3D::Vector<ConfigSection>::Iterator itr = _configMap.Begin(); itr != _configMap.End(); itr++) {
     if (itr->Begin() == itr->End()) {
-      continue; }
+      continue;
+    }
 
     Urho3D::String& header = *(itr->Begin());
     header = ParseHeader(header);
 
     if (_caseSensitive) {
       if (section == header) {
-        configSection = &(*itr); } }
-    else {
+        configSection = &(*itr);
+      }
+    } else {
       if (section.ToLower() == header.ToLower()) {
-        configSection = &(*itr); } } }
+        configSection = &(*itr);
+      }
+    }
+  }
 
   // Section doesn't exist
   if (!configSection) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
   for (Urho3D::Vector<Urho3D::String>::ConstIterator itr = configSection->Begin(); itr != configSection->End(); itr++) {
     Urho3D::String property;
@@ -157,140 +182,178 @@ const Urho3D::String ConfigFile::GetString(const Urho3D::String& section, const 
     ParseProperty(*itr, property, value);
 
     if (property == Urho3D::String::EMPTY || value == Urho3D::String::EMPTY) {
-      continue; }
+      continue;
+    }
 
     if (_caseSensitive) {
       if (parameter == property) {
-        return value; } }
-    else {
+        return value;
+      }
+    } else {
       if (parameter.ToLower() == property.ToLower()) {
-        return value; } } }
+        return value;
+      }
+    }
+  }
 
-  return defaultValue; }
+  return defaultValue;
+}
 
 const int ConfigFile::GetInt(const Urho3D::String& section, const Urho3D::String& parameter, const int defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToInt(property); }
+  return Urho3D::ToInt(property);
+}
 
 const bool ConfigFile::GetBool(const Urho3D::String& section, const Urho3D::String& parameter, const bool defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToBool(property); }
+  return Urho3D::ToBool(property);
+}
 
 const float ConfigFile::GetFloat(const Urho3D::String& section, const Urho3D::String& parameter, const float defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToFloat(property); }
+  return Urho3D::ToFloat(property);
+}
 
 const Urho3D::Vector2 ConfigFile::GetVector2(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Vector2& defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToVector2(property); }
+  return Urho3D::ToVector2(property);
+}
 
 const Urho3D::Vector3 ConfigFile::GetVector3(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Vector3& defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToVector3(property); }
+  return Urho3D::ToVector3(property);
+}
 
 const Urho3D::Vector4 ConfigFile::GetVector4(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Vector4& defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToVector4(property); }
+  return Urho3D::ToVector4(property);
+}
 
 const Urho3D::Quaternion ConfigFile::GetQuaternion(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Quaternion& defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToQuaternion(property); }
+  return Urho3D::ToQuaternion(property);
+}
 
 const Urho3D::Color ConfigFile::GetColor(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Color& defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToColor(property); }
+  return Urho3D::ToColor(property);
+}
 
 const Urho3D::IntRect ConfigFile::GetIntRect(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::IntRect& defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToIntRect(property); }
+  return Urho3D::ToIntRect(property);
+}
 
 const Urho3D::IntVector2 ConfigFile::GetIntVector2(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::IntVector2& defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToIntVector2(property); }
+  return Urho3D::ToIntVector2(property);
+}
 
 const Urho3D::Matrix3 ConfigFile::GetMatrix3(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Matrix3& defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToMatrix3(property); }
+  return Urho3D::ToMatrix3(property);
+}
 
 const Urho3D::Matrix3x4 ConfigFile::GetMatrix3x4(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Matrix3x4& defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToMatrix3x4(property); }
+  return Urho3D::ToMatrix3x4(property);
+}
 
 const Urho3D::Matrix4 ConfigFile::GetMatrix4(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::Matrix4& defaultValue) {
   Urho3D::String property = GetString(section, parameter);
 
   if (property == Urho3D::String::EMPTY) {
-    return defaultValue; }
+    return defaultValue;
+  }
 
-  return Urho3D::ToMatrix4(property); }
+  return Urho3D::ToMatrix4(property);
+}
 
 void ConfigFile::Set(const Urho3D::String& section, const Urho3D::String& parameter, const Urho3D::String& value) {
   // Find the correct section
   ConfigSection* configSection = 0;
   for (Urho3D::Vector<ConfigSection>::Iterator itr = _configMap.Begin(); itr != _configMap.End(); itr++) {
     if (itr->Begin() == itr->End()) {
-      continue; }
+      continue;
+    }
 
     Urho3D::String& header = *(itr->Begin());
     header = ParseHeader(header);
 
     if (_caseSensitive) {
       if (section == header) {
-        configSection = &(*itr); } }
-    else {
+        configSection = &(*itr);
+      }
+    } else {
       if (section.ToLower() == header.ToLower()) {
-        configSection = &(*itr); } } }
+        configSection = &(*itr);
+      }
+    }
+  }
 
   if (section == Urho3D::String::EMPTY) {
-    configSection = &(*_configMap.Begin()); }
+    configSection = &(*_configMap.Begin());
+  }
 
   // Section doesn't exist
   if (!configSection) {
@@ -298,7 +361,8 @@ void ConfigFile::Set(const Urho3D::String& section, const Urho3D::String& parame
 
     // Format header
     if (ConfigFile::ParseHeader(sectionName) == sectionName) {
-      sectionName = "[" + sectionName + "]"; }
+      sectionName = "[" + sectionName + "]";
+    }
 
     // Create section
     _configMap.Push(ConfigSection());
@@ -306,7 +370,8 @@ void ConfigFile::Set(const Urho3D::String& section, const Urho3D::String& parame
 
     // Add header and blank line
     configSection->Push(sectionName);
-    configSection->Push(""); }
+    configSection->Push("");
+  }
 
   Urho3D::String* line = 0;
   unsigned separatorPos = 0;
@@ -314,11 +379,13 @@ void ConfigFile::Set(const Urho3D::String& section, const Urho3D::String& parame
     // Find property separator
     separatorPos = itr->Find("=");
     if (separatorPos == Urho3D::String::NPOS) {
-      separatorPos = itr->Find(":"); }
+      separatorPos = itr->Find(":");
+    }
 
     // Not a property
     if (separatorPos == Urho3D::String::NPOS) {
-      continue; }
+      continue;
+    }
 
     Urho3D::String workingLine = ParseComments(*itr);
 
@@ -330,7 +397,9 @@ void ConfigFile::Set(const Urho3D::String& section, const Urho3D::String& parame
       // Replace the value
 
       itr->Replace(itr->Find(oldValue, separatorPos), oldValue.Length(), value);
-      return; } }
+      return;
+    }
+  }
 
   // Parameter doesn't exist yet
   // We need to find a good place to insert the parameter
@@ -339,8 +408,11 @@ void ConfigFile::Set(const Urho3D::String& section, const Urho3D::String& parame
   for (int i = index; i >= 0; i--) {
     if (ParseComments((*configSection)[i]) != Urho3D::String::EMPTY) {
       index = i + 1;
-      break; } }
-  configSection->Insert(index, parameter + "=" + value); }
+      break;
+    }
+  }
+  configSection->Insert(index, parameter + "=" + value);
+}
 
 // Returns header without bracket
 const Urho3D::String ConfigFile::ParseHeader(Urho3D::String line) {
@@ -357,7 +429,8 @@ const Urho3D::String ConfigFile::ParseHeader(Urho3D::String line) {
     // Header is behind a comment
     if (line.Find("[", lastCommentPos) > commentPos) {
       // Stop parsing this line
-      break; }
+      break;
+    }
 
     // Header is before a comment
     if (line.Find("[") < commentPos) {
@@ -365,11 +438,14 @@ const Urho3D::String ConfigFile::ParseHeader(Urho3D::String line) {
       unsigned l1 = line.Find("]");
       unsigned length = l1 - startPos;
       line = line.Substring(startPos, length);
-      break; } }
+      break;
+    }
+  }
 
   line = line.Trimmed();
 
-  return line; }
+  return line;
+}
 
 //  property or Empty if no property
 const void ConfigFile::ParseProperty(Urho3D::String line, Urho3D::String& property, Urho3D::String& value) {
@@ -378,16 +454,19 @@ const void ConfigFile::ParseProperty(Urho3D::String line, Urho3D::String& proper
   // Find property separator
   unsigned separatorPos = line.Find("=");
   if (separatorPos == Urho3D::String::NPOS) {
-    separatorPos = line.Find(":"); }
+    separatorPos = line.Find(":");
+  }
 
   // Not a property
   if (separatorPos == Urho3D::String::NPOS) {
     property = Urho3D::String::EMPTY;
     value = Urho3D::String::EMPTY;
-    return; }
+    return;
+  }
 
   property = line.Substring(0, separatorPos).Trimmed();
-  value = line.Substring(separatorPos + 1).Trimmed(); }
+  value = line.Substring(separatorPos + 1).Trimmed();
+}
 
 // strips comments and whitespaces
 const Urho3D::String ConfigFile::ParseComments(Urho3D::String line) {
@@ -397,7 +476,9 @@ const Urho3D::String ConfigFile::ParseComments(Urho3D::String line) {
   // Ignore comments
   unsigned commentPos = line.Find("#");
   if (commentPos != Urho3D::String::NPOS) {
-    line = line.Substring(0, commentPos); }
+    line = line.Substring(0, commentPos);
+  }
 
-  return line; }
+  return line;
+}
 //}
