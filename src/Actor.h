@@ -117,7 +117,7 @@ protected:
     float contactDistance_;
     float contactImpulse_;
 
-    Debug* debug_=NULL;
+    SharedPtr<Debug> debug_;
 
     bool markedForRemoval_;
 };

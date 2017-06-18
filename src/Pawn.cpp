@@ -84,7 +84,7 @@ void Pawn::FixedUpdate(float timeStep)
     Actor::FixedUpdate(timeStep);
     //rigid body data
 
-    if(node_->HasComponent<RigidBody>())
+    if(body_)
     {
         velocity_ = body_->GetLinearVelocity();
     }
