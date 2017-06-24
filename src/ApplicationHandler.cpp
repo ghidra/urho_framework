@@ -613,46 +613,45 @@ void ApplicationHandler::HandleStopMusic(StringHash eventType, VariantMap& event
 
 void ApplicationHandler::LogNodeInfo(Node* node, int logType, bool recursive /* = true */, unsigned depth /* = 0 */)
 {
-  ///@TODO: make this a callback param (incl level padding)
   String info;
   GetNodeInfo(info, node);
-  URHO3D_LOGINFO(info);
+  Log::Write(logType, info);
 
   if (recursive)
   {
-    if (!node->GetChildren().Empty())
-    {
-      const Vector<SharedPtr<Node>> children(node->GetChildren());
-      for (unsigned i(0); i < children.Size(); ++i)
+      if (!node->GetChildren().Empty())
       {
-        LogNodeInfo(children[i], true, depth + 1);
+          const Vector<SharedPtr<Node>>& children(node->GetChildren());
+          for (Vector<SharedPtr<Node>>::ConstIterator i(children.Begin()); i != children.End(); ++i)
+          {
+              LogNodeInfo(*i, logType, true, depth + 1);
+          }
       }
-    }
   }
 }
 
 void ApplicationHandler::GetNodeInfo(String& lhs, Node* node, unsigned depth /* = 0 */)
 {
-  lhs = String('+', depth); // Using the 'fill' ctor.
+    lhs = String('+', depth); // Using the 'fill' ctor.
 
-  // Name
-  lhs += "<" + node->GetName() + ">";
-  // Pointer in hex
-  lhs += " " + ToStringHex((unsigned)(std::size_t)node) + " ";
+    // Name
+    lhs += "<" + node->GetName() + ">";
+    // Pointer in hex
+    lhs += " " + ToStringHex((unsigned)(std::size_t)node) + " ";
 
-  // List of components
-  const Vector<SharedPtr<Component>>& comps(node->GetComponents());
-  for (Vector<SharedPtr<Component>>::ConstIterator i(comps.Begin()); i != comps.End(); ++i)
-  {
-    if (i != comps.Begin())
+    // List of components
+    const Vector<SharedPtr<Component>>& comps(node->GetComponents());
+    for (Vector<SharedPtr<Component>>::ConstIterator i(comps.Begin()); i != comps.End(); ++i)
     {
-      lhs += "/";
+        if (i != comps.Begin())
+        {
+          lhs += "/";
+        }
+        lhs += (*i)->GetTypeName();
     }
-    lhs += (*i)->GetTypeName();
-  }
 
-  lhs += " pos " + String(node->GetPosition());
-  lhs += " posw " + String(node->GetWorldPosition());
+    lhs += " pos " + String(node->GetPosition());
+    lhs += " posw " + String(node->GetWorldPosition());
 }
 
 ////loading scripts i need this from urho3dplayer.cpp

@@ -93,7 +93,7 @@ protected:
     void CreateConsoleAndDebugHud();
     bool LoadScriptFile();
     void GetScriptFileName();
-    void LogNodeInfo(Urho3D::Node* node, int logLevel = Urho3D::LOG_DEBUG, bool recursive = true, unsigned depth = 0);
+    void LogNodeInfo(Urho3D::Node* node, int logType = Urho3D::LOG_DEBUG, bool recursive = true, unsigned depth = 0);
     void GetNodeInfo(Urho3D::String& lhs, Urho3D::Node* node, unsigned depth = 0);
 
     /// Handle key down event to process key controls common to all samples.
