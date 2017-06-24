@@ -8,6 +8,7 @@
 #include <Urho3D/Container/Ptr.h>
 #include <Urho3D/Engine/Application.h>
 #include <Urho3D/Graphics/Texture2D.h>
+#include <Urho3D/IO/Log.h>
 
 #include "ApplicationInput.h"
 #include "ConfigManager.h"
@@ -84,26 +85,25 @@ protected:
     /// Subscribe to application-wide logic update and post-render update events.
     void SubscribeToEvents();
 
-    virtual void HandleUpdate(StringHash eventType, VariantMap& eventData);
-    //void HandleFixedUpdate(StringHash eventType, VariantMap& eventData);
-    /// Handle the post-render update event.
-    void HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData);
-    
-    
-    /// Flag to indicate whether touch input has been enabled.
-    bool touchEnabled_;
-
-//private:
     /// Create logo.
     //void CreateLogo();
     /// Set custom window Title & Icon
     void SetWindowTitleAndIcon();
     /// Create console and debug HUD.
     void CreateConsoleAndDebugHud();
+    bool LoadScriptFile();
+    void GetScriptFileName();
+    void LogNodeInfo(Urho3D::Node* node, int logLevel = Urho3D::LOG_DEBUG, bool recursive = true, unsigned depth = 0);
+    void GetNodeInfo(Urho3D::String& lhs, Urho3D::Node* node, unsigned depth = 0);
+
     /// Handle key down event to process key controls common to all samples.
     //void HandleKeyDown(StringHash eventType, VariantMap& eventData);
     /// Handle scene update event to control camera's pitch and yaw for all samples.
     void HandleSceneUpdate(StringHash eventType, VariantMap& eventData);
+    virtual void HandleUpdate(StringHash eventType, VariantMap& eventData);
+    //void HandleFixedUpdate(StringHash eventType, VariantMap& eventData);
+    /// Handle the post-render update event.
+    void HandlePostRenderUpdate(StringHash eventType, VariantMap& eventData);
     /// Handle touch begin event to initialize touch input on desktop platform.
     void HandleTouchBegin(StringHash eventType, VariantMap& eventData);
 
@@ -124,6 +124,8 @@ protected:
     bool paused_;
     /// Flag for drawing debug geometry.
     bool drawDebug_;
+    /// Flag to indicate whether touch input has been enabled.
+    bool touchEnabled_;
 
     Plane waterPlane_;
     Plane waterClipPlane_;
@@ -135,13 +137,6 @@ protected:
 
     SharedPtr<ScriptFile> scriptFile_;/// Script file.
     String scriptFileName_;/// Script file name.
-    bool LoadScriptFile();
-
-private:
-    ////
-    ///loading AS script files
-    void GetScriptFileName();
-    
 };
 
 

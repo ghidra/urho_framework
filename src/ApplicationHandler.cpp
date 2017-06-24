@@ -514,28 +514,33 @@ void ApplicationHandler::HandlePostRenderUpdate(StringHash eventType, VariantMap
     }
 }
 
-void ApplicationHandler::HandleSetMasterGain(StringHash eventType, VariantMap& eventData) {
+void ApplicationHandler::HandleSetMasterGain(StringHash eventType, VariantMap& eventData)
+{
     const String& soundType(eventData[SetMasterGain::P_NAME].GetString());
     const float gain(eventData[SetMasterGain::P_GAIN].GetFloat());
     audio_->SetMasterGain(soundType, gain);
 }
 
-void ApplicationHandler::HandleGetMasterGain(StringHash eventType, VariantMap& eventData) {
+void ApplicationHandler::HandleGetMasterGain(StringHash eventType, VariantMap& eventData)
+{
     const String& typeName(eventData[GetMasterGain::P_NAME].GetString());
     const float gain(audio_->GetMasterGain(typeName));
     eventData[GetMasterGain::P_GAIN] = gain;
 }
 
 
-void ApplicationHandler::HandleSpawnSound3D(StringHash eventType, VariantMap& eventData) {
+void ApplicationHandler::HandleSpawnSound3D(StringHash eventType, VariantMap& eventData)
+{
     const String& soundResourceName(eventData[SpawnSound3D::P_NAME].GetString());
     Sound* sound(cache_->GetResource<Sound>(soundResourceName));
-    if (!sound) {
+    if (!sound)
+    {
         URHO3D_LOGERROR("Sound resource not found: " + soundResourceName);
         return;
     }
     float gain(eventData[SpawnSound3D::P_GAIN].GetFloat());
-    if (gain == 0.0f) {
+    if (gain == 0.0f)
+    {
         gain = 1.0f;
     }
 
@@ -549,15 +554,18 @@ void ApplicationHandler::HandleSpawnSound3D(StringHash eventType, VariantMap& ev
     soundSource->Play(sound);
 }
 
-void ApplicationHandler::HandleSpawnSound(StringHash eventType, VariantMap& eventData) {
+void ApplicationHandler::HandleSpawnSound(StringHash eventType, VariantMap& eventData)
+{
     const String& soundResourceName(eventData[SpawnSound::P_NAME].GetString());
     Sound* sound(cache_->GetResource<Sound>(soundResourceName));
-    if (!sound) {
+    if (!sound)
+    {
         URHO3D_LOGERROR("Sound resource not found: " + soundResourceName);
         return;
     }
     float gain(eventData[SpawnSound::P_GAIN].GetFloat());
-    if (gain == 0.0f) {
+    if (gain == 0.0f)
+    {
         gain = 1.0f;
     }
     Node* soundNode(scene_->CreateChild(soundResourceName));
@@ -570,13 +578,15 @@ void ApplicationHandler::HandleSpawnSound(StringHash eventType, VariantMap& even
 
 /// Music
 
-void ApplicationHandler::HandleStartMusic(StringHash eventType, VariantMap& eventData) {
+void ApplicationHandler::HandleStartMusic(StringHash eventType, VariantMap& eventData)
+{
     HandleStopMusic(eventType, eventData);
     String soundName(eventData[StartMusic::P_NAME].GetString());
     bool looped(eventData[StartMusic::P_LOOPED].GetBool());
 
     Sound* sound(cache_->GetResource<Sound>(soundName));
-    if (!sound) {
+    if (!sound)
+    {
         URHO3D_LOGERROR("Music track not found: " + soundName);
         return;
     }
@@ -591,12 +601,58 @@ void ApplicationHandler::HandleStartMusic(StringHash eventType, VariantMap& even
     soundSource->Play(sound);
 }
 
-void ApplicationHandler::HandleStopMusic(StringHash eventType, VariantMap& eventData) {
+void ApplicationHandler::HandleStopMusic(StringHash eventType, VariantMap& eventData)
+{
     // Remove the music player node from the scene.
     Node* musicNodeOld(scene_->GetChild("Music"));
-    if (musicNodeOld) {
+    if (musicNodeOld)
+    {
         musicNodeOld->Remove();
     }
+}
+
+void ApplicationHandler::LogNodeInfo(Node* node, int logType, bool recursive /* = true */, unsigned depth /* = 0 */)
+{
+  ///@TODO: make this a callback param (incl level padding)
+  String info;
+  GetNodeInfo(info, node);
+  URHO3D_LOGINFO(info);
+
+  if (recursive)
+  {
+    if (!node->GetChildren().Empty())
+    {
+      const Vector<SharedPtr<Node>> children(node->GetChildren());
+      for (unsigned i(0); i < children.Size(); ++i)
+      {
+        LogNodeInfo(children[i], true, depth + 1);
+      }
+    }
+  }
+}
+
+void ApplicationHandler::GetNodeInfo(String& lhs, Node* node, unsigned depth /* = 0 */)
+{
+  lhs = String('+', depth); // Using the 'fill' ctor.
+
+  // Name
+  lhs += "<" + node->GetName() + ">";
+  // Pointer in hex
+  lhs += " " + ToStringHex((unsigned)(std::size_t)node) + " ";
+
+  // List of components
+  const Vector<SharedPtr<Component>>& comps(node->GetComponents());
+  for (Vector<SharedPtr<Component>>::ConstIterator i(comps.Begin()); i != comps.End(); ++i)
+  {
+    if (i != comps.Begin())
+    {
+      lhs += "/";
+    }
+    lhs += (*i)->GetTypeName();
+  }
+
+  lhs += " pos " + String(node->GetPosition());
+  lhs += " posw " + String(node->GetWorldPosition());
 }
 
 ////loading scripts i need this from urho3dplayer.cpp
