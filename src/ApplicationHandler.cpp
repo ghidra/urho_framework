@@ -213,7 +213,7 @@ void ApplicationHandler::Setup()
         VariantMap& vm(GetEventDataMap());
         vm[SetMasterGain::P_NAME] = SOUND_MASTER;
         vm[SetMasterGain::P_GAIN] = soundMasterGain;
-        SendEvent(E_SET_MASTER_GAIN, vm);
+        SendEvent(E_SETMASTERGAIN, vm);
     }
     if (cfg_->Has("engine", "SoundMusic"))
     {
@@ -221,7 +221,7 @@ void ApplicationHandler::Setup()
         VariantMap& vm(GetEventDataMap());
         vm[SetMasterGain::P_NAME] = SOUND_MUSIC;
         vm[SetMasterGain::P_GAIN] = soundMusicGain;
-        SendEvent(E_SET_MASTER_GAIN, vm);
+        SendEvent(E_SETMASTERGAIN, vm);
     }
     if (cfg_->Has("engine", "SoundBuffer") && cfg_->Has("engine", "SoundMixRate"))
     {
@@ -448,12 +448,12 @@ void ApplicationHandler::SubscribeToEvents()
     SubscribeToEvent(E_POSTRENDERUPDATE, URHO3D_HANDLER(ApplicationHandler, HandlePostRenderUpdate));
     SubscribeToEvent(E_SCENEUPDATE, URHO3D_HANDLER(ApplicationHandler, HandleSceneUpdate));
     //SubscribeToEvent(E_FIXEDUPDATE, URHO3D_HANDLER(ApplicationHandler, HandleFixedUpdate));
-    SubscribeToEvent(E_SPAWN_SOUND, URHO3D_HANDLER(ApplicationHandler, HandleSpawnSound));
-    SubscribeToEvent(E_SPAWN_SOUND3D, URHO3D_HANDLER(ApplicationHandler, HandleSpawnSound3D));
-    SubscribeToEvent(E_SET_MASTER_GAIN, URHO3D_HANDLER(ApplicationHandler, HandleSetMasterGain));
-    SubscribeToEvent(E_GET_MASTER_GAIN, URHO3D_HANDLER(ApplicationHandler, HandleGetMasterGain));
-    SubscribeToEvent(E_START_MUSIC, URHO3D_HANDLER(ApplicationHandler, HandleStartMusic));
-    SubscribeToEvent(E_STOP_MUSIC, URHO3D_HANDLER(ApplicationHandler, HandleStopMusic));
+    SubscribeToEvent(E_SPAWNSOUND, URHO3D_HANDLER(ApplicationHandler, HandleSpawnSound));
+    SubscribeToEvent(E_SPAWNSOUND3D, URHO3D_HANDLER(ApplicationHandler, HandleSpawnSound3D));
+    SubscribeToEvent(E_SETMASTERGAIN, URHO3D_HANDLER(ApplicationHandler, HandleSetMasterGain));
+    SubscribeToEvent(E_GETMASTERGAIN, URHO3D_HANDLER(ApplicationHandler, HandleGetMasterGain));
+    SubscribeToEvent(E_STARTMUSIC, URHO3D_HANDLER(ApplicationHandler, HandleStartMusic));
+    SubscribeToEvent(E_STOPMUSIC, URHO3D_HANDLER(ApplicationHandler, HandleStopMusic));
 
 }
 void ApplicationHandler::HandleUpdate(StringHash eventType, VariantMap& eventData)

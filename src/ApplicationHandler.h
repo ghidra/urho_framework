@@ -140,29 +140,29 @@ protected:
 };
 
 
-URHO3D_EVENT(E_SPAWN_SOUND3D, SpawnSound3D) {
+URHO3D_EVENT(E_SPAWNSOUND3D, SpawnSound3D) {
   URHO3D_PARAM(P_NAME, name);
   URHO3D_PARAM(P_GAIN, gain); // float
   URHO3D_PARAM(P_POSITION, position); }
 
-URHO3D_EVENT(E_SPAWN_SOUND, SpawnSound) {
+URHO3D_EVENT(E_SPAWNSOUND, SpawnSound) {
   URHO3D_PARAM(P_NAME, name);
   URHO3D_PARAM(P_GAIN, gain); // float
 }
 
-URHO3D_EVENT(E_START_MUSIC, StartMusic) {
+URHO3D_EVENT(E_STARTMUSIC, StartMusic) {
   URHO3D_PARAM(P_NAME, name);
   URHO3D_PARAM(P_LOOPED, looped); // bool
 }
 
-URHO3D_EVENT(E_STOP_MUSIC, StopMusic) { }
+URHO3D_EVENT(E_STOPMUSIC, StopMusic) { }
 
-URHO3D_EVENT(E_SET_MASTER_GAIN, SetMasterGain) {
+URHO3D_EVENT(E_SETMASTERGAIN, SetMasterGain) {
   URHO3D_PARAM(P_NAME, name);
   URHO3D_PARAM(P_GAIN, gain); // float
 }
 
-URHO3D_EVENT(E_GET_MASTER_GAIN, GetMasterGain) {
+URHO3D_EVENT(E_GETMASTERGAIN, GetMasterGain) {
   URHO3D_PARAM(P_NAME, name);
   URHO3D_PARAM(P_GAIN, gain); // float
 }
