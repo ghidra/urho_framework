@@ -36,6 +36,8 @@ public:
     void HandleUpdate(StringHash eventType, VariantMap& eventData);//this is called from outside this class
 
     Controls controls_;
+    Controls previous_controls_;
 
+    //Node* cameraNode_;
 };
 #endif
