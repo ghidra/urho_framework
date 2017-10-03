@@ -82,8 +82,8 @@ private:
     bool debugDrawPhysics_;
     bool fullscreen_;
 
-    SharedPtr<Node> cameraNode_;
-    CameraLogic* cameraLogic_;//i might not need to store this in the end
+    //SharedPtr<Node> cameraNode_;
+    //CameraLogic* cameraLogic_;//i might not need to store this in the end
     String cameraType_;//store this hear because when i use the debug camera to go into debug view, i need to be able to switch it back, so this stores it
 
     /// Touch sensitivity.

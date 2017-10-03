@@ -6,7 +6,17 @@
 #include <Urho3D/Input/Controls.h>
 #include <Urho3D/Core/Object.h>
 
+#include "CameraLogic.h"
+
 using namespace Urho3D;
+namespace Urho3D
+{
+
+class Node;
+class Scene;
+
+}
+class CameraLogic;
 
 namespace Urho3D
 {
@@ -39,5 +49,8 @@ public:
     Controls previous_controls_;
 
     //Node* cameraNode_;
+protected:
+    SharedPtr<Node> cameraNode_;
+    CameraLogic* cameraLogic_;//i might not need to store this in the end
 };
 #endif
