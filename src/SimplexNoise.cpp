@@ -152,7 +152,7 @@ float SimplexNoise::Noise(const Vector2 pos, const float scl, const Vector2 offs
 }
 float SimplexNoise::Noise(const Vector2 pos, const float scl, const float offset)
 {
-	return Noise(pos,Vector2(scl,scl),Vector3(offset,offset));
+	return Noise(pos,Vector2(scl,scl),Vector2(offset,offset));
 }
 Vector2 SimplexNoise::Gradient(const Vector2 pos, const float range, const Vector2 scl, const Vector2 offset)
 {
