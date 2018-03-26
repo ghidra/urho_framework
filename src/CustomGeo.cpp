@@ -132,8 +132,8 @@ void CustomGeo::Build(Node* node, const bool smooth, const bool rigid, const uns
 	skip+=(uvs_.Size()>0)?2:0;
 	skip+=(tangents_.Size()>0)?4:0;
 
-	float vertexData[num*skip];
-	unsigned short indexData[num];
+	float *vertexData = new float[numVertices*skip];
+	unsigned short *indexData = new unsigned short[numVertices];
 
 	for(unsigned i = 0; i < numVertices; ++i)
 	{

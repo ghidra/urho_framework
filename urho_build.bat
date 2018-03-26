@@ -18,12 +18,12 @@ if NOT "%1"=="" (
           		echo "***********************************"
           		echo "begun build process"
           		echo !URHOPATH!
-          		if NOT "%3"=="" (
-          			echo "build standard"
-          			!URHOPATH!\cmake_mingw.bat !URHOBUILD! -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_DEBUG=1 -DURHO3D_C++11=1 -DURHO3D_LIB_TYPE=SHARED -DURHO3D_SAMPLES=1 -DCMAKE_BUILD_TYPE=Debug
-          		) else (
+          		if "%3"=="generic" (
           			echo "build with development target = generic"
           			!URHOPATH!\cmake_mingw.bat !URHOBUILD! -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_DEBUG=1 -DURHO3D_LIB_TYPE=SHARED -DURHO3D_SAMPLES=1 -DURHO3D_DEPLOYMENT_TARGET=generic -DURHO3D_SSE=1
+          		) else (
+          			echo "build standard"
+          			!URHOPATH!\cmake_mingw.bat !URHOBUILD! -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_DEBUG=1 -DURHO3D_LIB_TYPE=SHARED -DURHO3D_SAMPLES=1 -DURHO3D_C++11=1 -DCMAKE_BUILD_TYPE=Debug
           		)
           		cd !URHOBUILD!
       		)

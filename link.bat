@@ -1,6 +1,9 @@
+::link.bat D:\Urho3D D:\UrhoBuild 0:1(overwrite) D:\project:""(vs path) dryrun":nothing
+
 @echo OFF
 setlocal EnableDelayedExpansion EnableExtensions
-SET DRYRUN=%4
+SET "BUILDDIR=%4"
+SET "DRYRUN=%5"
 
 if NOT "%1"=="" (
 	if NOT "%2"=="" (
@@ -12,11 +15,17 @@ if NOT "%1"=="" (
 		if exist "!URHOPATH!" (
 			if exist "!URHOBUILD!" (
 
+				::this sets the project path
 				for %%f in ("%~dp0\..\..\") do (
 					call :resolve PROJECTPATH %%~ff
 				)
 
-				if NOT "!DRYRUN!"=="" (
+				::this get the folder where the project IS
+				for %%f in ("%~dp0\..\..\..\") do (
+					call :resolve PROJECTROOTPATH %%~ff
+				)
+
+				if DEFINED DRYRUN (
 					echo ***********************************
 					echo -some debug information
 					echo 	Launched: "%~dp0"
@@ -27,17 +36,17 @@ if NOT "%1"=="" (
 				)
 				echo ***********************************
 				echo -make bin folder
-				if NOT "!DRYRUN!"=="" (
+				if DEFINED DRYRUN (
 					echo 	-DRYRUN
-					echo 	"!PROJECTPATH!bin"
+					echo 	!PROJECTPATH!bin
 				) else (
 					call:makeFolder "bin" "!PROJECTPATH!"
 				)
 				echo ***********************************
 				echo -make bin\Resources folder
-				if NOT "!DRYRUN!"=="" (
+				if DEFINED DRYRUN (
 					echo 	-DRYRUN
-					echo 	"!PROJECTPATH!bin\Resources"
+					echo 	!PROJECTPATH!bin\Resources
 				) else (
 					call:makeFolder "Resources" "!PROJECTPATH!bin\"
 				)
@@ -45,17 +54,17 @@ if NOT "%1"=="" (
 				echo ***********************************
 				echo linking folders from urho source
 				echo 	-link CMake, CoreData and Data folders
-				if NOT "!DRYRUN!"=="" (
+				if DEFINED DRYRUN (
 					echo 	-DRYRUN
-					echo 	"CoreData"
-					echo 		"!URHOPATH!\bin\CoreData"
-					echo 		"!PROJECTPATH!bin\CoreData" 
-					echo 	"Data"
-					echo 		"!URHOPATH!\bin\Data"
-					echo 		"!PROJECTPATH!bin\Data" 
-					echo 	"CMake" 
-					echo 		"!URHOPATH!\CMake"
-					echo 		"!PROJECTPATH!CMake"
+					echo 	CoreData
+					echo 		!URHOPATH!\bin\CoreData
+					echo 		!PROJECTPATH!bin\CoreData
+					echo 	Data
+					echo 		!URHOPATH!\bin\Data
+					echo 		!PROJECTPATH!bin\Data
+					echo 	CMake 
+					echo 		!URHOPATH!\CMake
+					echo 		!PROJECTPATH!CMake
 				) else (
 					call:makeAlias "CoreData" "!URHOPATH!\bin\CoreData" "!PROJECTPATH!bin\CoreData" "!OVERWRITE!"
 					call:makeAlias "Data" "!URHOPATH!\bin\Data" "!PROJECTPATH!bin\Data" "!OVERWRITE!"
@@ -63,22 +72,23 @@ if NOT "%1"=="" (
 				)
 				echo ***********************************
 				echo -copy dll file
-				if NOT "!DRYRUN!"=="" (
+				if DEFINED DRYRUN (
 					echo 	-DRYRUN
 					echo 	"!URHOBUILD!\bin\Urho3D.dll !PROJECTPATH!bin\Urho3D.dll"
 				) else (
 					call:copyFile "Urho3D.dll" "!URHOBUILD!\bin\Urho3D.dll" "!PROJECTPATH!bin\Urho3D.dll" "!OVERWRITE!"
+					call:copyFile "Urho3D_d.dll" "!URHOBUILD!\bin\Urho3D_d.dll" "!PROJECTPATH!bin\Urho3D_d.dll" "!OVERWRITE!"
 				)
 				echo ***********************************
 				echo copy CMakeLists.txt
 				if exist "!PROJECTPATH!\CMakeLists.txt" (
-					echo           "-CMakeLists.txt already exists"
+					echo           -CMakeLists.txt already exists
 				) else (
-					if NOT "!DRYRUN!"=="" (
-						echo "CMakeLists.txt will need to be copied"
+					if DEFINED DRYRUN (
+						echo CMakeLists.txt will need to be copied
 					) else (
-						echo      "CMakeLists.txt created"
-						echo            "-!!!! MANUALLY UPDATE PROJECT AND TARGET NAME !!!!"
+						echo      CMakeLists.txt created
+						echo            -!!!! MANUALLY UPDATE PROJECT AND TARGET NAME !!!!
 						call:copyFile "CmakeLists.txt" "%~dp0\CMakeLists.txt" "!PROJECTPATH!\CMakeLists.txt" "!OVERWRITE!"
 					)
 				)
@@ -87,35 +97,55 @@ if NOT "%1"=="" (
 				echo make cmakebat file
 				SET CMAKEBAT=cmake . -G "MinGW Makefiles"
 				if exist "!PROJECTPATH!\cmakebat.bat" (
-					echo           "-cmakebat.bat already exists"
+					echo           -cmakebat.bat already exists
 				) else (
-					if NOT "!DRYRUN!"=="" (
-						echo "cmakebat.bat will be created"
+					if DEFINED "!DRYRUN!" (
+						echo cmakebat.bat will be created
 					) else (
-						echo      "cmakebat.bat created"
+						echo      cmakebat.bat created
 						echo. 2>!PROJECTPATH!cmakebat.bat
 						echo !CMAKEBAT! > !PROJECTPATH!cmakebat.bat
 					)
 				)
-
-				echo ***********************************
-				echo editor script
-				SET EDITOR=!URHOBUILD!\bin\Urho3DPlayer.exe \Scripts\Editor.as -pp !PROJECTPATH!bin -p "CoreData;Data;Resources"
-				if NOT "!DRYRUN!"=="" (
-					echo 	-DRYRUN
-					echo 	!EDITOR!
-				) else (
-					if exist "!PROJECTPATH!\editor.bat" (
-						if 1==0 (
-							echo !EDITOR! > !PROJECTPATH!editor.bat
-							echo           -editor.bat edited
-						) else (
-							echo           "-editor.bat already exists"
-						)
+				if 1==0 (
+					echo ***********************************
+					echo editor script
+					SET EDITOR=!URHOBUILD!\bin\Urho3DPlayer.exe \Scripts\Editor.as -pp !PROJECTPATH!bin -p "CoreData;Data;Resources"
+					if DEFINED DRYRUN (
+						echo 	-DRYRUN
+						echo 	!EDITOR!
 					) else (
-					  echo. 2>!PROJECTPATH!editor.bat
-					  echo !EDITOR! > !PROJECTPATH!editor.bat
-					  echo           -editor.bat created
+						if exist "!PROJECTPATH!\editor.bat" (
+							if 1==0 (
+								echo !EDITOR! > !PROJECTPATH!editor.bat
+								echo           -editor.bat edited
+							) else (
+								echo           -editor.bat already exists
+							)
+						) else (
+						  echo. 2>!PROJECTPATH!editor.bat
+						  echo !EDITOR! > !PROJECTPATH!editor.bat
+						  echo           -editor.bat created
+						)
+					)
+				)
+				echo ***********************************
+				echo Setup for visual studio style building
+				if NOT !BUILDDIR!=="" (
+					if DEFINED DRYRUN (
+						echo           Make folder: !PROJECTROOTPATH!!BUILDDIR!
+						echo           Make folder: !PROJECTROOTPATH!!BUILDDIR!\bin
+						echo           link folder: !PROJECTPATH!bin\Resources
+						echo           copy file:   !URHOPATH!\cmake_vs2017.bat   to: !PROJECTPATH!cmake_vs2017.bat
+						echo           copy file:   !URHOPATH!\cmake_generic.bat  to: !PROJECTPATH!cmake_generic.bat
+					) else (
+						call:makeFolder "!BUILDDIR!" "!PROJECTROOTPATH!"
+						call:makeFolder "bin" "!PROJECTROOTPATH!!BUILDDIR!\"
+						call:makeAlias "Resources" "!PROJECTPATH!bin\Resources" "!PROJECTROOTPATH!!BUILDDIR!\bin\Resources" "!OVERWRITE!"
+						call:copyFile "cmake_vs2017.bat" "!URHOPATH!\cmake_vs2017.bat" "!PROJECTPATH!cmake_vs2017.bat" "!OVERWRITE!"
+						call:copyFile "cmake_generic.bat" "!URHOPATH!\cmake_generic.bat" "!PROJECTPATH!cmake_generic.bat" "!OVERWRITE!"
+
+						call !PROJECTPATH!\cmake_vs2017.bat !PROJECTROOTPATH!!BUILDDIR! -DURHO3D_HOME=!URHOBUILD! -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_LIB_TYPE=SHARED -DCMAKE_BUILD_TYPE=Debug
 					)
 				)
 
