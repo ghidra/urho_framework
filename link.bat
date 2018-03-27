@@ -138,12 +138,18 @@ if NOT "%1"=="" (
 						echo           link folder: !PROJECTPATH!bin\Resources
 						echo           copy file:   !URHOPATH!\cmake_vs2017.bat   to: !PROJECTPATH!cmake_vs2017.bat
 						echo           copy file:   !URHOPATH!\cmake_generic.bat  to: !PROJECTPATH!cmake_generic.bat
+						echo           config alias:!PROJECTPATH!\bin\chmup.cfg  to: !PROJECTROOTPATH!!BUILDDIR!\bin\chmup.cfg
 					) else (
 						call:makeFolder "!BUILDDIR!" "!PROJECTROOTPATH!"
 						call:makeFolder "bin" "!PROJECTROOTPATH!!BUILDDIR!\"
 						call:makeAlias "Resources" "!PROJECTPATH!bin\Resources" "!PROJECTROOTPATH!!BUILDDIR!\bin\Resources" "!OVERWRITE!"
 						call:copyFile "cmake_vs2017.bat" "!URHOPATH!\cmake_vs2017.bat" "!PROJECTPATH!cmake_vs2017.bat" "!OVERWRITE!"
 						call:copyFile "cmake_generic.bat" "!URHOPATH!\cmake_generic.bat" "!PROJECTPATH!cmake_generic.bat" "!OVERWRITE!"
+						call:copyFile "chmup.cfg" "!PROJECTPATH!bin\chmup.cfg" "!PROJECTROOTPATH!!BUILDDIR!\bin\chmup.cfg"
+
+						SET EDITOR = start "" "!PROJECTROOTPATH!!BUILDDIR!\bin\urho_chmup_d.exe" \Scripts\Editor.as
+						echo. 2>!PROJECTPATH!editor.bat
+						echo !EDITOR! > !PROJECTROOTPATH!!BUILDDIR!\bin\editor.bat
 
 						call !PROJECTPATH!\cmake_vs2017.bat !PROJECTROOTPATH!!BUILDDIR! -DURHO3D_HOME=!URHOBUILD! -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_LIB_TYPE=SHARED -DCMAKE_BUILD_TYPE=Debug
 					)

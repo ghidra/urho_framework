@@ -81,6 +81,9 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     cache_(GetSubsystem<ResourceCache>()),
     input_(GetSubsystem<Input>())
 {
+	//windows only
+	OpenConsoleWindow();
+
     context_->RegisterSubsystem(new Script(context_));
     script_ = GetSubsystem<Script>();
     cfg_ = new ConfigManager(context, String::EMPTY, false, false);
@@ -131,7 +134,7 @@ void ApplicationHandler::Setup()
         engineParameters_["LogLevel"] = LOG_ERROR;
     //engineParameters_["FullScreen"]  = false;
     engineParameters_["Headless"]    = false;
-    //engineParameters_["WindowResizable"] = true;
+    engineParameters_["WindowResizable"] = true;
     //engineParameters_["WindowWidth"] = 800;
     //engineParameters_["WindowHeight"] = 600;
     //engineParameters_["VSync"] = true; // need this on my slow laptop
