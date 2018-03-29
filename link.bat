@@ -95,7 +95,7 @@ if NOT "%1"=="" (
 
 				echo ***********************************
 				echo make cmakebat file
-				SET CMAKEBAT=cmake . -G "MinGW Makefiles"
+				SET CMAKEBAT=!PROJECTPATH!\cmake_vs2017.bat !PROJECTROOTPATH!!BUILDDIR! -DURHO3D_HOME=!URHOBUILD! -DURHO3D_64BIT=1 -DURHO3D_OPENGL=1 -DURHO3D_LIB_TYPE=SHARED -DCMAKE_BUILD_TYPE=Debug
 				if exist "!PROJECTPATH!\cmakebat.bat" (
 					echo           -cmakebat.bat already exists
 				) else (
