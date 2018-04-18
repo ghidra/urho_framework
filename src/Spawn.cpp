@@ -6,13 +6,13 @@
 #include "Spawn.h"
 
 Spawn::Spawn(Context* context) :
-    LogicComponent(context),
-    duration_(-0.1f),
+    Actor(context),
+    //duration_(-0.1f),
     amount_(1),
     spawning_timer_(0.0f),
     spawning_interval_(0.8f),
-    spawn_rate_(1.0f/spawning_interval_),
-    markedForRemoval_(false)
+    spawn_rate_(1.0f/spawning_interval_)
+    //markedForRemoval_(false)
 {
     debug_ = new Debug(context_);
 }
@@ -49,15 +49,15 @@ void Spawn::Setup(const Vector3 pos)
     node_->SetPosition(pos);
 }
 
-void Spawn::MarkForRemoval()
-{
-    markedForRemoval_=true;
-}
+// void Spawn::MarkForRemoval()
+// {
+//     markedForRemoval_=true;
+// }
 
-void Spawn::CheckForRemoval()
-{
-    if(markedForRemoval_ && node_!=NULL)
-    {
-        node_->Remove();
-    }
-}
+// void Spawn::CheckForRemoval()
+// {
+//     if(markedForRemoval_ && node_!=NULL)
+//     {
+//         node_->Remove();
+//     }
+// }
