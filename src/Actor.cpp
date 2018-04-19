@@ -200,6 +200,17 @@ void Actor::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
     }
 }
 void Actor::OnProjectileHitActor(Actor* victim){};
+void Actor::InfoGUI(bool toggle){
+    //this is basically a template to use if we use this in children classes
+    if (infoGUIOn_ && !toggle)
+    {
+        infoGUIOn_ = false;
+    }
+    else
+    {
+        infoGUIOn_ = true;
+    }
+};
 
 float Actor::Fit(float v, float l1, float h1, float l2, float h2)
 {

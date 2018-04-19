@@ -50,6 +50,9 @@ public:
     void CheckForRemoval();
     bool MarkedForRemoval(){return markedForRemoval_;};
 
+    virtual void InfoGUI(bool toggle = true);//this is a method that should be there, that I know I can use on any item to get a window of info
+    
+
     //editor functions
     virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);
     float GetMaxHealth() const {return maxHealth_;};
@@ -120,5 +123,6 @@ protected:
     SharedPtr<Debug> debug_;
 
     bool markedForRemoval_;
+    bool infoGUIOn_;
 };
 #endif
