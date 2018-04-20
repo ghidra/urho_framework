@@ -50,8 +50,8 @@ public:
     void CheckForRemoval();
     bool MarkedForRemoval(){return markedForRemoval_;};
 
-    virtual void InfoGUI(bool toggle = true);//this is a method that should be there, that I know I can use on any item to get a window of info
-    
+    //virtual void InfoGUI( bool toggle = true );//this is a method that should be there, that I know I can use on any item to get a window of info
+    virtual void InfoGUI( SharedPtr<Node> parent, bool toggle = true );
 
     //editor functions
     virtual void OnSetAttribute(const AttributeInfo& attr, const Variant& src);

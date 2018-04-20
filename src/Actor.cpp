@@ -200,7 +200,7 @@ void Actor::HandleNodeCollision(StringHash eventType, VariantMap& eventData)
     }
 }
 void Actor::OnProjectileHitActor(Actor* victim){};
-void Actor::InfoGUI(bool toggle){
+void Actor::InfoGUI(SharedPtr<Node> parent,bool toggle){
     //this is basically a template to use if we use this in children classes
     if (infoGUIOn_ && !toggle)
     {
