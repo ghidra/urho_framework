@@ -58,6 +58,9 @@ public:
 	std::vector<float> GetWeights()const;//gets the weights from the NN
 	unsigned GetNumberOfWeights()const;//returns total number of weights in net
 	unsigned GetNumberOfOutputs()const{return numOutputs_;};
+	unsigned GetNumberOfInputs()const{return numInputs_;};//for gui
+	unsigned GetNumberOfHiddenLayers()const{return numHiddenLayers_;};//for gui
+	unsigned GetNumberOfNeuronsPerHiddenLayer_()const{return neuronsPerHiddenLyr_;};//for gui
 	void PutWeights(std::vector<float> &weights);//replaces the weights with new ones
 	std::vector<float> Update(std::vector<float> &inputs);//calculates the outputs from a set of inputs
 	inline float Sigmoid(float activation, float response);//sigmoid response curve
