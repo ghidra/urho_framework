@@ -9,7 +9,7 @@ Controller::Controller(Context* context):
 }
 Controller::~Controller(){}
 
-void Controller::HandleUpdate(StringHash eventType, VariantMap& eventData)
+void Controller::HandleUpdate()
 {
     //using namespace Update;
     controls_.Set(CTRL_UP | CTRL_DOWN | CTRL_LEFT | CTRL_RIGHT | CTRL_FIRE |CTRL_JUMP | CTRL_ALL, false);

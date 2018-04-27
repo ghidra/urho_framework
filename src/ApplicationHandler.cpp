@@ -482,7 +482,7 @@ void ApplicationHandler::HandleUpdate(StringHash eventType, VariantMap& eventDat
         }
 
         //-----
-        applicationInput_->HandleUpdate(eventType, eventData);
+        //applicationInput_->HandleUpdate();//NOW I HAVE TO CALL THIS ELSEWHERE
     }
 
     // Move the camera, scale movement with time step

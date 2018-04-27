@@ -33,7 +33,7 @@ public:
     Controller(Context* context);
     ~Controller();
 
-    void HandleUpdate(StringHash eventType, VariantMap& eventData);//this is called from outside this class
+    virtual void HandleUpdate();//this is called from outside this class
 
     Controls controls_;
 

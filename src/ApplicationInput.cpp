@@ -119,9 +119,9 @@ void ApplicationInput::InitTouchInput()
     input->SetScreenJoystickVisible(screenJoystickSettingsIndex_, true);
 }
 
-void ApplicationInput::HandleUpdate(StringHash eventType, VariantMap& eventData)
+void ApplicationInput::HandleUpdate()
 {
-    Controller::HandleUpdate(eventType, eventData);
+    Controller::HandleUpdate();
 
     using namespace Update;
 
