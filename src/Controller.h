@@ -5,6 +5,7 @@
 
 #include <Urho3D/Input/Controls.h>
 #include <Urho3D/Core/Object.h>
+#include <vector>
 
 using namespace Urho3D;
 
@@ -34,6 +35,7 @@ public:
     ~Controller();
 
     virtual void HandleUpdate();//this is called from outside this class
+	virtual std::vector<float> HandleUpdate(std::vector<float> in);//this is a mock version of incmoing data for nural net processing
 
     Controls controls_;
 

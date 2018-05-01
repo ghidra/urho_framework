@@ -31,7 +31,7 @@ public:
     //void Possess(Actor* actor);
 
     void HandleUpdate();//this is called from outside this class, in the appication handler
-    //void HandleFixedUpdate(StringHash eventType, VariantMap& eventData);//this is called from outside this class
+	//void HandleFixedUpdate(StringHash eventType, VariantMap& eventData);//this is called from outside this class
 
     void SetFullscreen(const bool value);
     void ToggleFullscreen();
