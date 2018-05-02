@@ -30,13 +30,19 @@ class Controller : public Object
     URHO3D_OBJECT(Controller,Object);
 
 public:
+	enum NotifyAction
+	{
+		NA_HIT_ENEMY,
+		NA_HIT_FRIENDLY,
+		NA_TOOK_DAMAGE
+	};
     /// Construct.
     Controller(Context* context);
     ~Controller();
 
     virtual void HandleUpdate();//this is called from outside this class
 	virtual std::vector<float> HandleUpdate(std::vector<float> in);//this is a mock version of incmoing data for nural net processing
-
+	virtual void Notify(enum NotifyAction action, float value);//this is called from whom we are controlling, of what the character accomplished from list
     Controls controls_;
 
 };

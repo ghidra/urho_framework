@@ -27,12 +27,10 @@ public:
 
 	virtual void HandleUpdate();
 	virtual std::vector<float> HandleUpdate(std::vector<float> in);//this is called from outside this class
-
 protected:
 	
 	SharedPtr<NGenome> genome_;
     SharedPtr<NeuralNet> brain_;
     SharedPtr<NGenePool> genePool_;
-
 };
 #endif
