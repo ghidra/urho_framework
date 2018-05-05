@@ -682,14 +682,35 @@ bool ApplicationHandler::LoadScriptFile()
         scriptFile_ = GetSubsystem<ResourceCache>()->GetResource<ScriptFile>(scriptFileName_);
 
         // If script loading is successful, the load the editor
-        if (scriptFile_ && scriptFile_->Execute("void Start()"))
-        {
-            URHO3D_LOGRAW(String("EDITOR CALLED: ") + scriptFileName_ + "\n"); // raw, Log not yet active
-            return true;
-        }else{
-            URHO3D_LOGRAW(String("EDITOR NOT CALLED: ") + scriptFileName_ + "\n"); // raw, Log not yet active
-            return false;
-        }
+		//I want to see if I can pass the scene along here
+		if (scriptFileName_ == "/Scripts/InGameEditor.as")
+		{
+			VariantVector args;
+			args.Push(Variant(scene_));
+			if (scriptFile_ && scriptFile_->Execute("void Start(Scene& sc)", args))
+			{
+				URHO3D_LOGRAW(String("IN GAME EDITOR CALLED: ") + scriptFileName_ + "\n"); // raw, Log not yet active
+				return true;
+			}
+			else
+			{
+				URHO3D_LOGRAW(String("IN GAME EDITOR FAILED: ") + scriptFileName_ + "\n"); // raw, Log not yet active
+				return false;
+			}
+		}
+		else 
+		{
+
+			if (scriptFile_ && scriptFile_->Execute("void Start()"))
+			{
+				URHO3D_LOGRAW(String("EDITOR CALLED: ") + scriptFileName_ + "\n"); // raw, Log not yet active
+				return true;
+			}
+			else {
+				URHO3D_LOGRAW(String("EDITOR NOT CALLED: ") + scriptFileName_ + "\n"); // raw, Log not yet active
+				return false;
+			}
+		}
     }
     else
     {
