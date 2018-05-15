@@ -11,20 +11,20 @@
 //	sets up the population with random floats
 //
 //-----------------------------------------------------------------------
-NGenePool::NGenePool(Context* context, unsigned PopMaxSize, float MutRate, float CrossRate, float MutPeturb) :	
-	Object(context),
-	popSize_(0),
-	popMaxSize_(PopMaxSize),
-	mutationRate_(MutRate),
-	mutationPerturb_(MutPeturb),
-	crossoverRate_(CrossRate),
-	chromoLength_(0),//chromoLength_(numWeights),
-	totalFitness_(0),
-	generation_(0),
-	fittestGenome_(0),
-	bestFitness_(0),
-	worstFitness_(99999999),
-	averageFitness_(0)
+NGenePool::NGenePool(Context* context, unsigned PopMaxSize, float MutRate, float CrossRate, float MutPeturb)	
+	: Serializable(context)
+	, popSize_(0)
+	, popMaxSize_(PopMaxSize)
+	, mutationRate_(MutRate)
+	, mutationPerturb_(MutPeturb)
+	, crossoverRate_(CrossRate)
+	, chromoLength_(0)//chromoLength_(numWeights),
+	, totalFitness_(0)
+	, generation_(0)
+	, fittestGenome_(0)
+	, bestFitness_(0)
+	, worstFitness_(99999999)
+	, averageFitness_(0)
 {//unsigned numWeights taking out the need to know this right now
 	//initialise population with chromosomes consisting of random
 	//weights and all fitnesses set to zero
@@ -36,6 +36,28 @@ NGenePool::NGenePool(Context* context, unsigned PopMaxSize, float MutRate, float
 			pop_[i].weights_.Push( Random()-Random() );
 		}
 	}*/
+
+	
+}
+
+void NGenePool::RegisterObject(Context* context)
+{
+	context->RegisterFactory<NGenePool>();
+	URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AM_NOEDIT);
+
+	URHO3D_ATTRIBUTE("Generation", unsigned, generation_, 0, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Population Size", unsigned, popSize_, 0, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Population Max Size", unsigned, popMaxSize_, 32, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Weights Per Chromo", unsigned, chromoLength_, 0, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Total Fitness of Population", float, totalFitness_, 0.0, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Best Fitness of Population", float, bestFitness_, 0.0, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Average Fitness of Popluation", float, averageFitness_, 0.0, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Worst Fitness of Population", float, worstFitness_, 99999999.0, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Best Genome", unsigned, fittestGenome_, 0, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Worst genome", unsigned, weakestGenome_, 0, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Mutation Rate", float, mutationRate_, 0.05, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Mutation Perturb", float, mutationPerturb_, 1.0, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Chromosomes Crossover Probability", float, crossoverRate_, 0.7, AM_NOEDIT);
 }
 
 //-----------------------------------Epoch()-----------------------------

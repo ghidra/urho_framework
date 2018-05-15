@@ -64,6 +64,8 @@
 #include "Spawn.h"
 #include "Weapon.h"
 
+#include "NGenePool.h"
+
 #include "IK.h"
 #include "IKTarget.h"
 
@@ -104,7 +106,9 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     ProjectileTargeting::RegisterObject(context);
     RagDoll::RegisterObject(context);
     Spawn::RegisterObject(context);
-    Weapon::RegisterObject(context); 
+    Weapon::RegisterObject(context);
+
+	NGenePool::RegisterObject(context);
 }
 
 void ApplicationHandler::Setup()

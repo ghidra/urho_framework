@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <Urho3D/Scene/Serializable.h>
 #include "NGenome.h"
 
 #pragma once
@@ -28,12 +29,13 @@ using namespace Urho3D;
 //
 //	the genetic algorithm class
 //-----------------------------------------------------------------------
-class NGenePool : public Object
+class NGenePool : public Serializable
 {
-	URHO3D_OBJECT(NGenePool,Object);
+	URHO3D_OBJECT(NGenePool, Serializable);
 public:
 	NGenePool(Context* context, unsigned PopMaxSize=10, float MutRate=0.1, float CrossRate=0.7, float MutPeturb = 0.3);//unsigned numWeights,
-	
+	static void RegisterObject(Context* context);
+
 	void GiveNumberOfWeights(unsigned num);
 	void Add(SharedPtr<NGenome> genome);//add genome to the population
 	//void Remove(NGenome* genome);//remove genome from the population
@@ -69,6 +71,8 @@ private:
   	//void GrabNBest(unsigned NBest, const unsigned NumCopies, Vector<NGenome*> &Pop);//use to introduce elitism
 	void CalculateBestWorstAvTot();
 	//void Reset();
+
+	VariantMap vars_;
 };
 
 #endif
