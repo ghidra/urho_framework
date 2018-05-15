@@ -60,6 +60,48 @@ void NGenePool::RegisterObject(Context* context)
 	URHO3D_ATTRIBUTE("Chromosomes Crossover Probability", float, crossoverRate_, 0.7, AM_NOEDIT);
 }
 
+//this is saving a binary file
+bool NGenePool::Save(Serializer& dest) const
+{
+	// Write node ID
+	if (!dest.WriteUInt(1))
+		return false;
+
+	//// Write attributes
+	//if (!Animatable::Save(dest))
+	//	return false;
+
+	//// Write components
+	//dest.WriteVLE(GetNumPersistentComponents());
+	//for (unsigned i = 0; i < components_.Size(); ++i)
+	//{
+	//	Component* component = components_[i];
+	//	if (component->IsTemporary())
+	//		continue;
+
+	//	// Create a separate buffer to be able to skip failing components during deserialization
+	//	VectorBuffer compBuffer;
+	//	if (!component->Save(compBuffer))
+	//		return false;
+	//	dest.WriteVLE(compBuffer.GetSize());
+	//	dest.Write(compBuffer.GetData(), compBuffer.GetSize());
+	//}
+
+	//// Write child nodes
+	//dest.WriteVLE(GetNumPersistentChildren());
+	//for (unsigned i = 0; i < children_.Size(); ++i)
+	//{
+	//	Node* node = children_[i];
+	//	if (node->IsTemporary())
+	//		continue;
+
+	//	if (!node->Save(dest))
+	//		return false;
+	//}
+
+	return true;
+}
+
 //-----------------------------------Epoch()-----------------------------
 //
 //	takes a population of chromosones and runs the algorithm through one
