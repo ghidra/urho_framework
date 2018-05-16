@@ -1,6 +1,7 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/Context.h>
 #include <Urho3D/Container/Sort.h>
+#include <Urho3D/IO/File.h>
 
 #include <Urho3D/IO/Log.h>
 
@@ -43,23 +44,36 @@ NGenePool::NGenePool(Context* context, unsigned PopMaxSize, float MutRate, float
 void NGenePool::RegisterObject(Context* context)
 {
 	context->RegisterFactory<NGenePool>();
-	URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AM_DEFAULT);
 
-	URHO3D_ATTRIBUTE("Generation", unsigned, generation_, 0, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Population Size", unsigned, popSize_, 0, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Population Max Size", unsigned, popMaxSize_, 32, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Weights Per Chromo", unsigned, chromoLength_, 0, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Total Fitness of Population", float, totalFitness_, 0.0, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Best Fitness of Population", float, bestFitness_, 0.0, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Average Fitness of Popluation", float, averageFitness_, 0.0, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Worst Fitness of Population", float, worstFitness_, 99999999.0, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Best Genome", unsigned, fittestGenome_, 0, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Worst genome", unsigned, weakestGenome_, 0, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Mutation Rate", float, mutationRate_, 0.05, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Mutation Perturb", float, mutationPerturb_, 1.0, AM_NOEDIT);
-	URHO3D_ATTRIBUTE("Chromosomes Crossover Probability", float, crossoverRate_, 0.7, AM_NOEDIT);
+	URHO3D_ATTRIBUTE("generation_", unsigned, generation_, 0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("popSize_", unsigned, popSize_, 0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("popMaxSize_ ", unsigned, popMaxSize_, 32, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("chromoLength_", unsigned, chromoLength_, 0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("totalFitness_", float, totalFitness_, 0.0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("bestFitness_", float, bestFitness_, 0.0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("averageFitness_", float, averageFitness_, 0.0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("worstFitness_", float, worstFitness_, 99999999.0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("fittestGenome_", unsigned, fittestGenome_, 0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("weakestGenome_", unsigned, weakestGenome_, 0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("mutationRate_", float, mutationRate_, 0.05, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("mutationPerturb_", float, mutationPerturb_, 1.0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("crossoverRate_", float, crossoverRate_, 0.7, AM_DEFAULT);
 }
-
+void NGenePool::Save()
+{
+	Urho3D::SharedPtr<Urho3D::File> file(new Urho3D::File(context_, "nn.xml", Urho3D::FILE_WRITE));
+	// Ensure file is open
+	//if (file->IsOpen()) {
+	//	genePoolCoPilots_->Save(*file);
+	//}
+	//make xml
+	SharedPtr<XMLFile> xml(new XMLFile(context_));
+	XMLElement rootElem = xml->CreateRoot("NeuralNet");
+	bool saved = SaveXML(rootElem);
+	if (saved)
+		xml->Save(*file);
+}
 //this is saving a binary file
 bool NGenePool::Save(Serializer& dest) const
 {
@@ -96,6 +110,46 @@ bool NGenePool::Save(Serializer& dest) const
 	//		continue;
 
 	//	if (!node->Save(dest))
+	//		return false;
+	//}
+
+	return true;
+}
+bool NGenePool::SaveXML(XMLElement& dest) const
+{
+	// Write node ID
+	//if (!dest.SetUInt("id", id_))
+	if (!dest.SetUInt("id", 12345))
+		return false;
+
+	//// Write attributes
+	if (!Serializable::SaveXML(dest))
+		return false;
+
+	if (!dest.SetUInt("ENDED", 9000))
+		return false;
+
+	//// Write components
+	//for (unsigned i = 0; i < components_.Size(); ++i)
+	//{
+	//	Component* component = components_[i];
+	//	if (component->IsTemporary())
+	//		continue;
+
+	//	XMLElement compElem = dest.CreateChild("component");
+	//	if (!component->SaveXML(compElem))
+	//		return false;
+	//}
+
+	//// Write child nodes
+	//for (unsigned i = 0; i < children_.Size(); ++i)
+	//{
+	//	Node* node = children_[i];
+	//	if (node->IsTemporary())
+	//		continue;
+
+	//	XMLElement childElem = dest.CreateChild("node");
+	//	if (!node->SaveXML(childElem))
 	//		return false;
 	//}
 

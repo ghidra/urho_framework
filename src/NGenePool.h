@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <Urho3D/Scene/Serializable.h>
 #include <Urho3D/IO/Serializer.h>
+#include <Urho3D/Resource/XMLFile.h>//for calling the writing out of the nn serilization
+#include <Urho3D/Resource/XMLElement.h>
 #include "NGenome.h"
 
 #pragma once
@@ -42,8 +44,9 @@ public:
 	//void Remove(NGenome* genome);//remove genome from the population
 	SharedPtr<NGenome> GetSpecimen();//get a fresh evolved specimen
 	
-
+	void Save();
 	bool Save(Serializer& dest) const override;
+	bool SaveXML(XMLElement& dest) const override;
 	//Vector<NGenome> Epoch(Vector<NGenome> &old_pop); //this runs the GA for one generation.
 	//-------------------accessor methods
 	//Vector<NGenome> GetChromos()const{return pop_;}
