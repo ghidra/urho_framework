@@ -3,14 +3,25 @@
 
 #include "NGenome.h"
 
-NGenome::NGenome(Context* context, std::vector<float> w, float f, unsigned g) :	
-	Object(context),
-	weights_(w), 
-	fitness_(f),
-  generation_(g),
-  markedForRemoval_(false)
+NGenome::NGenome(Context* context, std::vector<float> w, float f, unsigned g) 
+	: Serializable(context)
+	, weights_(w)
+	, fitness_(f)
+	, generation_(g)
+	, markedForRemoval_(false)
+	, weightsVariant_(Variant::emptyVariantMap)
 {
+	URHO3D_ATTRIBUTE("weightsVariant_", VariantMap, weightsVariant_, Variant::emptyVariantMap, AM_DEFAULT);
+
 }
+
+//void NGenome::RegisterObject(Context* context)
+//{
+//	context->RegisterFactory<NGenome>();
+//
+//	//URHO3D_ATTRIBUTE("weightsVariant_", VariantMap, weightsVariant_, Variant::emptyVariantMap, AM_DEFAULT);
+//}
+
 String NGenome::DebugString()
 {
 	String s;
@@ -39,6 +50,34 @@ String NGenome::DebugString()
   return s;
   //return String(s.str().c_str());
 }
+
+bool NGenome::Save(Serializer& dest) const
+{
+	// Write node ID
+	if (!dest.WriteUInt(1))
+		return false;
+	return true;
+}
+bool NGenome::SaveXML(XMLElement& dest) const
+{
+	// Write node ID
+	//if (!dest.SetUInt("id", id_))
+	if (!dest.SetUInt("id", 12345))
+		return false;
+
+	//for now we need to put the stuff in there
+	for (unsigned i=0; i< weights_.size(); i++)
+	{
+		weightsVariant_["weight_" + String(i)] = weights_[i];
+	}
+
+	//// Write attributes
+	if (!Serializable::SaveXML(dest))
+		return false;
+
+	return true;
+}
+
 void NGenome::MarkForRemoval()
 {
   markedForRemoval_=true;;

@@ -44,7 +44,7 @@ NGenePool::NGenePool(Context* context, unsigned PopMaxSize, float MutRate, float
 void NGenePool::RegisterObject(Context* context)
 {
 	context->RegisterFactory<NGenePool>();
-	URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AM_DEFAULT);
+	//URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AM_DEFAULT);
 
 	URHO3D_ATTRIBUTE("generation_", unsigned, generation_, 0, AM_DEFAULT);
 	URHO3D_ATTRIBUTE("popSize_", unsigned, popSize_, 0, AM_DEFAULT);
@@ -129,17 +129,17 @@ bool NGenePool::SaveXML(XMLElement& dest) const
 	if (!dest.SetUInt("ENDED", 9000))
 		return false;
 
-	//// Write components
-	//for (unsigned i = 0; i < components_.Size(); ++i)
-	//{
-	//	Component* component = components_[i];
-	//	if (component->IsTemporary())
-	//		continue;
+	//// Write gnomes
+	for (unsigned i = 0; i < population_.Size(); ++i)
+	{
+		NGenome* component = population_[i];
+		/*if (component->IsTemporary())
+			continue;*/
 
-	//	XMLElement compElem = dest.CreateChild("component");
-	//	if (!component->SaveXML(compElem))
-	//		return false;
-	//}
+		XMLElement compElem = dest.CreateChild("component");
+		if (!component->SaveXML(compElem))
+			return false;
+	}
 
 	//// Write child nodes
 	//for (unsigned i = 0; i < children_.Size(); ++i)

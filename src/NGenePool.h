@@ -3,10 +3,12 @@
 
 #include <vector>
 #include <algorithm>
+
 #include <Urho3D/Scene/Serializable.h>
 #include <Urho3D/IO/Serializer.h>
 #include <Urho3D/Resource/XMLFile.h>//for calling the writing out of the nn serilization
 #include <Urho3D/Resource/XMLElement.h>
+
 #include "NGenome.h"
 
 #pragma once
@@ -78,7 +80,7 @@ private:
 	void CalculateBestWorstAvTot();
 	//void Reset();
 
-	VariantMap vars_;
+	//VariantMap vars_;
 };
 
 #endif

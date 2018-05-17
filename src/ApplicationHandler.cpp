@@ -64,7 +64,9 @@
 #include "Spawn.h"
 #include "Weapon.h"
 
+//#include "NGenome.h"
 #include "NGenePool.h"
+
 
 #include "IK.h"
 #include "IKTarget.h"
@@ -108,7 +110,9 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     Spawn::RegisterObject(context);
     Weapon::RegisterObject(context);
 
+	//NGenome::RegisterObject(context);
 	NGenePool::RegisterObject(context);
+	
 }
 
 void ApplicationHandler::Setup()
