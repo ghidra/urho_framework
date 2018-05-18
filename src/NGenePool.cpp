@@ -1,7 +1,10 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/Context.h>
+//#include <Urho3D/Scene/Scene.h>
 #include <Urho3D/Container/Sort.h>
 #include <Urho3D/IO/File.h>
+#include <Urho3D/IO/FileSystem.h>
+#include <Urho3D/Resource/ResourceCache.h>
 
 #include <Urho3D/IO/Log.h>
 
@@ -12,7 +15,7 @@
 //	sets up the population with random floats
 //
 //-----------------------------------------------------------------------
-NGenePool::NGenePool(Context* context, unsigned PopMaxSize, float MutRate, float CrossRate, float MutPeturb)	
+NGenePool::NGenePool(Context* context, String identifier, unsigned PopMaxSize, float MutRate, float CrossRate, float MutPeturb)
 	: Serializable(context)
 	, popSize_(0)
 	, popMaxSize_(PopMaxSize)
@@ -26,6 +29,7 @@ NGenePool::NGenePool(Context* context, unsigned PopMaxSize, float MutRate, float
 	, bestFitness_(0)
 	, worstFitness_(99999999)
 	, averageFitness_(0)
+	, id_(identifier)
 {//unsigned numWeights taking out the need to know this right now
 	//initialise population with chromosomes consisting of random
 	//weights and all fitnesses set to zero
@@ -62,17 +66,69 @@ void NGenePool::RegisterObject(Context* context)
 }
 void NGenePool::Save()
 {
-	Urho3D::SharedPtr<Urho3D::File> file(new Urho3D::File(context_, "nn.xml", Urho3D::FILE_WRITE));
-	// Ensure file is open
-	//if (file->IsOpen()) {
-	//	genePoolCoPilots_->Save(*file);
-	//}
-	//make xml
-	SharedPtr<XMLFile> xml(new XMLFile(context_));
-	XMLElement rootElem = xml->CreateRoot("NeuralNet");
-	bool saved = SaveXML(rootElem);
-	if (saved)
-		xml->Save(*file);
+	if (id_!="") {
+		Urho3D::SharedPtr<Urho3D::File> file(new Urho3D::File(context_, "nn_"+id_+".xml", Urho3D::FILE_WRITE));
+		// Ensure file is open
+		//if (file->IsOpen()) {
+		//	genePoolCoPilots_->Save(*file);
+		//}
+		//make xml
+		SharedPtr<XMLFile> xml(new XMLFile(context_));
+		XMLElement rootElem = xml->CreateRoot("NeuralNet");
+		bool saved = SaveXML(rootElem);
+		if (saved)
+			xml->Save(*file);
+	}
+}
+bool NGenePool::Load()
+{
+	//bool ConfigManager::Load(const Urho3D::String& fileName, bool overwriteExisting) {
+	const Urho3D::FileSystem* fileSystem = context_->GetSubsystem<Urho3D::FileSystem>();
+
+	//ConfigFile configFile(context_);
+	String filename = "nn_" + id_ + ".xml";
+	// Check if file exists
+	if (!fileSystem->FileExists(filename)) {
+		return false;
+	}
+
+	Urho3D::File file(context_, filename, Urho3D::FILE_READ);
+
+	ResourceCache* cache = GetSubsystem<ResourceCache>();
+	XMLFile* xml = cache->GetResource<XMLFile>("nn_" + id_ + ".xml");
+	XMLElement rootElem = xml->GetRoot("NeuralNet");
+	//configFile.BeginLoad(file);
+
+	return LoadXML(rootElem);
+
+}
+bool NGenePool::LoadXML(const XMLElement& source)
+{
+	//SceneResolver resolver;
+
+	// Read own ID. Will not be applied, only stored for resolving possible references
+	//unsigned nodeID = source.GetUInt("id");
+	String nnID = source.GetAttribute("id");
+	XMLElement compElem = source.GetChild("Genomes");
+	while (compElem)
+	{
+		
+		//compElem = compElem.GetNext("component");
+		/*Component* newComponent = SafeCreateComponent(typeName, StringHash(typeName),
+			(mode == REPLICATED && Scene::IsReplicatedID(compID)) ? REPLICATED : LOCAL, rewriteIDs ? 0 : compID);
+		if (newComponent)
+		{
+			resolver.AddComponent(compID, newComponent);
+			if (!newComponent->LoadXML(compElem))
+				return false;
+		}*/
+
+		
+	}
+	//ApplyAttributes();
+
+
+	return true;
 }
 //this is saving a binary file
 bool NGenePool::Save(Serializer& dest) const
@@ -81,77 +137,32 @@ bool NGenePool::Save(Serializer& dest) const
 	if (!dest.WriteUInt(1))
 		return false;
 
-	//// Write attributes
-	//if (!Animatable::Save(dest))
-	//	return false;
-
-	//// Write components
-	//dest.WriteVLE(GetNumPersistentComponents());
-	//for (unsigned i = 0; i < components_.Size(); ++i)
-	//{
-	//	Component* component = components_[i];
-	//	if (component->IsTemporary())
-	//		continue;
-
-	//	// Create a separate buffer to be able to skip failing components during deserialization
-	//	VectorBuffer compBuffer;
-	//	if (!component->Save(compBuffer))
-	//		return false;
-	//	dest.WriteVLE(compBuffer.GetSize());
-	//	dest.Write(compBuffer.GetData(), compBuffer.GetSize());
-	//}
-
-	//// Write child nodes
-	//dest.WriteVLE(GetNumPersistentChildren());
-	//for (unsigned i = 0; i < children_.Size(); ++i)
-	//{
-	//	Node* node = children_[i];
-	//	if (node->IsTemporary())
-	//		continue;
-
-	//	if (!node->Save(dest))
-	//		return false;
-	//}
-
 	return true;
 }
 bool NGenePool::SaveXML(XMLElement& dest) const
 {
 	// Write node ID
-	//if (!dest.SetUInt("id", id_))
-	if (!dest.SetUInt("id", 12345))
+	/*if (!dest.SetUInt("id", 12345))
+		return false;*/
+	if (!dest.SetString("id", id_))
 		return false;
 
 	//// Write attributes
 	if (!Serializable::SaveXML(dest))
 		return false;
 
-	if (!dest.SetUInt("ENDED", 9000))
-		return false;
-
 	//// Write gnomes
+	XMLElement genomesElem = dest.CreateChild("Genomes");
 	for (unsigned i = 0; i < population_.Size(); ++i)
 	{
-		NGenome* component = population_[i];
-		/*if (component->IsTemporary())
-			continue;*/
+		NGenome* genome = population_[i];
+		if (genome->IsTemporary())
+			continue;
 
-		XMLElement compElem = dest.CreateChild("component");
-		if (!component->SaveXML(compElem))
+		XMLElement compElem = genomesElem.CreateChild("Genome");
+		if (!genome->SaveXML(compElem))
 			return false;
 	}
-
-	//// Write child nodes
-	//for (unsigned i = 0; i < children_.Size(); ++i)
-	//{
-	//	Node* node = children_[i];
-	//	if (node->IsTemporary())
-	//		continue;
-
-	//	XMLElement childElem = dest.CreateChild("node");
-	//	if (!node->SaveXML(childElem))
-	//		return false;
-	//}
 
 	return true;
 }
@@ -256,7 +267,7 @@ SharedPtr<NGenome> NGenePool::GetSpecimen()
 			weights.push_back(Random()-Random());
 		}
 
-		g = new NGenome(context_,weights);
+		g = new NGenome(context_, popSize_, weights);
 		//URHO3D_LOGWARNING("THIS IS A RANDOM BABY:"+String(population_.Size())+":"+String(popSize_));
 	}
 	else
@@ -273,7 +284,8 @@ SharedPtr<NGenome> NGenePool::GetSpecimen()
 		Mutate(baby2);
 		unsigned gen = parent1->generation_>parent2->generation_ ? parent1->generation_ : parent2->generation_;
 		unsigned fit = parent1->fitness_>parent2->fitness_ ? parent1->fitness_ : parent2->fitness_;
-		g = new NGenome(context_,baby1,fit*0.9,gen+1);
+		g = new NGenome(context_, popSize_,baby1,fit*0.9,gen+1);
+		
 		//URHO3D_LOGWARNING("THIS IS A Evolved BABY:"+String(population_.Size()));
 		//SINCE we CALCULATED THE BEST AND WORSE, NOW WE CAN DO OUR REMOVAL
 		if(weakestGenome_>=0)

@@ -23,8 +23,9 @@ class NGenome : public Serializable
 {
 	URHO3D_OBJECT(NGenome, Serializable);
 public:
-	NGenome(Context* context, std::vector<float> w, float f = 0.0f, unsigned g = 0);
-	//static void RegisterObject(Context* context);
+	//NGenome(Context* context);
+	NGenome(Context* context, unsigned id = 0, std::vector<float> w = std::vector<float>{}, float f = 0.0f, unsigned g = 0);
+	static void RegisterObject(Context* context);
 
 	std::vector<float> weights_;
 	float fitness_;
@@ -42,8 +43,8 @@ public:
 
 private:
 	bool markedForRemoval_;
-
-	mutable VariantMap weightsVariant_;//for serialization
+	unsigned id_;//id from genepool counter
+	mutable VariantVector weightsVariant_;//for serialization
 	
 };
 

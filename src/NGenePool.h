@@ -38,7 +38,7 @@ class NGenePool : public Serializable
 {
 	URHO3D_OBJECT(NGenePool, Serializable);
 public:
-	NGenePool(Context* context, unsigned PopMaxSize=10, float MutRate=0.1, float CrossRate=0.7, float MutPeturb = 0.3);//unsigned numWeights,
+	NGenePool(Context* context, String identifier="", unsigned PopMaxSize=10, float MutRate=0.1, float CrossRate=0.7, float MutPeturb = 0.3);//unsigned numWeights,
 	static void RegisterObject(Context* context);
 
 	void GiveNumberOfWeights(unsigned num);
@@ -47,8 +47,10 @@ public:
 	SharedPtr<NGenome> GetSpecimen();//get a fresh evolved specimen
 	
 	void Save();
+	bool Load();
 	bool Save(Serializer& dest) const override;
 	bool SaveXML(XMLElement& dest) const override;
+	bool LoadXML(const XMLElement& dest) override;
 	//Vector<NGenome> Epoch(Vector<NGenome> &old_pop); //this runs the GA for one generation.
 	//-------------------accessor methods
 	//Vector<NGenome> GetChromos()const{return pop_;}
@@ -71,6 +73,8 @@ private:
 	float mutationPerturb_;
 	float crossoverRate_; //probability of chromosones crossing over bits //0.7 is pretty good
 	unsigned generation_;//generation counter
+
+	String id_;
 
 	void Crossover(const std::vector<float> &mum, const std::vector<float> &dad, std::vector<float> &baby1, std::vector<float> &baby2);
 	void Mutate(std::vector<float> &chromo);

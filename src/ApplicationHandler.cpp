@@ -64,7 +64,7 @@
 #include "Spawn.h"
 #include "Weapon.h"
 
-//#include "NGenome.h"
+#include "NGenome.h"
 #include "NGenePool.h"
 
 
@@ -110,7 +110,7 @@ ApplicationHandler::ApplicationHandler(Context* context) :
     Spawn::RegisterObject(context);
     Weapon::RegisterObject(context);
 
-	//NGenome::RegisterObject(context);
+	NGenome::RegisterObject(context);
 	NGenePool::RegisterObject(context);
 	
 }
