@@ -84,7 +84,7 @@ private:
 	void CalculateBestWorstAvTot();
 	//void Reset();
 
-	//VariantMap vars_;
+	virtual bool SaveDefaultAttributes() const { return true; }//for serialization, if I want to save default values
 };
 
 #endif

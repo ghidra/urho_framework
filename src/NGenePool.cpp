@@ -30,7 +30,8 @@ NGenePool::NGenePool(Context* context, String identifier, unsigned PopMaxSize, f
 	, worstFitness_(99999999)
 	, averageFitness_(0)
 	, id_(identifier)
-{//unsigned numWeights taking out the need to know this right now
+{
+	//unsigned numWeights taking out the need to know this right now
 	//initialise population with chromosomes consisting of random
 	//weights and all fitnesses set to zero
 	/*for (unsigned i=0; i<popSize_; ++i)
@@ -42,13 +43,13 @@ NGenePool::NGenePool(Context* context, String identifier, unsigned PopMaxSize, f
 		}
 	}*/
 
+	Load();//attempt to load identifier file
 	
 }
 
 void NGenePool::RegisterObject(Context* context)
 {
 	context->RegisterFactory<NGenePool>();
-	//URHO3D_ATTRIBUTE("Variables", VariantMap, vars_, Variant::emptyVariantMap, AM_DEFAULT);
 
 	URHO3D_ATTRIBUTE("generation_", unsigned, generation_, 0, AM_DEFAULT);
 	URHO3D_ATTRIBUTE("popSize_", unsigned, popSize_, 0, AM_DEFAULT);
@@ -84,49 +85,47 @@ bool NGenePool::Load()
 {
 	//bool ConfigManager::Load(const Urho3D::String& fileName, bool overwriteExisting) {
 	const Urho3D::FileSystem* fileSystem = context_->GetSubsystem<Urho3D::FileSystem>();
+	if (id_ != "") {
 
-	//ConfigFile configFile(context_);
-	String filename = "nn_" + id_ + ".xml";
-	// Check if file exists
-	if (!fileSystem->FileExists(filename)) {
+		//ConfigFile configFile(context_);
+		String filename = "nn_" + id_ + ".xml";
+		// Check if file exists
+		if (!fileSystem->FileExists(filename)) {
+			return false;
+		}
+
+		Urho3D::File file(context_, filename, Urho3D::FILE_READ);
+		ResourceCache* cache = GetSubsystem<ResourceCache>();
+		XMLFile* xml = cache->GetResource<XMLFile>(filename);
+		XMLElement rootElem = xml->GetRoot("NeuralNet");
+
+		return LoadXML(rootElem);
+	}
+	else
+	{
 		return false;
 	}
-
-	Urho3D::File file(context_, filename, Urho3D::FILE_READ);
-
-	ResourceCache* cache = GetSubsystem<ResourceCache>();
-	XMLFile* xml = cache->GetResource<XMLFile>("nn_" + id_ + ".xml");
-	XMLElement rootElem = xml->GetRoot("NeuralNet");
-	//configFile.BeginLoad(file);
-
-	return LoadXML(rootElem);
 
 }
 bool NGenePool::LoadXML(const XMLElement& source)
 {
-	//SceneResolver resolver;
-
-	// Read own ID. Will not be applied, only stored for resolving possible references
-	//unsigned nodeID = source.GetUInt("id");
 	String nnID = source.GetAttribute("id");
-	XMLElement compElem = source.GetChild("Genomes");
+
+	XMLElement attributeElem = source.GetChild("attribute");
+	while (attributeElem)
+	{
+		URHO3D_LOGWARNING("--------------------------- SETTING: " + attributeElem.GetAttribute("name"));
+		SetAttribute(attributeElem.GetAttribute("name"), attributeElem.GetValue());
+		attributeElem = attributeElem.GetNext("attribute");
+	}
+
+	XMLElement compElem = source.GetChild("Genomes").GetChild("Genome");
 	while (compElem)
 	{
-		
-		//compElem = compElem.GetNext("component");
-		/*Component* newComponent = SafeCreateComponent(typeName, StringHash(typeName),
-			(mode == REPLICATED && Scene::IsReplicatedID(compID)) ? REPLICATED : LOCAL, rewriteIDs ? 0 : compID);
-		if (newComponent)
-		{
-			resolver.AddComponent(compID, newComponent);
-			if (!newComponent->LoadXML(compElem))
-				return false;
-		}*/
-
+		URHO3D_LOGWARNING("------------------- GENOME: "+ compElem.GetAttribute("Id"));
+		compElem = compElem.GetNext("Genome");
 		
 	}
-	//ApplyAttributes();
-
 
 	return true;
 }
@@ -142,8 +141,6 @@ bool NGenePool::Save(Serializer& dest) const
 bool NGenePool::SaveXML(XMLElement& dest) const
 {
 	// Write node ID
-	/*if (!dest.SetUInt("id", 12345))
-		return false;*/
 	if (!dest.SetString("id", id_))
 		return false;
 
@@ -166,6 +163,7 @@ bool NGenePool::SaveXML(XMLElement& dest) const
 
 	return true;
 }
+
 
 //-----------------------------------Epoch()-----------------------------
 //
