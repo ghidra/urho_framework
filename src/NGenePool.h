@@ -42,7 +42,7 @@ public:
 	static void RegisterObject(Context* context);
 
 	void GiveNumberOfWeights(unsigned num);
-	void Add(SharedPtr<NGenome> genome);//add genome to the population
+	
 	//void Remove(NGenome* genome);//remove genome from the population
 	SharedPtr<NGenome> GetSpecimen();//get a fresh evolved specimen
 	
@@ -58,7 +58,8 @@ public:
 	//float BestFitness()const{return bestFitness_;}
 
 private:
-	
+	void Add(SharedPtr<NGenome> genome);//add genome to the population
+
 	Vector< SharedPtr<NGenome> > population_;//this holds the entire population of chromosomes	
 	unsigned popSize_; //size of population
 	unsigned popMaxSize_; //max size of population

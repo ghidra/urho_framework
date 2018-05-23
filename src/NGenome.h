@@ -25,6 +25,7 @@ class NGenome : public Serializable
 public:
 	//NGenome(Context* context);
 	NGenome(Context* context, unsigned id = 0, std::vector<float> w = std::vector<float>{}, float f = 0.0f, unsigned g = 0);
+	NGenome(Context* context, const XMLElement& source);//this is called when loading serilaized data from genepool
 	static void RegisterObject(Context* context);
 
 	std::vector<float> weights_;
@@ -37,6 +38,7 @@ public:
 
 	bool Save(Serializer& dest) const override;
 	bool SaveXML(XMLElement& dest) const override;
+	bool LoadXML(const XMLElement& dest) override;
 	//overload '<' used for sorting
 	//friend bool operator <(const NGenome& lhs, const NGenome& rhs){return (lhs.fitness_ < rhs.fitness_);}
 	

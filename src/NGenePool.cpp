@@ -114,8 +114,8 @@ bool NGenePool::LoadXML(const XMLElement& source)
 	XMLElement attributeElem = source.GetChild("attribute");
 	while (attributeElem)
 	{
-		URHO3D_LOGWARNING("--------------------------- SETTING: " + attributeElem.GetAttribute("name"));
-		SetAttribute(attributeElem.GetAttribute("name"), attributeElem.GetValue());
+		URHO3D_LOGWARNING("--------------------------- SETTING: " + attributeElem.GetAttribute("name") + ": " + attributeElem.GetValue() + ": "+ attributeElem.GetAttribute("value"));
+		SetAttribute(attributeElem.GetAttribute("name"), attributeElem.GetAttribute("value"));
 		attributeElem = attributeElem.GetNext("attribute");
 	}
 
@@ -123,6 +123,18 @@ bool NGenePool::LoadXML(const XMLElement& source)
 	while (compElem)
 	{
 		URHO3D_LOGWARNING("------------------- GENOME: "+ compElem.GetAttribute("Id"));
+
+	/*	std::vector<float> weights;
+		for (int i = 0; i<chromoLength_; ++i)
+		{
+			weights.push_back(Random() - Random());
+		}*/
+
+		//not sure why this needs to be on multiple lines
+		SharedPtr<NGenome> g;
+		g = new NGenome(context_, compElem);
+		Add(g);
+
 		compElem = compElem.GetNext("Genome");
 		
 	}

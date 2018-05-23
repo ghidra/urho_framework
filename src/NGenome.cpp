@@ -1,6 +1,8 @@
 #include <Urho3D/Urho3D.h>
 #include <Urho3D/Core/Context.h>
 
+#include <Urho3D/IO/Log.h>
+
 #include "NGenome.h"
 
 //NGenome::NGenome(Context* context) 
@@ -21,6 +23,16 @@ NGenome::NGenome(Context* context, unsigned id, std::vector<float> w, float f, u
 {
 	//URHO3D_ATTRIBUTE("weightsVariant_", VariantMap, weightsVariant_, Variant::emptyVariantMap, AM_DEFAULT);
 
+}
+NGenome::NGenome(Context* context, const XMLElement& source)
+	: Serializable(context)
+	, fitness_(0.0)
+	, generation_(0)
+	, markedForRemoval_(false)
+	, weightsVariant_(Variant::emptyVariantVector)
+	, weights_(std::vector<float>{})
+{
+	LoadXML(source);
 }
 
 void NGenome::RegisterObject(Context* context)
@@ -84,6 +96,29 @@ bool NGenome::SaveXML(XMLElement& dest) const
 	if (!Serializable::SaveXML(dest))
 		return false;
 
+	return true;
+}
+bool NGenome::LoadXML(const XMLElement& source)
+{
+	URHO3D_LOGWARNING("----------------------------------- WE ARE TRYING TO LOAD GENOME DATA");
+	String nnID = source.GetAttribute("id");
+	id_ = ToInt(nnID);//give the id over
+	URHO3D_LOGWARNING("----------------------------------- ID: "+String(nnID));
+	XMLElement attrElem = source.GetChild("attribute");// .GetChild("variant");
+	while (attrElem)
+	{
+		if (attrElem.GetAttribute("name") == "weightsVariant_")
+		{
+			XMLElement wElem = attrElem.GetChild("variant");
+			while (wElem)
+			{
+				URHO3D_LOGWARNING("----------------------------------- w: " + wElem.GetAttribute("value") );
+				weights_.push_back( ToFloat(wElem.GetAttribute("value")) );
+				wElem = wElem.GetNext("variant");
+			}
+		}
+		attrElem = attrElem.GetNext("attribute");
+	}
 	return true;
 }
 
