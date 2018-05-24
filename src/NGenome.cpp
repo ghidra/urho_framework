@@ -39,6 +39,8 @@ void NGenome::RegisterObject(Context* context)
 {
 	context->RegisterFactory<NGenome>();
 
+	URHO3D_ATTRIBUTE("fitness_", float, fitness_, 0.0, AM_DEFAULT);
+	URHO3D_ATTRIBUTE("generation_", unsigned, generation_, 0, AM_DEFAULT);
 	URHO3D_ATTRIBUTE("weightsVariant_", VariantVector, weightsVariant_, Variant::emptyVariantVector, AM_DEFAULT);
 }
 
@@ -85,8 +87,11 @@ bool NGenome::SaveXML(XMLElement& dest) const
 	if (!dest.SetUInt("Id", id_))
 		return false;
 
-	//for now we need to put the stuff in there
-	//VariantVector parameters;
+	///save attributes
+	// if (!Serializable::SaveXML(dest))
+	// 	return false;
+
+	//save our weights in thier own thing
 	for (unsigned i=0; i< weights_.size(); i++)
 	{
 		weightsVariant_.Push(Variant(weights_[i]));
@@ -101,8 +106,8 @@ bool NGenome::SaveXML(XMLElement& dest) const
 bool NGenome::LoadXML(const XMLElement& source)
 {
 	URHO3D_LOGWARNING("----------------------------------- WE ARE TRYING TO LOAD GENOME DATA");
-	String nnID = source.GetAttribute("id");
-	id_ = ToInt(nnID);//give the id over
+	String nnID = source.GetAttribute("Id");
+	id_ = ToUInt(nnID);//give the id over
 	URHO3D_LOGWARNING("----------------------------------- ID: "+String(nnID));
 	XMLElement attrElem = source.GetChild("attribute");// .GetChild("variant");
 	while (attrElem)
@@ -116,6 +121,11 @@ bool NGenome::LoadXML(const XMLElement& source)
 				weights_.push_back( ToFloat(wElem.GetAttribute("value")) );
 				wElem = wElem.GetNext("variant");
 			}
+		}
+		else
+		{
+			//load other attributes like normal
+			SetAttribute(attrElem.GetAttribute("name"), attrElem.GetAttribute("value"));
 		}
 		attrElem = attrElem.GetNext("attribute");
 	}
