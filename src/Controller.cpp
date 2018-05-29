@@ -18,7 +18,3 @@ std::vector<float> Controller::HandleUpdate(std::vector<float> in)
 	HandleUpdate();
 	return std::vector<float>();
 }
-void Controller::Notify(enum NotifyAction action, float value)
-{
-	//we can do what we want with this information
-}
