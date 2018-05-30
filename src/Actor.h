@@ -20,7 +20,8 @@ const int SIDE_ENEMY = 2;
 enum DamageType
 {
     DT_BALISTIC,
-    DT_ELEMENTAL
+    DT_ELEMENTAL,
+    DT_ENVIRONMENTAL
 };
 
 class Actor : public LogicComponent

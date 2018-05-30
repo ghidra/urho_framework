@@ -23,20 +23,11 @@ class NCharacterController : public Controller
 
 public:
 
-	enum NotifyAction
-	{
-		NA_HIT_ENEMY,
-		NA_HIT_FRIENDLY,
-		NA_TOOK_DAMAGE
-	};
-
 	NCharacterController(Context* context,NGenePool* genepool);
 	~NCharacterController();
 
 	virtual void HandleUpdate();
 	virtual std::vector<float> HandleUpdate(std::vector<float> in);//this is called from outside this class
-	virtual void Notify(enum NotifyAction action, float value);//this is called from whom we are controlling, of what the character accomplished from list
-
 
 protected:
 	

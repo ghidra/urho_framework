@@ -23,7 +23,3 @@ std::vector<float> NCharacterController::HandleUpdate(std::vector<float> in)
 	HandleUpdate();
 	return brain_->Update(in);// std::vector<float>();
 }
-void NCharacterController::Notify(enum NotifyAction action, float value)
-{
-	//we can do what we want with this information
-}
