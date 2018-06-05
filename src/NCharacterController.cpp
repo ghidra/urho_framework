@@ -9,11 +9,15 @@ NCharacterController::NCharacterController(Context* context, NGenePool* genepool
 {
 	brain_ = new NeuralNet(context_,10,6,8);
     genePool_->GiveNumberOfWeights(brain_->GetNumberOfWeights());
-    genome_ = genePool_->GetSpecimen();
-    brain_->PutWeights(genome_->weights_);
+	RefreshGenome();
 }
 NCharacterController::~NCharacterController() {}
 
+void NCharacterController::RefreshGenome()
+{
+	genome_ = genePool_->GetSpecimen();
+	brain_->PutWeights(genome_->weights_);
+}
 void NCharacterController::HandleUpdate()
 {
 	Controller::HandleUpdate();

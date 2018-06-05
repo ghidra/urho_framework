@@ -29,6 +29,8 @@ public:
 	virtual void HandleUpdate();
 	virtual std::vector<float> HandleUpdate(std::vector<float> in);//this is called from outside this class
 
+	virtual void RefreshGenome();
+
 protected:
 	
 	SharedPtr<NGenome> genome_;
