@@ -112,17 +112,37 @@ bool NGenePool::LoadXML(const XMLElement& source)
 	String nnID = source.GetAttribute("id");
 
 	XMLElement attributeElem = source.GetChild("attribute");
+	// attributeElem.GetUInt("generation_");
+	// attributeElem.GetUInt("popSize_");
+	// attributeElem.GetUInt("popMaxSize_ ");
+	// attributeElem.GetUInt("chromoLength_");
+	// attributeElem.GetFloat("totalFitness_");
+	// attributeElem.GetFloat("bestFitness_");
+	// attributeElem.GetFloat("averageFitness_");
+	// attributeElem.GetFloat("worstFitness_");
+	// attributeElem.GetUInt("fittestGenome_");
+	// attributeElem.GetUInt("weakestGenome_");
+	// attributeElem.GetFloat("mutationRate_");
+	// attributeElem.GetFloat("mutationPerturb_");
+	// attributeElem.GetFloat("crossoverRate_");
 	while (attributeElem)
 	{
-		URHO3D_LOGWARNING("--------------------------- SETTING: " + attributeElem.GetAttribute("name") + ": " + attributeElem.GetValue() + ": "+ attributeElem.GetAttribute("value"));
-		SetAttribute(attributeElem.GetAttribute("name"), attributeElem.GetAttribute("value"));
+		//URHO3D_LOGWARNING("--------------------------- SETTING: " + attributeElem.GetAttribute("name") + ": " + attributeElem.GetValue() + ": "+ attributeElem.GetAttribute("value"));
+		//SetAttribute(attributeElem.GetAttribute("name"), attributeElem.GetAttribute("value"));
+		String aName = attributeElem.GetAttribute("name");
+		if(aName=="generation_" || aName=="popSize_" || aName=="popMaxSize_" || aName=="chromoLength_" || aName=="fittestGenome_" || aName=="weakestGenome_" )
+			SetAttribute(aName, ToUInt( attributeElem.GetAttribute("value")) );
+		else if( aName == "totalFitness_" || aName == "bestFitness_" || aName == "averageFitness_" || aName == "worstFitness_" || aName == "mutationRate_" || aName == "mutationPerturb_" || aName == "crossoverRate_" )
+			SetAttribute(aName, ToFloat( attributeElem.GetAttribute("value")) );
+		else
+			SetAttribute(aName, attributeElem.GetAttribute("value"));
 		attributeElem = attributeElem.GetNext("attribute");
 	}
 
 	XMLElement compElem = source.GetChild("Genomes").GetChild("Genome");
 	while (compElem)
 	{
-		URHO3D_LOGWARNING("------------------- GENOME: "+ compElem.GetAttribute("Id"));
+		//URHO3D_LOGWARNING("------------------- GENOME: "+ compElem.GetAttribute("Id"));
 
 	/*	std::vector<float> weights;
 		for (int i = 0; i<chromoLength_; ++i)
@@ -253,7 +273,7 @@ void NGenePool::GiveNumberOfWeights(unsigned num)
 void NGenePool::Add(SharedPtr<NGenome> genome)
 {
 	population_.Push(genome);
-	popSize_++;
+	popSize_ ++;
 }
 /*void NGenePool::Remove(NGenome* genome)
 {
@@ -278,6 +298,7 @@ SharedPtr<NGenome> NGenePool::GetSpecimen()
 		}
 
 		g = new NGenome(context_, popSize_, weights);
+		Add(g);
 		//URHO3D_LOGWARNING("THIS IS A RANDOM BABY:"+String(population_.Size())+":"+String(popSize_));
 	}
 	else
@@ -299,13 +320,18 @@ SharedPtr<NGenome> NGenePool::GetSpecimen()
 		//URHO3D_LOGWARNING("THIS IS A Evolved BABY:"+String(population_.Size()));
 		//SINCE we CALCULATED THE BEST AND WORSE, NOW WE CAN DO OUR REMOVAL
 		if(weakestGenome_>=0)
+		{
 			population_.Erase(weakestGenome_);
+			population_[weakestGenome_] = g;
+		}
+
 	}
 
-	Add(g);
+	//Add(g);
 	//
 	//i need to send back evolved genomes to use
-	return population_.Back();
+	//return population_.Back();
+	return g;
 
 }
 
@@ -373,7 +399,8 @@ SharedPtr<NGenome> NGenePool::GetChromoRoulette()
 	SharedPtr<NGenome> TheChosenOne;//this will be set to the chosen chromosome
 	float FitnessSoFar = 0;//go through the chromosones adding up the fitness so far
 	
-	for (unsigned i=0; i<popSize_; ++i)
+	//for (unsigned i=0; i<popSize_; ++i)
+	for (unsigned i=0; i<population_.Size(); ++i)
 	{
 		FitnessSoFar += population_[i]->fitness_;
 		

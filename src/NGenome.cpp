@@ -105,10 +105,10 @@ bool NGenome::SaveXML(XMLElement& dest) const
 }
 bool NGenome::LoadXML(const XMLElement& source)
 {
-	URHO3D_LOGWARNING("----------------------------------- WE ARE TRYING TO LOAD GENOME DATA");
+	//URHO3D_LOGWARNING("----------------------------------- WE ARE TRYING TO LOAD GENOME DATA");
 	String nnID = source.GetAttribute("Id");
 	id_ = ToUInt(nnID);//give the id over
-	URHO3D_LOGWARNING("----------------------------------- ID: "+String(nnID));
+	//URHO3D_LOGWARNING("----------------------------------- ID: "+String(nnID));
 	XMLElement attrElem = source.GetChild("attribute");// .GetChild("variant");
 	while (attrElem)
 	{
@@ -117,15 +117,20 @@ bool NGenome::LoadXML(const XMLElement& source)
 			XMLElement wElem = attrElem.GetChild("variant");
 			while (wElem)
 			{
-				URHO3D_LOGWARNING("----------------------------------- w: " + wElem.GetAttribute("value") );
+				//URHO3D_LOGWARNING("----------------------------------- w: " + wElem.GetAttribute("value") );
 				weights_.push_back( ToFloat(wElem.GetAttribute("value")) );
 				wElem = wElem.GetNext("variant");
 			}
 		}
 		else
 		{
-			//load other attributes like normal
-			SetAttribute(attrElem.GetAttribute("name"), attrElem.GetAttribute("value"));
+			if(attrElem.GetAttribute("name") == "fitness_")
+				SetAttribute("fitness_", ToFloat(attrElem.GetAttribute("value")));
+			else if(attrElem.GetAttribute("name") == "generation_")
+				SetAttribute("generation_", ToUInt(attrElem.GetAttribute("value")));
+			else
+				SetAttribute(attrElem.GetAttribute("name"), attrElem.GetAttribute("value"));
+			
 		}
 		attrElem = attrElem.GetNext("attribute");
 	}
