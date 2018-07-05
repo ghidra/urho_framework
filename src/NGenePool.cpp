@@ -319,7 +319,7 @@ SharedPtr<NGenome> NGenePool::GetSpecimen()
 		
 		//URHO3D_LOGWARNING("THIS IS A Evolved BABY:"+String(population_.Size()));
 		//SINCE we CALCULATED THE BEST AND WORSE, NOW WE CAN DO OUR REMOVAL
-		if(weakestGenome_>=0)
+		if(weakestGenome_>=0 && population_.Size()> weakestGenome_)
 		{
 			population_.Erase(weakestGenome_);
 			population_[weakestGenome_] = g;
