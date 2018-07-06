@@ -7,6 +7,7 @@ NCharacterController::NCharacterController(Context* context, NGenePool* genepool
 	:Controller(context)
 	,genePool_(genepool)
 {
+	cpu_ = true;
 	brain_ = new NeuralNet(context_,10,6,8);
     genePool_->GiveNumberOfWeights(brain_->GetNumberOfWeights());
 	RefreshGenome();

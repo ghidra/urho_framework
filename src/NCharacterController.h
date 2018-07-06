@@ -31,6 +31,8 @@ public:
 
 	virtual void RefreshGenome();
 
+	virtual float GetFitness() { return genome_->fitness_; }
+
 protected:
 	
 	SharedPtr<NGenome> genome_;

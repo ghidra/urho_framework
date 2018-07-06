@@ -4,7 +4,8 @@
 #include "Controller.h"
 
 Controller::Controller(Context* context):
-    Object(context)
+    Object(context),
+	cpu_(false)
 {
 }
 Controller::~Controller(){}

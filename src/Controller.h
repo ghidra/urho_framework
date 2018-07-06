@@ -49,6 +49,6 @@ public:
     virtual void Notify(enum NotifyAction action, float value = 1.0f);//this is called from whom we are controlling, of what the character accomplished from list
 
     Controls controls_;
-
+	bool cpu_;
 };
 #endif
