@@ -94,13 +94,13 @@ void CameraLogic::PostUpdate(float timeStep)
         node_->SetRotation(Quaternion(pitch_, yaw_, 0.0f));
 
         // Read WASD keys and move the camera scene node to the corresponding direction if they are pressed
-        if (input->GetKeyDown('W'))
+        if (input->GetKeyDown(KEY_W))
             node_->Translate(Vector3::FORWARD * MOVE_SPEED * timeStep);
-        if (input->GetKeyDown('S'))
+        if (input->GetKeyDown(KEY_S))
             node_->Translate(Vector3::BACK * MOVE_SPEED * timeStep);
-        if (input->GetKeyDown('A'))
+        if (input->GetKeyDown(KEY_A))
             node_->Translate(Vector3::LEFT * MOVE_SPEED * timeStep);
-        if (input->GetKeyDown('D'))
+        if (input->GetKeyDown(KEY_D))
             node_->Translate(Vector3::RIGHT * MOVE_SPEED * timeStep);
     }
     else if(cameraType_ == String("sidescrolling"))

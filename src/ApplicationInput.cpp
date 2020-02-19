@@ -143,10 +143,10 @@ void ApplicationInput::HandleUpdate()
     {
         //if (!touch_ || !touch_->useGyroscope_)
         //{
-        controls_.Set(CTRL_UP, input->GetKeyDown('W'));
-        controls_.Set(CTRL_DOWN, input->GetKeyDown('S'));
-        controls_.Set(CTRL_LEFT, input->GetKeyDown('A'));
-        controls_.Set(CTRL_RIGHT, input->GetKeyDown('D'));
+        controls_.Set(CTRL_UP, input->GetKeyDown(KEY_W));
+        controls_.Set(CTRL_DOWN, input->GetKeyDown(KEY_S));
+        controls_.Set(CTRL_LEFT, input->GetKeyDown(KEY_A));
+        controls_.Set(CTRL_RIGHT, input->GetKeyDown(KEY_D));
         //}
         if(input->GetKeyDown(KEY_LCTRL) || input->GetKeyPress(KEY_LCTRL) || input->GetMouseButtonDown(MOUSEB_LEFT) || input->GetMouseButtonPress(MOUSEB_LEFT) )
         //if(input->GetKeyDown(KEY_LCTRL) || input->GetKeyPress(KEY_LCTRL) )
@@ -333,21 +333,21 @@ void ApplicationInput::HandleKeyDown(StringHash eventType, VariantMap& eventData
         // Texture quality
         else if (key == '1')
         {
-            int quality = renderer->GetTextureQuality();
+            unsigned quality = (unsigned)renderer->GetTextureQuality();
             ++quality;
             if (quality > QUALITY_HIGH)
                 quality = QUALITY_LOW;
-            renderer->SetTextureQuality(quality);
+            renderer->SetTextureQuality((MaterialQuality)quality);
         }
         
         // Material quality
         else if (key == '2')
         {
-            int quality = renderer->GetMaterialQuality();
+            unsigned quality = (unsigned)renderer->GetMaterialQuality();
             ++quality;
             if (quality > QUALITY_HIGH)
                 quality = QUALITY_LOW;
-            renderer->SetMaterialQuality(quality);
+            renderer->SetMaterialQuality((MaterialQuality)quality);
         }
         
         // Specular lighting
